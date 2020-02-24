@@ -1,11 +1,11 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import LiveIndex from '@/views/live/index.vue';
+import VideoPlayer from '@/views/live/video-player.vue';
 
 @Component({
   components: {
-    LiveIndex,
+    VideoPlayer,
   },
 })
 export default class App extends Vue {}
@@ -13,7 +13,7 @@ export default class App extends Vue {}
 
 <template>
   <div id="app">
-    <live-index/>
+    <video-player />
   </div>
 </template>
 
