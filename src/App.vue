@@ -1,21 +1,21 @@
-<template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
-</template>
-
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from './components/HelloWorld.vue';
+
+import LiveIndex from '@/views/live/index.vue';
 
 @Component({
   components: {
-    HelloWorld,
+    LiveIndex,
   },
 })
 export default class App extends Vue {}
 </script>
+
+<template>
+  <div id="app">
+    <live-index/>
+  </div>
+</template>
 
 <style lang="stylus">
 #app
