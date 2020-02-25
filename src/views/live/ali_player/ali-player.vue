@@ -7,6 +7,12 @@
 
 import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
 
+import {
+  // SKINLAYOUT_H5_VOD,
+  // SKINLAYOUT_FLASH_VOD,
+  SKINLAYOUT_H5_LIVE,
+  SKINLAYOUT_FLASH_LIVE,
+} from '@/constant/ali_player.ts';
 
 @Component({
   name: 'ali-player',
@@ -17,15 +23,20 @@ export default class AliPlayer extends Vue {
   @Prop({type: String, default: ''}) private aliplayerSdkPath!: string;
 
   @Prop({type: Boolean, default: false}) private autoplay!: boolean;
-  @Prop({type: Boolean, default: false}) private isLive!: boolean;
+  @Prop({type: Boolean, default: true}) private isLive!: boolean;
   @Prop({type: Boolean, default: false}) private playsinline!: boolean;
 
   @Prop({type: String, default: '100%'}) private width!: string;
   @Prop({type: String, default: '100%'}) private height!: string;
+  // controlBarVisibility -> hover | click | always
   @Prop({type: String, default: 'always'}) private controlBarVisibility!: string;
 
   @Prop({type: Boolean, default: false}) private useH5Prism!: boolean;
   @Prop({type: Boolean, default: false}) private useFlashPrism!: boolean;
+  // 显示缓冲进度
+  @Prop({type: Boolean, default: true}) private showBuffer!: boolean;
+  // 快照
+  @Prop({type: Boolean, default: true}) private snapshot!: boolean;
 
   @Prop({type: String, default: ''}) private vid!: string;
   @Prop({type: String, default: ''}) private playauth!: string;
@@ -106,6 +117,7 @@ export default class AliPlayer extends Vue {
     }
     this.initAliplayer();
   }
+
   /**
    * 初始化播放器
    */
@@ -117,7 +129,8 @@ export default class AliPlayer extends Vue {
           id: this.playerId,
 
           autoplay: this.autoplay,
-          isLive: this.isLive,
+          isLive: this.isLive, // 直播时，页面将无播放暂停按钮
+          rePlay: this.replay,
           playsinline: this.playsinline,
 
           width: this.width,
@@ -126,6 +139,8 @@ export default class AliPlayer extends Vue {
 
           useH5Prism: this.useH5Prism,
           useFlashPrism: this.useFlashPrism,
+          showBuffer: this.showBuffer,
+          snapshot: this.snapshot,
 
           vid: this.vid,
           playauth: this.playauth,
@@ -140,6 +155,11 @@ export default class AliPlayer extends Vue {
 
           autoPlayDelay: this.autoPlayDelay,
           autoPlayDelayDisplayText: this.autoPlayDelayDisplayText,
+
+          // skinLayout: SKINLAYOUT_H5_VOD,
+          // skinLayout: SKINLAYOUT_FLASH_VOD,
+          skinLayout: SKINLAYOUT_H5_LIVE,
+          // skinLayout: SKINLAYOUT_FLASH_LIVE,
         });
 
         // 绑定事件： 当Alipalyer初始化完成后，将编辑器实例通过自定义的ready事件交出去

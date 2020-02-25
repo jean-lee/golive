@@ -29,6 +29,7 @@ function getUrlParam(sKey: string) {
 })
 export default class VideoPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
+  // 默认播放湖南卫视
   @Prop({type: String, default: 'rtmp://58.200.131.2:1935/livetv/hunantv'}) private videopath!: string;
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
@@ -36,6 +37,7 @@ export default class VideoPlayer extends Vue {
 
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   private playStyle: object = {widt: '100%', height: '500px'};
+
   /* ------------------------ WATCH ------------------------ */
 
   /* ------------------------ METHODS ------------------------ */
