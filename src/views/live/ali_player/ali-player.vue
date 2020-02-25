@@ -13,19 +13,19 @@ import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
 })
 export default class AliPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
-  @Prop({type: String, default: ''}) private playStyle!: string;
+  @Prop({type: Object, default: () => {}}) private playStyle!: object;
   @Prop({type: String, default: ''}) private aliplayerSdkPath!: string;
 
-  @Prop({type: Boolean, default: false}) private autoPlay!: boolean;
+  @Prop({type: Boolean, default: false}) private autoplay!: boolean;
   @Prop({type: Boolean, default: false}) private isLive!: boolean;
-  @Prop({type: String, default: false}) private playsinline!: boolean;
+  @Prop({type: Boolean, default: false}) private playsinline!: boolean;
 
   @Prop({type: String, default: '100%'}) private width!: string;
   @Prop({type: String, default: '100%'}) private height!: string;
   @Prop({type: String, default: 'always'}) private controlBarVisibility!: string;
 
-  @Prop({type: String, default: false}) private useH5Prism!: boolean;
-  @Prop({type: String, default: false}) private useFlashPrism!: boolean;
+  @Prop({type: Boolean, default: false}) private useH5Prism!: boolean;
+  @Prop({type: Boolean, default: false}) private useFlashPrism!: boolean;
 
   @Prop({type: String, default: ''}) private vid!: string;
   @Prop({type: String, default: ''}) private playauth!: string;
@@ -35,7 +35,7 @@ export default class AliPlayer extends Vue {
 
   @Prop({type: String, default: 'h5'}) private x5Type!: string;
   @Prop({type: String, default: 'top'}) private x5VideoPosition!: string;
-  @Prop({type: String, default: false}) private x5Fullscreen!: boolean;
+  @Prop({type: Boolean, default: false}) private x5Fullscreen!: boolean;
   @Prop({type: Number, default: 2}) private x5Orientation!: number;
 
   @Prop({type: Number, default: 0}) private autoPlayNumber!: number;
@@ -99,7 +99,7 @@ export default class AliPlayer extends Vue {
     if (playerScriptTag.loaded) {
       this.scriptTagsStatus++;
     } else {
-      playerScriptTag.addEvenListener('load', () => {
+      playerScriptTag.addEventListener('load', () => {
         this.scriptTagsStatus++;
         playerScriptTag.loaded = true;
       });
@@ -116,7 +116,7 @@ export default class AliPlayer extends Vue {
         this.instance = (window as any).Aliplayer({
           id: this.playerId,
 
-          autoPlay: this.autoPlay,
+          autoplay: this.autoplay,
           isLive: this.isLive,
           playsinline: this.playsinline,
 
@@ -133,10 +133,10 @@ export default class AliPlayer extends Vue {
           cover: this.cover,
           format: this.format,
 
-          x5Type: this.x5Type,
-          x5VideoPosition: this.x5VideoPosition,
-          x5Fullscreen: this.x5Fullscreen,
-          x5Orientation: this.x5Orientation,
+          x5_type: this.x5Type,
+          x5_video_position: this.x5VideoPosition,
+          x5_fullscreen: this.x5Fullscreen,
+          x5_orientation: this.x5Orientation,
 
           autoPlayDelay: this.autoPlayDelay,
           autoPlayDelayDisplayText: this.autoPlayDelayDisplayText,

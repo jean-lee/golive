@@ -1,11 +1,11 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import VideoPlayer from '@/views/live/video-player.vue';
+import LivingIndex from '@/views/live/index.vue';
 
 @Component({
   components: {
-    VideoPlayer,
+    LivingIndex,
   },
 })
 export default class App extends Vue {}
@@ -13,7 +13,7 @@ export default class App extends Vue {}
 
 <template>
   <div id="app">
-    <video-player />
+    <living-index></living-index>
   </div>
 </template>
 
@@ -25,4 +25,6 @@ export default class App extends Vue {}
   text-align center
   color #2c3e50
   margin-top 60px
+  height 100%
+
 </style>

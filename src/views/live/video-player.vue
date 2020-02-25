@@ -29,13 +29,13 @@ function getUrlParam(sKey: string) {
 })
 export default class VideoPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
-
+  @Prop({type: String, default: 'rtmp://58.200.131.2:1935/livetv/hunantv'}) private videopath!: string;
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
 
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
-
+  private playStyle: object = {widt: '100%', height: '500px'};
   /* ------------------------ WATCH ------------------------ */
 
   /* ------------------------ METHODS ------------------------ */
@@ -46,13 +46,15 @@ export default class VideoPlayer extends Vue {
 
 <template>
 <div class="module_living">
-<ali-player v-if="videopath !== ''" :source="videopath" :autoplay="true" :is-live="true"></ali-player>
+  <ali-player v-if="videopath !== ''" :source="videopath" 
+  :autoplay="true" :is-live="true" :play-style="playStyle"></ali-player>
 </div>
 </template>
 
 <style lang="stylus" scoped>
 
 .module_living
-  pass
+  width 100%
+  height auto
 
 </style>
