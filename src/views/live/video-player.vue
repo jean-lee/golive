@@ -7,7 +7,8 @@
 
 import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
 
-import AliPlayer from './ali_player/ali-player.vue';
+import AliPlayer from './ali_player/ali_player.vue';
+// import VueAliplayer from './ali_player/vue_aliplayer.vue';
 
 function getUrlParam(sKey: string) {
   const resObj: any = null;
@@ -25,6 +26,7 @@ function getUrlParam(sKey: string) {
   name: 'video-player',
   components: {
     AliPlayer,
+    // VueAliplayer,
   },
 })
 export default class VideoPlayer extends Vue {
@@ -49,7 +51,9 @@ export default class VideoPlayer extends Vue {
 <template>
 <div class="module_living">
   <ali-player v-if="videopath !== ''" :source="videopath" 
-  :autoplay="true" :is-live="true" :play-style="playStyle"></ali-player>
+  :autoplay="false" :is-live="true" :play-style="playStyle"></ali-player>
+
+  <!-- <vue-aliplayer></vue-aliplayer> -->
 </div>
 </template>
 

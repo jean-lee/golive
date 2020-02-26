@@ -82,6 +82,7 @@ export default class LiveIndex extends Vue {
 @import '~@/assets/styles/var.styl';
 
 .module_index
+  // position fixed
   margin-top 60px
   .left
     display inline-block

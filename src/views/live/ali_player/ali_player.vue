@@ -14,8 +14,13 @@ import {
   SKINLAYOUT_FLASH_LIVE,
 } from '@/constant/ali_player.ts';
 
+import CommentDanmu from '@/views/live/barrage/comment_danmu.vue';
+
 @Component({
   name: 'ali-player',
+  components: {
+    CommentDanmu,
+  },
 })
 export default class AliPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
@@ -78,6 +83,11 @@ export default class AliPlayer extends Vue {
   private scriptTagsStatus: number = 0;
   private instance: any = null;
 
+  private danmukuList = [
+    {mode: 1, text: 'hello world', stime: 0, size: '25', color: '#0056dd'},
+    {mode: 1, text: 'hello jean', stime: 10, size: '35', color: '#f00'},
+    {mode: 1, text: 'who are you', stime: 30, size: '14', color: '#fff'},
+  ];
   /* ------------------------ WATCH ------------------------ */
 
   /* ------------------------ METHODS ------------------------ */
@@ -160,6 +170,12 @@ export default class AliPlayer extends Vue {
           // skinLayout: SKINLAYOUT_FLASH_VOD,
           skinLayout: SKINLAYOUT_H5_LIVE,
           // skinLayout: SKINLAYOUT_FLASH_LIVE,
+
+          // components: [{
+          //   name: 'AliplayerDanmuComponent',
+          //   // type: AliPlayerComponent.AliplayerDanmuComponent,
+          //   args: [this.danmukuList],
+          // }],
         });
 
         // 绑定事件： 当Alipalyer初始化完成后，将编辑器实例通过自定义的ready事件交出去
@@ -279,7 +295,9 @@ export default class AliPlayer extends Vue {
 </script>
 
 <template>
-  <div class="prism-player" :id="playerId" :style="playStyle"></div>
+  <div class="prism-player" :id="playerId" :style="playStyle">
+    <comment-danmu></comment-danmu>
+  </div>
 </template>
 
 <style lang="stylus" scoped>

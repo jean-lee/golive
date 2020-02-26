@@ -2711,6 +2711,11 @@ commander@~2.19.0:
   resolved "https://registry.npm.taobao.org/commander/download/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
   integrity sha1-9hmKqE5bg8RgVLlN3tv+1e6f8So=
 
+comment-core-library@^0.11.1:
+  version "0.11.1"
+  resolved "http://r.cnpmjs.org/comment-core-library/download/comment-core-library-0.11.1.tgz#095a722c649d67d3e7be9a8823366136775d0987"
+  integrity sha1-CVpyLGSdZ9PnvpqIIzZhNnddCYc=
+
 commondir@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/commondir/download/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
