@@ -24,7 +24,7 @@ import CommentDanmu from '@/views/live/barrage/comment_danmu.vue';
 })
 export default class AliPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
-  @Prop({type: Object, default: () => {}}) private playStyle!: object;
+  @Prop({type: Object, default() { return {width: '100%', height: '500px'}; }}) private playStyle!: object;
   @Prop({type: String, default: ''}) private aliplayerSdkPath!: string;
 
   @Prop({type: Boolean, default: false}) private autoplay!: boolean;
@@ -301,7 +301,7 @@ export default class AliPlayer extends Vue {
 </template>
 
 <style lang="stylus" scoped>
-@import url('https://g.alicdn.com/de/prismplayer/2.8.2/skins/default/aliplayer-min.css');
+// @import url('https://g.alicdn.com/de/prismplayer/2.8.2/skins/default/aliplayer-min.css');
 
 .module_idnex
   pass

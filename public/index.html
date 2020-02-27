@@ -6,77 +6,20 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
-    <script src=./js/aliplayer.min.v2.8.2.js></script>
+    <link rel="stylesheet" href="<%= BASE_URL %>css/aliplayer-min.v2.8.2.css">
+    <script src="<%= BASE_URL %>js/aliplayer.min.v2.8.2.js"></script>
 
-    <!-- <link rel="stylesheet" href="./css/aliplayer-min.v2.8.7.css"> -->
-    <!-- <script src=./js/aliplayer-min.v2.8.7></script> -->
+    <!-- <link rel="stylesheet" href="<%= BASE_URL %>css/aliplayer-min.v2.8.7.css">
+    <script src="<%= BASE_URL %>js/aliplayer-min.v2.8.7"></script> -->
 
-    <link rel="stylesheet" href="./css/comment-demo-style">
-    <link rel="stylesheet" href="./css/comment-core-library-danmu.min.css">
-    <script src=./js/CommentCoreLibrary.v0.11.0.min.js></script>
-    <script>
-      // window.onload = showComment();
-
-      // function showComment() {
-      //   var CM = new CommentManager(document.getElementById('my-comment-stage'));
-      //   CM.init(); // 初始化
-      //   // 载入弹幕列表
-      //   var danmakuList = [
-      //       {
-      //           "mode":1,
-      //           "text":"Hello World",
-      //           "stime":0,
-      //           "size":25,
-      //           "color":0xffffff
-      //       }
-      //   ];
-      //   CM.load(danmakuList);
-
-      //   // 插入弹幕
-      //   var someDanmakuAObj = {
-      //       "mode":1,
-      //       "text":"Hello CommentCoreLibrary",
-      //       "stime":1000,
-      //       "size":30,
-      //       "color":0xff0000
-      //   };
-      //   CM.insert(someDanmakuAObj);
-
-      //   // 启动播放弹幕（在未启动状态下弹幕不会移动）
-      //   CM.start();
-
-      //   // 停止播放（停止弹幕移动）
-      //   CM.stop();
-
-      //   // 更新时间轴时间
-      //   CM.time(500);
-      //   CM.time(1000);
-      // }
-
-      document.addEventListener('DOMContentLoaded', function(){
-    var CM = new CommentManager(document.getElementById('commentCanvas'));
-    CM.init();
-    // 启动播放弹幕（在未启动状态下弹幕不会移动）
-    CM.start();
-    // 开放 CM 对象到全局这样就可以在 console 终端里操控
-    window.CM = CM;
-    // 弹幕播放
-    // cmtController();
-} ,false);
-
-    </script>
+    <link rel="stylesheet" href="<%= BASE_URL %>css/comment-core-library-danmu.min.css">
+    <script src="<%= BASE_URL %>js/CommentCoreLibrary.v0.11.0.min.js"></script>
   </head>
   <body>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app" style="display: none;"></div>
-    <!-- built files will be auto injected -->
-    
-    <div class="feng-ccl-panel">
-      <div class="abp" id="feng-player">
-          <div id="commentCanvas" class="container"></div>
-      </div>
-  </div>
+    <!--  style="display: none;" -->
+    <div id="app"></div>
   </body>
 </html>

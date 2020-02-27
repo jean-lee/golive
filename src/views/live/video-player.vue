@@ -38,7 +38,7 @@ export default class VideoPlayer extends Vue {
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
 
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
-  private playStyle: object = {widt: '100%', height: '500px'};
+  private playStyle: object = {width: '100%', height: '500px'};
 
   /* ------------------------ WATCH ------------------------ */
 
