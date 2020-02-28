@@ -16,6 +16,20 @@ declare namespace LIVESPACE {
   }
 
 
+/* ============================ 播放视频 ============================ */
+/**
+ * 视频对象
+ */
+interface VIDEOTYPE {
+  type: string; // 视频类型
+  id: number;
+  label: string; // 名称
+  value: string; // 地址
+  islive: boolean; // 播放方式
+}
+
+
+
 /* ============================ CommentCoreLibrary 弹幕 类型 ============================ */
 /**
  *  CommentCoreLibrary CommentManager CommentObject单条弹幕类型 | 弹幕抽象对象ICommentData

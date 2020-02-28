@@ -33,12 +33,14 @@ export default class VideoPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
   // 默认播放湖南卫视
   @Prop({type: String, default: 'rtmp://58.200.131.2:1935/livetv/hunantv'}) private videopath!: string;
+  @Prop({type: String, default: 'rtmp'}) private type!: string;
+  @Prop({type: Boolean, default: true}) private islive!: boolean;
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
 
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
-  private playStyle: object = {width: '100%', height: '500px'};
+  private playStyle: object = {width: '100%', height: '577px'};
 
   /* ------------------------ WATCH ------------------------ */
 
@@ -50,8 +52,8 @@ export default class VideoPlayer extends Vue {
 
 <template>
 <div class="module_living">
-  <ali-player v-if="videopath !== ''" :source="videopath" 
-  :autoplay="false" :is-live="true" :play-style="playStyle"></ali-player>
+  <ali-player v-if="videopath !== ''" :source="videopath" :play-style="playStyle"
+  :autoplay="islive" :is-live="islive" :use-h5-prism="type === 'rtmp'"></ali-player>
 
   <!-- <vue-aliplayer></vue-aliplayer> -->
 </div>
@@ -60,7 +62,8 @@ export default class VideoPlayer extends Vue {
 <style lang="stylus" scoped>
 
 .module_living
-  width 100%
+  margin 0 auto
+  width 1024px
   height auto
 
 </style>

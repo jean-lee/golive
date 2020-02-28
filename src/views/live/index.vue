@@ -10,12 +10,6 @@ import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
 
 import VideoPlayer from '@/views/live/video-player.vue';
 
-interface VIDEOTYPE {
-  type: string;
-  id: number;
-  label: string;
-  value: string;
-}
 
 @Component({
   name: 'live-index',
@@ -31,20 +25,21 @@ export default class LiveIndex extends Vue {
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
 
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
-  private videoAddress: VIDEOTYPE[] = [
-    {type: 'hls', id: 0, label: 'CCTV1', value: 'http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8'},
-    {type: 'hls', id: 1, label: 'CCTV3', value: 'http://ivi.bupt.edu.cn/hls/cctv3hd.m3u8'},
-    {type: 'hls', id: 2, label: 'CCTV6', value: 'http://ivi.bupt.edu.cn/hls/cctv6hd.m3u8'},
-    {type: 'rtmp', id: 3, label: '湖南卫视', value: 'rtmp://58.200.131.2:1935/livetv/hunantv'},
-    {type: 'rtmp', id: 4, label: '香港卫视', value: 'rtmp://live.hkstv.hk.lxdns.com/live/hks1'},
-    {type: 'rtmp', id: 5, label: '香港财经', value: 'rtmp://202.69.69.180:443/webcast/bshdlive-pc'},
-    {type: 'rtmp', id: 6, label: '韩国GoodTV', value: 'rtmp://mobliestream.c3tv.com:554/live/goodtv.sdp'},
-    {type: 'rtmp', id: 7, label: '美国1', value: 'rtmp://ns8.indexforce.com/home/mystream'},
-    {type: 'rtmp', id: 8, label: '美国中文电视', value: 'rtmp://media3.sinovision.net:1935/live/livestream'},
+  private videoAddress: LIVESPACE.VIDEOTYPE[] = [
+    {type: 'hls', id: 0, label: 'CCTV1', value: 'http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8', islive: true},
+    {type: 'hls', id: 1, label: 'CCTV3', value: 'http://ivi.bupt.edu.cn/hls/cctv3hd.m3u8', islive: false},
+    {type: 'hls', id: 2, label: 'CCTV6', value: 'http://ivi.bupt.edu.cn/hls/cctv6hd.m3u8', islive: true},
+    {type: 'rtmp', id: 3, label: '湖南卫视', value: 'rtmp://58.200.131.2:1935/livetv/hunantv', islive: true},
+    {type: 'rtmp', id: 4, label: '香港卫视', value: 'rtmp://live.hkstv.hk.lxdns.com/live/hks1', islive: false},
+    {type: 'rtmp', id: 5, label: '香港财经', value: 'rtmp://202.69.69.180:443/webcast/bshdlive-pc', islive: true},
+    {type: 'rtmp', id: 6, label: '韩国GoodTV', value: 'rtmp://mobliestream.c3tv.com:554/live/goodtv.sdp', islive: true},
+    {type: 'rtmp', id: 7, label: '美国1', value: 'rtmp://ns8.indexforce.com/home/mystream', islive: true},
+    {type: 'rtmp', id: 8, label: '美国中文电视', value: 'rtmp://media3.sinovision.net:1935/live/livestream', islive: true},
   ];
 
   private activeVideoIndex: number = 0;
   private key: number = 0;
+
   /* ------------------------ WATCH ------------------------ */
 
   /* ------------------------ METHODS ------------------------ */
@@ -65,7 +60,7 @@ export default class LiveIndex extends Vue {
   <div class="left">
     <p class="video_title">{{videoAddress[activeVideoIndex].label}}</p>
     <!-- 播放画面 -->
-    <video-player :videopath="videoAddress[activeVideoIndex].value" :key="key"/>
+    <video-player :videopath="videoAddress[activeVideoIndex].value" :key="key" :type="videoAddress[activeVideoIndex].type" :islive="videoAddress[activeVideoIndex].islive"/>
   </div>
   <div class="right">
     <ul class="video_list">

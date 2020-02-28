@@ -17,7 +17,7 @@
  */
 
 
-// h5 点播
+// 点播 h5 controlBar
 export const SKINLAYOUT_H5_VOD = [
   {name: 'bigPlayButton', align: 'blabs', x: 30, y: 80},
   {
@@ -41,7 +41,7 @@ export const SKINLAYOUT_H5_VOD = [
    },
  ];
 
-// flash 点播
+// 点播 flash controlBar
 export const SKINLAYOUT_FLASH_VOD = [
   {name: 'bigPlayButton', align: 'blabs', x: 30, y: 80},
   {
@@ -67,7 +67,7 @@ export const SKINLAYOUT_FLASH_VOD = [
   },
 ];
 
-// h5 直播
+// 直播 h5 controlBar
 export const SKINLAYOUT_H5_LIVE = [
   {name: 'bigPlayButton', align: 'blabs', x: 30, y: 80},
   {name: 'errorDisplay', align: 'tlabs', x: 0, y: 0},
@@ -84,7 +84,7 @@ export const SKINLAYOUT_H5_LIVE = [
   },
 ];
 
-// flash 直播
+// 直播 flash controlBar
 export const SKINLAYOUT_FLASH_LIVE = [
   {name: 'bigPlayButton', align: 'blabs', x: 30, y: 80},
   {name: 'errorDisplay', align: 'tlabs', x: 0, y: 0},
@@ -92,9 +92,9 @@ export const SKINLAYOUT_FLASH_LIVE = [
   {
     name: 'controlBar', align: 'blabs', x: 0, y: 0,
     children: [
-      {name: 'liveDisplay', align: 'tlabs', x: 15, y: 25},
-      {name: 'fullScreenButton', align: 'tr', x: 10, y: 25},
-      {name: 'volume', align: 'tr', x: 10, y: 25},
+      {name: 'liveDisplay', align: 'tlabs', x: 15, y: 0},
+      {name: 'fullScreenButton', align: 'tr', x: 10, y: 12},
+      {name: 'volume', align: 'tr', x: 5, y: 10},
     ],
   },
 ];

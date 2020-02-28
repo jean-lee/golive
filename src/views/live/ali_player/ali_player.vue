@@ -8,8 +8,8 @@
 import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
 
 import {
-  // SKINLAYOUT_H5_VOD,
-  // SKINLAYOUT_FLASH_VOD,
+  SKINLAYOUT_H5_VOD,
+  SKINLAYOUT_FLASH_VOD,
   SKINLAYOUT_H5_LIVE,
   SKINLAYOUT_FLASH_LIVE,
 } from '@/constant/ali_player.ts';
@@ -24,11 +24,11 @@ import CommentDanmu from '@/views/live/barrage/comment_danmu.vue';
 })
 export default class AliPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
-  @Prop({type: Object, default() { return {width: '100%', height: '500px'}; }}) private playStyle!: object;
+  @Prop({type: Object, default() { return {width: '100%', height: '520px'}; }}) private playStyle!: object;
   @Prop({type: String, default: ''}) private aliplayerSdkPath!: string;
 
   @Prop({type: Boolean, default: false}) private autoplay!: boolean;
-  @Prop({type: Boolean, default: true}) private isLive!: boolean;
+  @Prop({type: Boolean, default: true}) private isLive!: boolean; // true -> 直播
   @Prop({type: Boolean, default: false}) private playsinline!: boolean;
 
   @Prop({type: String, default: '100%'}) private width!: string;
@@ -36,8 +36,8 @@ export default class AliPlayer extends Vue {
   // controlBarVisibility -> hover | click | always
   @Prop({type: String, default: 'always'}) private controlBarVisibility!: string;
 
-  @Prop({type: Boolean, default: false}) private useH5Prism!: boolean;
-  @Prop({type: Boolean, default: false}) private useFlashPrism!: boolean;
+  @Prop({type: Boolean, default: true}) private useH5Prism!: boolean;
+  // @Prop({type: Boolean, default: false}) private useFlashPrism!: boolean;
   // 显示缓冲进度
   @Prop({type: Boolean, default: true}) private showBuffer!: boolean;
   // 快照
@@ -46,7 +46,7 @@ export default class AliPlayer extends Vue {
   @Prop({type: String, default: ''}) private vid!: string;
   @Prop({type: String, default: ''}) private playauth!: string;
   @Prop({type: String, default: ''}) private source!: string;
-  @Prop({type: String, default: ''}) private cover!: string;
+  @Prop({type: String, default: ''}) private cover!: string; // 自动加载与自动播放为false时生效显示
   @Prop({type: String, default: 'm3u8'}) private format!: string;
 
   @Prop({type: String, default: 'h5'}) private x5Type!: string;
@@ -80,6 +80,7 @@ export default class AliPlayer extends Vue {
   }
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   private playerId: string = 'aliplayer_' + Math.random() * 100000000000000000;
+  // private playerId: string = 'J_prismPlayer';
   private scriptTagsStatus: number = 0;
   private instance: any = null;
 
@@ -88,6 +89,15 @@ export default class AliPlayer extends Vue {
     {mode: 1, text: 'hello jean', stime: 10, size: '35', color: '#f00'},
     {mode: 1, text: 'who are you', stime: 30, size: '14', color: '#fff'},
   ];
+
+  get whichSkinLayout() {
+    if (this.isLive) {
+      return this.useH5Prism ? SKINLAYOUT_H5_LIVE : SKINLAYOUT_FLASH_LIVE;
+    }
+    return this.useH5Prism ? SKINLAYOUT_H5_VOD : SKINLAYOUT_FLASH_VOD;
+    // return this.isLive ? (this.useH5Prism ? SKINLAYOUT_H5_LIVE : SKINLAYOUT_FLASH_LIVE)
+    //   : (this.useH5Prism ? SKINLAYOUT_H5_VOD : SKINLAYOUT_FLASH_VOD);
+  }
   /* ------------------------ WATCH ------------------------ */
 
   /* ------------------------ METHODS ------------------------ */
@@ -148,7 +158,7 @@ export default class AliPlayer extends Vue {
           controlBarVisibility: this.controlBarVisibility,
 
           useH5Prism: this.useH5Prism,
-          useFlashPrism: this.useFlashPrism,
+          useFlashPrism: !this.useH5Prism,
           showBuffer: this.showBuffer,
           snapshot: this.snapshot,
 
@@ -166,16 +176,7 @@ export default class AliPlayer extends Vue {
           autoPlayDelay: this.autoPlayDelay,
           autoPlayDelayDisplayText: this.autoPlayDelayDisplayText,
 
-          // skinLayout: SKINLAYOUT_H5_VOD,
-          // skinLayout: SKINLAYOUT_FLASH_VOD,
-          skinLayout: SKINLAYOUT_H5_LIVE,
-          // skinLayout: SKINLAYOUT_FLASH_LIVE,
-
-          // components: [{
-          //   name: 'AliplayerDanmuComponent',
-          //   // type: AliPlayerComponent.AliplayerDanmuComponent,
-          //   args: [this.danmukuList],
-          // }],
+          skinLayout: this.whichSkinLayout,
         });
 
         // 绑定事件： 当Alipalyer初始化完成后，将编辑器实例通过自定义的ready事件交出去
@@ -301,7 +302,6 @@ export default class AliPlayer extends Vue {
 </template>
 
 <style lang="stylus" scoped>
-// @import url('https://g.alicdn.com/de/prismplayer/2.8.2/skins/default/aliplayer-min.css');
 
 .module_idnex
   pass
