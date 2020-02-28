@@ -26,14 +26,14 @@ export default class CommentDanmu extends Vue {
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   private CM: any;
   private cmtArr: LIVESPACE.CmtDanmuType[] = [
-    {mode: 1, text: 'hello world',  size: '25', color: 0x0056dd, backgroundColor: '#424448', border: true },
-    {mode: 1, text: 'hello jean', size: '35', color: 0x0ff6dd, backgroundColor: '#fff', border: true},
-    {mode: 1, text: 'who are you', size: '14', color: 0x00ffdd, backgroundColor: '#400', border: true},
-    {mode: 1, text: 'who are you', stime: 30, size: '14', color: 0x0056ff, bgColor: '#424448', border: true},
-    {mode: 1, text: 'who are you', stime: 30, size: '14', color: 0xff56dd, bgColor: '#424448'},
-    {mode: 1, text: 'who are you', stime: 30, size: '14', color: 0xff56dd, bgColor: '#424448'},
-    {mode: 1, text: 'who are you', stime: 30, size: '14', color: 0xff56dd, bgColor: '#fff'},
-    {mode: 1, text: 'who are you', stime: 30, size: '14', color: 0xff56dd, bgColor: '#fff'},
+    {mode: 1, text: '1 - hello world', stime: 0,  size: '12', backgroundColor: '#424448', border: false },
+    {mode: 1, text: '2 - hello jean', stime: 1500, size: '16', backgroundColor: '#fff', border: true},
+    {mode: 1, text: '3 - who are you', stime: 3000, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '4 - who are you', stime: 3000, size: '25', bgColor: '#424448', border: true},
+    {mode: 1, text: '5 - who are you', stime: 6000, size: '36', bgColor: '#424448', border: false},
+    {mode: 1, text: '6 - who are you', stime: 70000, size: '45', bgColor: '#424448', border: false},
+    {mode: 1, text: '7 - who are you', stime: 70000, size: '64', bgColor: '#fff', border: true},
+    {mode: 1, text: '8 - who are you', stime: 6600, size: '18', bgColor: '#fff', border: false},
   ];
   /* ------------------------ WATCH ------------------------ */
 
@@ -44,6 +44,12 @@ export default class CommentDanmu extends Vue {
     }
 
     this.CM = new (window as any).CommentManager(document.getElementById('my_comment_stage'));
+    // a: this.CM.options.gloabal.scale // 单个弹幕对象全局生存时间加成
+    // b: this.CM.options.scroll.scale // 单个弹幕对象滚动弹幕生存时间加成
+    // 固定弹幕（顶部、底部）生存时间为4*a; 滚动弹幕（滚动、底部滚动、顶部滚动）总生存时间是4*a*b
+    // 弹幕默认生存时间是4s。加成数值越大，弹幕运行速度越低
+    // 相同加成下不同长度的弹幕， 速度是不一样的。 弹幕大了，速度就慢了
+    this.CM.options.global.className = 'cmt self_customization';
     this.CM.init();
     // CM.load(this.danmukuList);
 
@@ -87,9 +93,13 @@ export default class CommentDanmu extends Vue {
    */
   private sendCmtData(cmtArr: LIVESPACE.CmtDanmuType[]) {
     for (const item of cmtArr) {
-       item.dur = Math.floor(Math.random() * 4000 + 4000);
+       item.dur = Math.floor(Math.random() * 40000 + 4000);
+       item.color = '#fff';
+      //  item.backgroundColor = 'rgba(ff, 00, dd, .5)';
+       item.backgroundColor = '#fee';
       // 把一条 弹幕显示到屏幕上, 它不会把弹幕发送到服务器，也不会把弹幕插入时间轴
        this.CM.send(item);
+      //  this.CM.stop();
     }
   }
   /**
@@ -101,20 +111,25 @@ export default class CommentDanmu extends Vue {
       this.getCmtDataList();
     }, 3000);
   }
+
+  // private dynamicDanmu() {
+  //   const provider = new CommentProvider();
+
+  //   // 绑定动态源，动态源可以是两种：LongPoll 或者 EventDispatcher
+  //   provider.addDynamicSource(source, CommentProvider.SOURCE_JSON);
+  //   // 会使用 parseOne 来逐个解析动态弹幕
+  //   provider.addParser(new SomeFormat.JSONParser(), CommentProvider.SOURCE_JSON);
+
+  //   provider.addTarget(this.CM);
+  // }
 }
 
 </script>
 
 <template>
-  <div id="my_comment_stage" class="container"></div>
+  <div id="my_comment_stage" class="container module_comment_danmu"></div>
 </template>
 
 <style lang="stylus" scoped>
-
-// .module_comment_danmu
-// .container
-//   position relative
-//   width 100%
-//   height 500px
 
 </style>

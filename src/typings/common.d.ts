@@ -18,25 +18,51 @@ declare namespace LIVESPACE {
 
 /* ============================ CommentCoreLibrary 弹幕 类型 ============================ */
 /**
- *  CommentCoreLibrary CommentManager 单条弹幕类型
+ *  CommentCoreLibrary CommentManager CommentObject单条弹幕类型 | 弹幕抽象对象ICommentData
  */
 export interface CmtDanmuType {
   mode: number; // 类型
-  text: string; // 弹幕的文字内容。在创造弹幕对象后，对 text 的更改将无意义。
-  stime?: number; // 弹幕相对于视频位置的开始时间（ms）
+  stime: number; // 弹幕相对于视频位置的开始时间（ms）弹幕根据stime排序输出
+  text: string; // 弹幕的文字内容。在创造弹幕对象后，对 text 的更改将无意义。图片弹幕中的 text 字段表示图片的URL。
   size: string; // 文字大小
-  color: number; // 字体颜色, 需为16进制格式: 0xff00ff
+  // color: number; // 字体颜色, 需为16进制格式: 0xff00ff
+  
+  // ############### 弹幕附加显示信息 ###############
+  color?: string;
+  font?: string; // 弹幕字体。默认使用字体
   bgColor?: string; // 背景
   backgroundColor?: string; // 背景
   border?: boolean; // 弹幕边框
-  
+  shadow?: number; //是否显示弹幕描边/阴影
+
   ttl?: number; // Time To Live: ttl 表示弹幕剩余的生存时间（ms）（注意：在css模式下该子段可能不准确）
   dur?: number; // 弹幕的总生存时间（ms）。默认情况下，对于滚动弹幕这个数字是 4000
   motion?: string[]; // 控制一般弹幕（CoreComment）的运动轨迹，别的类型的弹幕可能忽略此属性（如 滚动弹幕）
   movable?: boolean; // 弹幕是否可移动
   width?: number; // 弹幕的宽高
   height?: number;
-  shadow?: number;
+  cindex?: number; // 弹幕在弹幕池里的ID，用于删除弹幕时寻找
+  date?: string; // 排序时，两个相同stime的弹幕，Date更新的排序在后面（渲染更靠上层）
+
+  // ############### 暂未使用的配置 ###############
+  // dbid: any; // 记录弹幕的数据库ID，同一时间靠前的弹幕会先显示，靠后的后显示，来实现遮罩
+
+
+  // axis: number; // 坐标轴增长方向
+  // aling: number; // 对齐锚点（方形四角）
+  // absolute: boolean; // 对齐锚点（方形四角）
+  // parent: string; // 此弹幕归属的上层管理器
+  // dom: any; // 对应的渲染元素，根据不同情况选择HTMLDivElement|Canvas|etc. 默认为div元素
+  // ############### 弹幕methods方法 ###############
+  // constructor
+  // init
+  // time
+  // update
+  // invalidate
+  // animate
+  // finish
+  // stop
+  // toString
 }
 
 }

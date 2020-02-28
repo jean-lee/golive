@@ -2,11 +2,11 @@
 /**
  * Aliplayer可以通过skinLayout属性去定制三个组件是否显示和位置:
  * 播放按钮 | Loading动画 | Controlbar的UI
- * 
+ *
  * 设置规则：
  * skinLayout属性未设置，则默认显示全部；设置为空集合[]或false时，则全部隐藏
  * 如果是直播controlBar的children属性，只能是liveDisplay、fullScreenButton和Volume3个UI组件
- * 
+ *
  * 可定义属性
  * align， {string}， 组件相对于父级组件的对齐方式，可选项有：
  * cc： 相对于父组件绝对居中

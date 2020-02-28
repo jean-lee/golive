@@ -2,7 +2,7 @@
 /* COMPONENT DOCUMENT
  * author: ljx
  * date: 2020/02/26
- * desc: 
+ * desc: 阿里播放器SDK（基于CommentCoreLibrary）
  */
 
 import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';

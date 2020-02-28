@@ -4,5 +4,5 @@ import router from '@/router';
 
 router.beforeEach((to: Route, from: Route, next: any) => {
 
-  
-})
+
+});

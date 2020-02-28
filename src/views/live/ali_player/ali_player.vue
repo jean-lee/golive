@@ -295,7 +295,7 @@ export default class AliPlayer extends Vue {
 </script>
 
 <template>
-  <div class="prism-player" :id="playerId" :style="playStyle">
+  <div class="prism-player abp" :id="playerId" :style="playStyle">
     <comment-danmu></comment-danmu>
   </div>
 </template>

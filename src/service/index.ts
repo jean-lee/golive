@@ -24,7 +24,7 @@ axios.interceptors.request.use((config: MyAxiosRequestConfig) => {
 );
 
 
-axios.interceptors.response.use((response: AxiosResponse<LIVISPACE.AjaxResponseType>) => {
+axios.interceptors.response.use((response: AxiosResponse<LIVESPACE.AjaxResponseType>) => {
   return response;
 }, (error: any) => {
   return Promise.reject(error);

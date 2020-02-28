@@ -1,6 +1,7 @@
 // ---------------------------------------- 样式 ----------------------------------------
 import '@/assets/styles/reset.styl';
 import '@/assets/styles/_common.styl';
+import '@/assets/styles/_comment_danmu.styl';
 
 
 // ---------------------------------------- plugins ----------------------------------------
