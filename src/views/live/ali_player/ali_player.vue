@@ -25,11 +25,11 @@ import CommentDanmu from '@/views/live/barrage/comment_danmu.vue';
 export default class AliPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
   @Prop({type: Object, default() { return {width: '100%', height: '520px'}; }}) private playStyle!: object;
-  @Prop({type: String, default: ''}) private aliplayerSdkPath!: string;
+  @Prop({type: String, default: 'http://g.alicdn.com/de/prismplayer/2.8.7/aliplayer-min.js'}) private aliplayerSdkPath!: string;
 
   @Prop({type: Boolean, default: false}) private autoplay!: boolean;
   @Prop({type: Boolean, default: true}) private isLive!: boolean; // true -> 直播
-  @Prop({type: Boolean, default: false}) private playsinline!: boolean;
+  @Prop({type: Boolean, default: true}) private playsinline!: boolean; // H5是否内置播放
 
   @Prop({type: String, default: '100%'}) private width!: string;
   @Prop({type: String, default: '100%'}) private height!: string;
@@ -60,21 +60,21 @@ export default class AliPlayer extends Vue {
 
 
   @Emit('ready') private readyEmit() {}
-  @Emit('ready') private playEmit() {}
-  @Emit('ready') private pauseEmit() {}
-  @Emit('ready') private endedEmit() {}
-  @Emit('ready') private liveStreamStopEmit() {}
-  @Emit('ready') private m3u8RetryEmit() {}
-  @Emit('ready') private hideBarEmit() {}
-  @Emit('ready') private waitingEmit() {}
-  @Emit('ready') private snapshotedEmit() {}
+  @Emit('play') private playEmit() {}
+  @Emit('pause') private pauseEmit() {}
+  @Emit('ended') private endedEmit() {}
+  @Emit('live-streamstop') private liveStreamStopEmit() {}
+  @Emit('m3u8retry') private m3u8RetryEmit() {}
+  @Emit('hidebar') private hideBarEmit() {}
+  @Emit('waiting') private waitingEmit() {}
+  @Emit('snapshoted') private snapshotedEmit() {}
 
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
-  private created() {
-    this.get_window_aliplayer();
-  }
+  // private created() {
+  //   this.get_window_aliplayer();
+  // }
   private mounted() {
     this.get_window_aliplayer();
   }
@@ -137,7 +137,6 @@ export default class AliPlayer extends Vue {
     }
     this.initAliplayer();
   }
-
   /**
    * 初始化播放器
    */
@@ -149,7 +148,7 @@ export default class AliPlayer extends Vue {
           id: this.playerId,
 
           autoplay: this.autoplay,
-          isLive: this.isLive, // 直播时，页面将无播放暂停按钮
+          isLive: this.isLive,
           rePlay: this.replay,
           playsinline: this.playsinline,
 
@@ -157,16 +156,16 @@ export default class AliPlayer extends Vue {
           height: this.height,
           controlBarVisibility: this.controlBarVisibility,
 
-          useH5Prism: this.useH5Prism,
-          useFlashPrism: !this.useH5Prism,
-          showBuffer: this.showBuffer,
-          snapshot: this.snapshot,
-
           vid: this.vid,
           playauth: this.playauth,
           source: this.source,
           cover: this.cover,
           format: this.format,
+
+          useH5Prism: this.useH5Prism,
+          useFlashPrism: !this.useH5Prism,
+          showBuffer: this.showBuffer,
+          snapshot: this.snapshot,
 
           x5_type: this.x5Type,
           x5_video_position: this.x5VideoPosition,

@@ -53,9 +53,9 @@ export default class VideoPlayer extends Vue {
 <template>
 <div class="module_living">
   <ali-player v-if="videopath !== ''" :source="videopath" :play-style="playStyle"
-  :autoplay="islive" :is-live="islive" :use-h5-prism="type === 'rtmp'"></ali-player>
+  :autoplay="islive" :is-live="islive" :use-h5-prism="type !== 'rtmp'"></ali-player>
 
-  <!-- <vue-aliplayer></vue-aliplayer> -->
+  <!-- <vue-aliplayer></vue-aliplayer> type === 'rtmp' -->
 </div>
 </template>
 
