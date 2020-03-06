@@ -32,7 +32,7 @@ function getUrlParam(sKey: string) {
 export default class VideoPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
   // 默认播放湖南卫视
-  @Prop({type: String, default: 'rtmp://58.200.131.2:1935/livetv/hunantv'}) private videopath!: string;
+  @Prop({type: String, default: ''}) private videopath!: string;
   @Prop({type: String, default: 'rtmp'}) private type!: string;
   @Prop({type: Boolean, default: true}) private islive!: boolean;
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
@@ -40,20 +40,34 @@ export default class VideoPlayer extends Vue {
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
 
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
-  private playStyle: object = {width: '100%', height: '577px'};
-
+  private playStyle: object = {width: '1024px', height: '576px'};
+  private player: any = null;
   /* ------------------------ WATCH ------------------------ */
 
   /* ------------------------ METHODS ------------------------ */
-
+  private play() {
+    const player = (this.$refs.player as any).instance;
+    player && player.play();
+  }
+  private pause() {
+      const player = (this.$refs.player as any).instance;
+      player && player.pause();
+  }
 }
 
 </script>
 
 <template>
 <div class="module_living">
-  <ali-player v-if="videopath !== ''" :source="videopath" :play-style="playStyle"
+  <!--  :play-style="playStyle" -->
+  <ali-player v-if="videopath !== ''" :source="videopath" ref="player"
   :autoplay="islive" :is-live="islive" :use-h5-prism="type !== 'rtmp'"></ali-player>
+   <div style="margin-top:20px;">
+    <button @click="play">播放</button>
+    <button @click="pause">暂停</button>
+    <!-- <button @click="replay">重播</button>
+    <button @click="convert">切换</button> -->
+  </div>
 
   <!-- <vue-aliplayer></vue-aliplayer> type === 'rtmp' -->
 </div>
@@ -64,6 +78,6 @@ export default class VideoPlayer extends Vue {
 .module_living
   margin 0 auto
   width 1024px
-  height auto
+  height 576px
 
 </style>

@@ -24,40 +24,61 @@ import CommentDanmu from '@/views/live/barrage/comment_danmu.vue';
 })
 export default class AliPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
-  @Prop({type: Object, default() { return {width: '100%', height: '520px'}; }}) private playStyle!: object;
+  // 阿里播放器引用地址
   @Prop({type: String, default: 'http://g.alicdn.com/de/prismplayer/2.8.7/aliplayer-min.js'}) private aliplayerSdkPath!: string;
+  // 播放器自定义样式style '100%' | '100px' 宽高比规则：  w:h = 16:9
+  @Prop({type: Object, default() { return {width: '924px', height: '520px'}; }}) private playStyle!: object;
 
   @Prop({type: Boolean, default: false}) private autoplay!: boolean;
-  @Prop({type: Boolean, default: true}) private isLive!: boolean; // true -> 直播
-  @Prop({type: Boolean, default: true}) private playsinline!: boolean; // H5是否内置播放
+   // 播放内容是否为直播，直播时会禁止用户拖动进度条
+  @Prop({type: Boolean, default: true}) private isLive!: boolean;
 
+  // 播放器宽度 | 高度
   @Prop({type: String, default: '100%'}) private width!: string;
   @Prop({type: String, default: '100%'}) private height!: string;
   // controlBarVisibility -> hover | click | always
   @Prop({type: String, default: 'always'}) private controlBarVisibility!: string;
-
-  @Prop({type: Boolean, default: true}) private useH5Prism!: boolean;
-  // @Prop({type: Boolean, default: false}) private useFlashPrism!: boolean;
+  // 指定使用H5播放器
+  @Prop({type: Boolean, default: false}) private useH5Prism!: boolean;
+  // 指定使用Flash播放器
+  @Prop({type: Boolean, default: false}) private useFlashPrism!: boolean;
+  // H5是否内置播放
+  @Prop({type: Boolean, default: true}) private playsinline!: boolean;
+  // 指定播放地址格式，只有使用vid+plauth播放方式时支持可选值为'mp4'和'm3u8',默认为'mp4'
+  @Prop({type: String, default: 'm3u8'}) private format!: string;
   // 显示缓冲进度
   @Prop({type: Boolean, default: true}) private showBuffer!: boolean;
   // 快照
   @Prop({type: Boolean, default: true}) private snapshot!: boolean;
-
+  // 媒体转码服务的媒体Id
   @Prop({type: String, default: ''}) private vid!: string;
   @Prop({type: String, default: ''}) private playauth!: string;
+  // 视频播放地址url：1、单独url；2、默认状态，表示使用“vi+playauth3、source播放方式优先级最高
   @Prop({type: String, default: ''}) private source!: string;
-  @Prop({type: String, default: ''}) private cover!: string; // 自动加载与自动播放为false时生效显示
-  @Prop({type: String, default: 'm3u8'}) private format!: string;
+  // 播放器默认封面图片，请填写正确的图片url地址Flash播放器封面也需要开启允许跨域访问
+  // 自动加载与自动播放为false时生效显示
+  @Prop({type: String, default: ''}) private cover!: string;
 
+  // 声明启用同层H5播放器，启用时设置的值为'h5'具体参考同层播放 默认'auto'
   @Prop({type: String, default: 'h5'}) private x5Type!: string;
-  @Prop({type: String, default: 'top'}) private x5VideoPosition!: string;
+  // 声明视频播放时是否进入到TBS的全屏模式，默认为false具体参考同层播放
   @Prop({type: Boolean, default: false}) private x5Fullscreen!: boolean;
+  // 声明视频播在界面上的位置，默认为"center" 可选值为：'top'，'center' 具体参考同层播放
+  @Prop({type: String, default: 'top'}) private x5VideoPosition!: string;
+  // 声明TBS播放器支持的方向，可选值：landscape:横屏） portraint:竖屏 landscape
   @Prop({type: Number, default: 2}) private x5Orientation!: number;
 
-  @Prop({type: Number, default: 0}) private autoPlayNumber!: number;
+  // @Prop({type: Number, default: 0}) private autoPlayNumber!: number;
+  // 延迟播放时间，单位为秒具体参考延迟播放
   @Prop({type: Number, default: 0}) private autoPlayDelay!: number;
+  // 延迟播放提示文本具体参考延迟播放
   @Prop({type: String, default: 'waiting'}) private autoPlayDelayDisplayText!: string;
 
+
+  // 重新加载视频
+  // @Prop({type: Boolean, default: false}) private isReload!: boolean;
+  // 显示弹幕
+  @Prop({type: Boolean, default: false}) private showDanmu!: boolean;
 
   @Emit('ready') private readyEmit() {}
   @Emit('play') private playEmit() {}
@@ -82,8 +103,7 @@ export default class AliPlayer extends Vue {
   private playerId: string = 'aliplayer_' + Math.random() * 100000000000000000;
   // private playerId: string = 'J_prismPlayer';
   private scriptTagsStatus: number = 0;
-  private instance: any = null;
-
+  public instance: any = null;
   private danmukuList = [
     {mode: 1, text: 'hello world', stime: 0, size: '25', color: '#0056dd'},
     {mode: 1, text: 'hello jean', stime: 10, size: '35', color: '#f00'},
@@ -188,6 +208,9 @@ export default class AliPlayer extends Vue {
         this.instance.on('pause', () => {
           this.pauseEmit();
         });
+        this.instance.on('waiting', () => {
+          this.waitingEmit();
+        });
         this.instance.on('ended', () => {
           this.endedEmit();
         });
@@ -200,9 +223,7 @@ export default class AliPlayer extends Vue {
         this.instance.on('hideBar', () => {
           this.hideBarEmit();
         });
-        this.instance.on('waiting', () => {
-          this.waitingEmit();
-        });
+
         this.instance.on('snapshoted', () => {
           this.snapshotedEmit();
         });
@@ -212,13 +233,13 @@ export default class AliPlayer extends Vue {
   /**
    * 播放 视频
    */
-  private play() {
+  public play() {
     this.instance.play();
   }
   /**
    * 暂停 视频
    */
-  private pause() {
+  public pause() {
     this.instance.pause();
   }
   /**
@@ -228,21 +249,19 @@ export default class AliPlayer extends Vue {
     this.instance.replay();
   }
   /**
-   * 跳转到某个时刻进行播放
-   * @argument time 的单位为秒
+   * 获取当前的播放时刻，返回的单位为秒
    */
   private seek(time: number) {
     this.instance.seek(time);
   }
   /**
-   * 获取当前时间 单位秒
+   * 获取视频总时长，返回的单位为秒
    */
   private getCurrentTime() {
     this.instance.getCurrentTime();
   }
   /**
    * 获取视频总时长，返回的单位为秒
-   * @returns 返回的单位为秒
    */
   private getDuration() {
     this.instance.getDuration();
@@ -260,7 +279,7 @@ export default class AliPlayer extends Vue {
     this.instance.setVolume();
   }
   /**
-   * 直接播放视频url，time为可选值（单位秒）目前只支持同种格式（mp4/flv/m3u8）之间切换暂不支持直播rtmp流切换
+   * 直接播放视频url，time为可选值（单位秒）目前只支持同种格式（mp4/flv/m3u8）之间切换，暂不支持直播rtmp流切换
    * @argument url 视频地址
    * @argument time 跳转到多少秒
    */
@@ -268,8 +287,7 @@ export default class AliPlayer extends Vue {
     this.instance.loadByUrl(url, time);
   }
   /**
-   * 设置播放速度
-   * @argument speed 速度
+   * 设置倍速播放移动端可能会失效，比如android 微信
    */
   private setSpeed(speed: string) {
     this.instance.setSpeed(speed);
@@ -290,19 +308,21 @@ export default class AliPlayer extends Vue {
   private reloaduserPlayInfoAndVidRequestMts(vid: number, playauth: string) {
     this.instance.reloaduserPlayInfoAndVidRequestMts(vid, playauth);
   }
+  /**
+   * 重新加载
+   */
+  // private reloadPlayer() {
+  //   this.isReload = true;
+  //   this.initAliplayer();
+  //   this.isReload = false;
+  // }
 }
 
 </script>
 
 <template>
   <div class="prism-player abp" :id="playerId" :style="playStyle">
-    <comment-danmu></comment-danmu>
+    <comment-danmu v-if="showDanmu"></comment-danmu>
   </div>
 </template>
 
-<style lang="stylus" scoped>
-
-.module_idnex
-  pass
-
-</style>

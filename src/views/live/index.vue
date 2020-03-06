@@ -65,7 +65,7 @@ export default class LiveIndex extends Vue {
   <div class="right">
     <ul class="video_list">
       <li :class="{'active': index === activeVideoIndex}" v-for="(item, index) of videoAddress" :key="index"
-       @click.stop="play(index)">{{ item.label}}</li>
+       @click.stop="play(index)">{{item.label}}</li>
     </ul>
   </div>
 
