@@ -66,6 +66,13 @@ export default class VideoPlayer extends Vue {
     const player = (this.$refs.player as any).instance;
     player && player.replay();
   }
+  /**
+   * 销毁
+   */
+  private dispose() {
+    (this.$refs.player as any).instance.dispose();
+    alert('this.$refs.player were destray, liveStream were stop!');
+  }
 }
 
 </script>
@@ -76,12 +83,13 @@ export default class VideoPlayer extends Vue {
     <button class="op_btn" @click="play">播放</button>
     <button class="op_btn" @click="pause">暂停</button>
     <button class="op_btn" @click="replay">刷新视频</button>
+    <button class="op_btn" @click="dispose">销毁播放器</button>
     <!-- <button @click="convert">切换</button> -->
   </div>
-  <ali-player v-if="videopath !== ''" :source="videopath" ref="player" :play-style="playStyle"
+  <ali-player :source="videopath" ref="player" :play-style="playStyle"
   :autoplay="islive" :is-live="islive" :use-h5-prism="type !== 'rtmp'"></ali-player>
 
-  <!-- <vue-aliplayer></vue-aliplayer> type === 'rtmp' -->
+  <!-- v-if="videopath !== ''" <vue-aliplayer></vue-aliplayer> type === 'rtmp' -->
 </div>
 </template>
 

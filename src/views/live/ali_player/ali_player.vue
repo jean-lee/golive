@@ -316,6 +316,12 @@ export default class AliPlayer extends Vue {
     this.initAliplayer();
     // this.isReload = false;
   }
+  /**
+   * 播放器释放销毁
+   */
+  public dispose() {
+    this.instance.dispose();
+  }
 }
 
 </script>
