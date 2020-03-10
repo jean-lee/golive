@@ -32,7 +32,7 @@ function getUrlParam(sKey: string) {
 export default class VideoPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
   // 默认播放湖南卫视
-  @Prop({type: String, default: ''}) private videopath!: string;
+  @Prop({type: String, default: ''}) private source!: string;
   @Prop({type: String, default: 'rtmp'}) private type!: string;
   @Prop({type: Boolean, default: true}) private islive!: boolean;
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
@@ -41,9 +41,12 @@ export default class VideoPlayer extends Vue {
 
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   private playStyle: object = {width: '1024px', height: '576px'};
-  private player: any = null;
-  /* ------------------------ WATCH ------------------------ */
 
+  /* ------------------------ WATCH ------------------------ */
+  @Watch('source') private source_change(val: string) {
+    const player = (this.$refs.player as any);
+    player && player.reloadPlayer();
+  }
   /* ------------------------ METHODS ------------------------ */
   /**
    * 播放
@@ -71,7 +74,7 @@ export default class VideoPlayer extends Vue {
    */
   private dispose() {
     (this.$refs.player as any).instance.dispose();
-    alert('this.$refs.player were destray, liveStream were stop!');
+    alert('this.$refs.player were destroyed , liveStream were stop! you need to reload this page to restart video playback');
   }
 }
 
@@ -86,8 +89,8 @@ export default class VideoPlayer extends Vue {
     <button class="op_btn" @click="dispose">销毁播放器</button>
     <!-- <button @click="convert">切换</button> -->
   </div>
-  <ali-player :source="videopath" ref="player" :play-style="playStyle"
-  :autoplay="islive" :is-live="islive" :use-h5-prism="type !== 'rtmp'"></ali-player>
+  <ali-player :source="source" ref="player" :play-style="playStyle"
+  :autoplay="islive" :is-live="islive" :use-h5-prism="true"></ali-player>
 
   <!-- v-if="videopath !== ''" <vue-aliplayer></vue-aliplayer> type === 'rtmp' -->
 </div>

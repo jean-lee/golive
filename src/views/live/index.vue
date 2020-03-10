@@ -38,7 +38,6 @@ export default class LiveIndex extends Vue {
   ];
 
   private activeVideoIndex: number = 0;
-  private key: number = 0;
 
   /* ------------------------ WATCH ------------------------ */
 
@@ -49,7 +48,6 @@ export default class LiveIndex extends Vue {
    */
   private play(index: number) {
     this.activeVideoIndex = index;
-    this.key++;
   }
 }
 
@@ -60,7 +58,7 @@ export default class LiveIndex extends Vue {
   <div class="left">
     <p class="video_title">{{videoAddress[activeVideoIndex].label}}</p>
     <!-- 播放画面 -->
-    <video-player :videopath="videoAddress[activeVideoIndex].value" :key="key" :type="videoAddress[activeVideoIndex].type" :islive="videoAddress[activeVideoIndex].islive"/>
+    <video-player :source="videoAddress[activeVideoIndex].value" :type="videoAddress[activeVideoIndex].type" :islive="videoAddress[activeVideoIndex].islive"/>
   </div>
   <div class="right">
     <ul class="video_list">
@@ -77,7 +75,6 @@ export default class LiveIndex extends Vue {
 @import '~@/assets/styles/var.styl';
 
 .module_index
-  // position fixed
   margin-top 60px
   .left
     display inline-block
@@ -95,9 +92,6 @@ export default class LiveIndex extends Vue {
     width 200px
     .video_list
       li
-        // float left
-        // padding 0 12px
-        // width fit-content
         height 32px
         line-height 32px
         border-bottom 1px dashed #333

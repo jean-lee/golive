@@ -74,9 +74,6 @@ export default class AliPlayer extends Vue {
   // 延迟播放提示文本具体参考延迟播放
   @Prop({type: String, default: 'waiting'}) public autoPlayDelayDisplayText!: string;
 
-
-  // 重新加载视频
-  // @Prop({type: Boolean, default: false}) public isReload!: boolean;
   // 显示弹幕
   @Prop({type: Boolean, default: false}) public showDanmu!: boolean;
 
@@ -101,19 +98,14 @@ export default class AliPlayer extends Vue {
   }
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   public playerId: string = 'aliplayer_' + Math.random() * 100000000000000000;
-  // public playerId: string = 'J_prismPlayer';
   public scriptTagsStatus: number = 0;
   public instance: any = null;
-  public danmukuList = [
-    {mode: 1, text: 'hello world', stime: 0, size: '25', color: '#0056dd'},
-    {mode: 1, text: 'hello jean', stime: 10, size: '35', color: '#f00'},
-    {mode: 1, text: 'who are you', stime: 30, size: '14', color: '#fff'},
-  ];
-
   get whichSkinLayout() {
+    // h5
     if (this.isLive) {
       return this.useH5Prism ? SKINLAYOUT_H5_LIVE : SKINLAYOUT_FLASH_LIVE;
     }
+    // flash
     return this.useH5Prism ? SKINLAYOUT_H5_VOD : SKINLAYOUT_FLASH_VOD;
     // return this.isLive ? (this.useH5Prism ? SKINLAYOUT_H5_LIVE : SKINLAYOUT_FLASH_LIVE)
     //   : (this.useH5Prism ? SKINLAYOUT_H5_VOD : SKINLAYOUT_FLASH_VOD);
@@ -162,7 +154,14 @@ export default class AliPlayer extends Vue {
    */
   public initAliplayer() {
     // scriptTagsStatus 为 2 的时候，说明两个必须引入的js文件都已经被引入，且加载完成
-    if (this.scriptTagsStatus === 2 && this.instance === null) {
+    if (
+        this.scriptTagsStatus === 2 &&
+        (this.instance === null || this.reloadPlayer)
+    ) {
+
+      // (document.querySelector('#' + this.playerId) as HTMLElement).innerHTML = '';
+      // this.instance && this.instance.dispose();
+
       this.$nextTick(() => {
         this.instance = (window as any).Aliplayer({
           id: this.playerId,
@@ -312,9 +311,7 @@ export default class AliPlayer extends Vue {
    * 重新加载
    */
   public reloadPlayer() {
-    // this.isReload = true;
     this.initAliplayer();
-    // this.isReload = false;
   }
   /**
    * 播放器释放销毁
