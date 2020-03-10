@@ -7,7 +7,8 @@
 
 import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
 
-import AliPlayer from './ali_player/ali_player.vue';
+import AliPlayer from '@/views/live/video_player/ali_player.vue';
+
 // import VueAliplayer from './ali_player/vue_aliplayer.vue';
 
 function getUrlParam(sKey: string) {
@@ -23,15 +24,13 @@ function getUrlParam(sKey: string) {
 }
 
 @Component({
-  name: 'video-player',
+  name: 'employ-ali-player',
   components: {
     AliPlayer,
-    // VueAliplayer,
   },
 })
-export default class VideoPlayer extends Vue {
+export default class EmployAliPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
-  // 默认播放湖南卫视
   @Prop({type: String, default: ''}) private source!: string;
   @Prop({type: String, default: 'rtmp'}) private type!: string;
   @Prop({type: Boolean, default: true}) private islive!: boolean;
@@ -81,40 +80,31 @@ export default class VideoPlayer extends Vue {
 </script>
 
 <template>
-<div class="module_living">
-   <div class="play_optation_row">
-    <button class="op_btn" @click="play">播放</button>
-    <button class="op_btn" @click="pause">暂停</button>
-    <button class="op_btn" @click="replay">刷新视频</button>
-    <button class="op_btn" @click="dispose">销毁播放器</button>
+<div class="module_employ_ali_player">
+  <div class="play_optation_row">
+    <button class="common_btn" @click="play">播放</button>
+    <button class="common_btn" @click="pause">暂停</button>
+    <button class="common_btn" @click="replay">刷新视频</button>
+    <button class="common_btn" @click="dispose">销毁播放器</button>
     <!-- <button @click="convert">切换</button> -->
   </div>
-  <ali-player :source="source" ref="player" :play-style="playStyle"
-  :autoplay="islive" :is-live="islive" :use-h5-prism="true"></ali-player>
 
-  <!-- v-if="videopath !== ''" <vue-aliplayer></vue-aliplayer> type === 'rtmp' -->
+  <!-- 调用播放器实例 -->
+  <ali-player :source="source" ref="player" :play-style="playStyle"
+    :autoplay="islive" :is-live="islive" :use-h5-prism="true"></ali-player>
+
 </div>
 </template>
 
 <style lang="stylus" scoped>
 
-.module_living
+.module_employ_ali_player
   margin 0 auto
   width 1024px
   height 576px
   .play_optation_row
     margin 8px 0
     text-align right
-    .op_btn
-      margin-left 8px
-      cursor pointer
-      background rgba(255,255,255,0.3)
-      border 1px solid #727272
-      color #f0f0f0
-      border-radius 3px
-      font-size 12px
-      padding 4px 10px
-      &:hover
-        color #2196f3
+
 
 </style>

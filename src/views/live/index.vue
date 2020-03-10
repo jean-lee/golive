@@ -8,13 +8,14 @@
 import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
 
 
-import VideoPlayer from '@/views/live/video-player.vue';
-
+import EmployAliPlayer from '@/views/live/_part/employ_ali_player.vue';
+import EmployVideojsPlayer from '@/views/live/_part/employ_videojs_player.vue';
 
 @Component({
   name: 'live-index',
   components: {
-    VideoPlayer,
+    EmployAliPlayer,
+    EmployVideojsPlayer,
   },
 })
 export default class LiveIndex extends Vue {
@@ -38,7 +39,7 @@ export default class LiveIndex extends Vue {
   ];
 
   private activeVideoIndex: number = 0;
-
+  private useAliPlayer: boolean = false;
   /* ------------------------ WATCH ------------------------ */
 
   /* ------------------------ METHODS ------------------------ */
@@ -56,9 +57,24 @@ export default class LiveIndex extends Vue {
 <template>
 <div class="module_index">
   <div class="left">
-    <p class="video_title">{{videoAddress[activeVideoIndex].label}}</p>
-    <!-- 播放画面 -->
-    <video-player :source="videoAddress[activeVideoIndex].value" :type="videoAddress[activeVideoIndex].type" :islive="videoAddress[activeVideoIndex].islive"/>
+    <div class="left_top">
+      <p class="video_title">{{videoAddress[activeVideoIndex].label}}</p>
+      <button class="common_btn" v-if="!useAliPlayer" @click.stop="() => {useAliPlayer=!useAliPlayer}">使用阿里播放器</button>
+      <button class="common_btn" v-else @click.stop="() => {useAliPlayer=!useAliPlayer}">使用videojs播放器</button>
+    </div>
+    <!-- 使用阿里封装的播放器 -->
+    <template v-if="useAliPlayer">
+      <employ-ali-player :source="videoAddress[activeVideoIndex].value" :type="videoAddress[activeVideoIndex].type" 
+        :islive="videoAddress[activeVideoIndex].islive"/>
+    </template>
+    <!-- 使用video.js播放器 -->
+    <template v-else>
+      <employ-videojs-player :source="videoAddress[activeVideoIndex].value" :type="videoAddress[activeVideoIndex].type" 
+        :islive="videoAddress[activeVideoIndex].islive"/>
+    </template>
+
+
+
   </div>
   <div class="right">
     <ul class="video_list">
@@ -81,12 +97,20 @@ export default class LiveIndex extends Vue {
     width calc(100% - 201px)
     vertical-align top
     border-right 1px solid #666
-    .video_title
-      padding-left 20px
+    .left_top
+      padding 0 20px
+      background #191717
+      height 50px
       line-height 50px
-      font-size $big_title_size
-      color #565656
-      text-align left
+      clearfix()
+      .video_title
+        float left
+        font-size $big_title_size
+        color #565656
+        text-align left
+      .common_btn
+        float right
+        margin-top 12px
   .right
     display inline-block
     width 200px
