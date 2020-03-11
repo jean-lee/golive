@@ -18,17 +18,18 @@ import 'videojs-flash';
 })
 export default class VideojsPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
-  @Prop({type: String, default: ''}) private source!: string;
   @Prop({type: Object, default() { return {}; }}) private options!: object;
 
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
   private mounted() {
-    console.log('dispose beforeDestroy');
     this.player = videojs(this.$refs.videoPlayer, this.options, function onPlayerReady() {
       console.log('onPlayerReady mounted');
     });
+
+    // dynamic 动态绑定className, 更新播放器样式
+    this.player.addClass('my_videojs_player');
   }
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   private player: any = null;
@@ -47,14 +48,14 @@ export default class VideojsPlayer extends Vue {
 </script>
 
 <template>
-<div class="module_video_player">
-  <video src="" ref="videoPlayer" class="video-js"></video>
+<div class="module_videojs_player">
+  <video ref="videoPlayer" class="videojs_player_video_tag"></video>
 </div>
 </template>
 
 <style lang="stylus" scoped>
 
-.module_video_player
+.module_videojs_player
   width 1024px
 
 </style>

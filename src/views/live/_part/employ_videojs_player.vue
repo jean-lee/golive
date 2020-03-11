@@ -28,24 +28,30 @@ export default class EmployVideojsPlayer extends Vue {
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
 
   private videoOptions = {
-    techOrder: ['flash', 'html5'],
-    sourceOrder: true,
-    flash: {
-      hls: { withCredentials: false },
-      // swf: 'statics/video-js.swf',
-    },
-    html5: { hls: { withCredentials: false } },
-    sources: [{
-      type: 'rtmp/flv',
-      // src: this.source,
-      src: 'rtmp://58.200.131.2:1935/livetv/hunantv',
-      // src: 'rtmp://live.hkstv.hk.lxdns.com/live/hks2', // 香港卫视
-    }],
     autoplay: true,
     controls: true,
-
     width: '1024',
     height: '576',
+
+    // techOrder: ['flash', 'html5'],
+    // sourceOrder: true,
+    // liveui: true,
+    // flash: {
+    //   hls: { withCredentials: true },
+    //   // swf: 'statics/video-js.swf',
+    // },
+    // html5: { hls: { withCredentials: true } },
+    sources: [{
+      // type: 'rtmp/flv',
+      type: 'video/mp4',
+      // src: this.source,
+      src: '/test_video.mp4',
+      // src: 'http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8',
+      // src: 'rtmp://58.200.131.2:1935/livetv/hunantv',
+      // src: 'rtmp://live.hkstv.hk.lxdns.com/live/hks2', // 香港卫视
+      // disableProgress: true,
+    }],
+
   };
   /* ------------------------ WATCH ------------------------ */
 
@@ -58,7 +64,7 @@ export default class EmployVideojsPlayer extends Vue {
 <template>
 <div class="module_employ_videojs_player">
   <!-- 调用播放器实例 -->
-  <videojs-player :options="videoOptions" v-if="videoOptions.sources[0].src !== ''"></videojs-player>
+  <videojs-player v-if="videoOptions.sources[0].src !== ''" :options="videoOptions"></videojs-player>
 
 </div>
 </template>
