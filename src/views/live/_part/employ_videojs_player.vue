@@ -30,27 +30,45 @@ export default class EmployVideojsPlayer extends Vue {
   private videoOptions = {
     autoplay: true,
     controls: true,
-    width: '1024',
-    height: '576',
+    width: 1024, // 单独设置宽或高时，另外一项会按比例自动适配，保证画面在宽或高中占满父级
+    // height: '576px',
 
-    // techOrder: ['flash', 'html5'],
+    loop: true,
+    muted: false, // 静音
+    fluid: false,
+    poster: '',
+    preload: 'metadata', // 自动加载如视频长度、尺寸的信息
     // sourceOrder: true,
-    // liveui: true,
-    // flash: {
-    //   hls: { withCredentials: true },
-    //   // swf: 'statics/video-js.swf',
+    liveui: this.islive, // 让进度条失效，仅允许点击暂停
+    playsinline: true,
+    techOrder: ['html5', 'flash'],
+    playbackRates: this.islive ? [] : [0.5, 0.75, 1, 1.5, 1.75, 2], // flash不支持倍速
+    plugins: { }, // 初始化播放器时使用自定义选项自动初始化插件
+    language: 'zh-CN',
+    notSupportedMessage: '此视频暂时无法播放',
+    // html5: {
+    //   hls: { overrideNative: true }, // 覆盖本地
+    //   // flash: { withCredentials: false }
+    //   // swf: './js/video-js.swf',
     // },
-    // html5: { hls: { withCredentials: true } },
-    sources: [{
-      // type: 'rtmp/flv',
-      type: 'video/mp4',
-      // src: this.source,
-      src: '/test_video.mp4',
-      // src: 'http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8',
-      // src: 'rtmp://58.200.131.2:1935/livetv/hunantv',
-      // src: 'rtmp://live.hkstv.hk.lxdns.com/live/hks2', // 香港卫视
-      // disableProgress: true,
-    }],
+    flash: {
+      // hls: { withCredentials: false }, // 使用证书
+      swf: './js/video-js.swf', // 指定Video.js SWF文件在Flash技术位置的位置
+    },
+    sources: [
+      {
+        type: 'video/mp4',
+        src: '/badhappy.mp4',
+      },
+      // {
+      //   type: 'application/x-mpegURL',
+      //   src: 'http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8',
+      // },
+      // {
+      //   type: 'rtmp/flv',
+      //   src: 'rtmp://58.200.131.2:1935/livetv/hunantv',
+      // },
+    ],
 
   };
   /* ------------------------ WATCH ------------------------ */

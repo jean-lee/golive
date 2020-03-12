@@ -70,7 +70,8 @@ export default class LiveIndex extends Vue {
     <!-- 使用video.js播放器 -->
     <template v-else>
       <employ-videojs-player :source="videoAddress[activeVideoIndex].value" :type="videoAddress[activeVideoIndex].type" 
-        :islive="videoAddress[activeVideoIndex].islive"/>
+        :islive="false"/>
+        <!-- :islive="videoAddress[activeVideoIndex].islive"/> -->
     </template>
 
 

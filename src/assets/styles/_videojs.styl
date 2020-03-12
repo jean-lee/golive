@@ -1,0 +1,39 @@
+/*
+ * video.js 播放按钮设置
+ */
+
+// 暂停时展示播放按钮
+.vjs-paused .vjs-big-play-button,
+.vjs-paused.vjs-has-started .vjs-big-play-button
+  display block
+
+// 播放按钮设为圆形
+.video-js .vjs-big-play-button
+  font-size 2.5em!important
+  line-height 2.5em!important
+  height 2.5em!important
+  width 2.5em!important
+  -webkit-border-radius 2.5em
+  -moz-border-radius 2.5em
+  border-radius 50%!important
+  background-color #73859f
+  background-color rgba(115,133,159,.5)
+  border-width 0.15em
+  margin-top -1.25em
+  margin-left -1.75em
+
+// 中间的播放箭头
+.vjs-big-play-button .vjs-icon-placeholder
+  font-size 1.5em
+
+// 加载圆圈
+.vjs-loading-spinner
+  font-size 2.5em
+  width 2em
+  height 2em
+  border-radius 1em
+  margin-top -1em
+  margin-left -1.5em
+
+.video-js.vjs-playing .vjs-tech
+  pointer-events auto
