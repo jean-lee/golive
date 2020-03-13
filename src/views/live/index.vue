@@ -50,18 +50,30 @@ export default class LiveIndex extends Vue {
   private play(index: number) {
     this.activeVideoIndex = index;
   }
+  /**
+   * 更换播放器
+   */
+  // private change_player() {
+  //   this.useAliPlayer = ! this.useAliPlayer;
+  // }
 }
 
 </script>
 
 <template>
 <div class="module_index">
-  <div class="left">
-    <div class="left_top">
-      <p class="video_title">{{videoAddress[activeVideoIndex].label}}</p>
-      <button class="common_btn" v-if="!useAliPlayer" @click.stop="() => {useAliPlayer=!useAliPlayer}">使用阿里播放器</button>
-      <button class="common_btn" v-else @click.stop="() => {useAliPlayer=!useAliPlayer}">使用videojs播放器</button>
-    </div>
+  <div class="head_top">
+    <p class="video_title">{{videoAddress[activeVideoIndex].label}}</p>
+    <button class="common_btn" :class="{active: useAliPlayer}" @click.stop="() => {useAliPlayer=!useAliPlayer}">使用阿里播放器</button>
+    <button class="common_btn" :class="{active: !useAliPlayer}" @click.stop="() => {useAliPlayer=!useAliPlayer}">使用videojs播放器</button>
+  </div>
+  <div class="menu">
+    <ul class="video_list">
+      <li :class="{'active': index === activeVideoIndex}" v-for="(item, index) of videoAddress" :key="index"
+       @click.stop="play(index)">{{item.label}}</li>
+    </ul>
+  </div>
+  <div class="player_wrapp">
     <!-- 使用阿里封装的播放器 -->
     <template v-if="useAliPlayer">
       <employ-ali-player :source="videoAddress[activeVideoIndex].value" :type="videoAddress[activeVideoIndex].type" 
@@ -74,15 +86,8 @@ export default class LiveIndex extends Vue {
         <!-- :islive="videoAddress[activeVideoIndex].islive"/> -->
     </template>
 
-
-
   </div>
-  <div class="right">
-    <ul class="video_list">
-      <li :class="{'active': index === activeVideoIndex}" v-for="(item, index) of videoAddress" :key="index"
-       @click.stop="play(index)">{{item.label}}</li>
-    </ul>
-  </div>
+
 
   
 </div>
@@ -92,39 +97,48 @@ export default class LiveIndex extends Vue {
 @import '~@/assets/styles/var.styl';
 
 .module_index
-  margin-top 60px
-  .left
-    display inline-block
-    width calc(100% - 201px)
-    vertical-align top
-    border-right 1px solid #666
-    .left_top
-      padding 0 20px
-      background #191717
-      height 50px
-      line-height 50px
-      clearfix()
-      .video_title
-        float left
-        font-size $big_title_size
-        color #565656
-        text-align left
-      .common_btn
-        float right
-        margin-top 12px
-  .right
-    display inline-block
-    width 200px
+  // margin-top 60px
+  .head_top
+    padding 0 60px
+    background #191717
+    height 60px
+    line-height 60px
+    clearfix()
+    .video_title
+      float left
+      font-size $big_title_size
+      color #c3c3c3
+      text-align left
+    .common_btn
+      float right
+      margin-top 16px
+      margin-left 10px
+      padding 6px
+    .active
+      color #2196f3
+      border-color #2196f3
+  .menu
+    width 100%
+    height 48px
+    padding 0 60px
     .video_list
+      padding 14px 0
       li
-        height 32px
-        line-height 32px
-        border-bottom 1px dashed #333
+        display inline-block
+        padding 0 8px
+        width fit-content
+        border-right 1px solid #666
         color #565656
         text-align center
         cursor pointer
         font-size $normal_font_size
+        &:last-child
+          border-right none
       .active
-        color #f8f8f8
-
+        color #2196f3
+  .player_wrapp
+    display inline-block
+    width calc(100% - 201px)
+    vertical-align top
+    
 </style>

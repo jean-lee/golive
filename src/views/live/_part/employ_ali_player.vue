@@ -73,7 +73,13 @@ export default class EmployAliPlayer extends Vue {
    */
   private dispose() {
     (this.$refs.player as any).instance.dispose();
-    alert('this.$refs.player were destroyed , liveStream were stop! you need to reload this page to restart video playback');
+    alert('This.$refs.player were destroyed, liveStream were stop! If you want see again, you need to refresh current page.');
+  }
+  /**
+   * 组件销毁前，销毁播放器，停止数据请求
+   */
+  private beforeDestroy() {
+    this.dispose();
   }
 }
 

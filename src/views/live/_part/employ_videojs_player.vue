@@ -34,7 +34,7 @@ export default class EmployVideojsPlayer extends Vue {
     // height: '576px',
 
     loop: true,
-    muted: false, // 静音
+    muted: true, // 静音
     fluid: false,
     poster: '',
     preload: 'metadata', // 自动加载如视频长度、尺寸的信息
