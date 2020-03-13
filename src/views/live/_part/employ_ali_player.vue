@@ -9,8 +9,6 @@ import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
 
 import AliPlayer from '@/views/live/video_player/ali_player.vue';
 
-// import VueAliplayer from './ali_player/vue_aliplayer.vue';
-
 function getUrlParam(sKey: string) {
   const resObj: any = null;
   const reg = /(\w+)=(\w+)/g;
@@ -31,9 +29,7 @@ function getUrlParam(sKey: string) {
 })
 export default class EmployAliPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
-  @Prop({type: String, default: ''}) private source!: string;
-  @Prop({type: String, default: 'rtmp'}) private type!: string;
-  @Prop({type: Boolean, default: true}) private islive!: boolean;
+  @Prop({type: Object, default() { return {}; }}) private VideoInfo!: LIVESPACE.VideoPlayerInfoType;
 
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
@@ -43,10 +39,12 @@ export default class EmployAliPlayer extends Vue {
   private playStyle: object = {width: '1024px', height: '576px'};
 
   /* ------------------------ WATCH ------------------------ */
-  @Watch('source') private source_change(val: string) {
-    const player = (this.$refs.player as any);
-    player && player.reloadPlayer();
-  }
+  // @Watch('source') private source_change(val: string) {
+  //   const player = (this.$refs.player as any);
+  //   this.$nextTick(() => {
+  //     player && player.reloadPlayer();
+  //   });
+  // }
   /* ------------------------ METHODS ------------------------ */
   /**
    * 播放
@@ -74,7 +72,7 @@ export default class EmployAliPlayer extends Vue {
    */
   private dispose() {
     (this.$refs.player as any).instance.dispose();
-    alert('This.$refs.player were destroyed, liveStream were stop! If you want see again, you need to refresh current page.');
+    // alert('This.$refs.player were destroyed, liveStream were stop! If you want see again, you need to refresh current page.');
   }
   /**
    * 组件销毁前，销毁播放器，停止数据请求
@@ -89,8 +87,8 @@ export default class EmployAliPlayer extends Vue {
 <template>
 <div class="module_employ_ali_player">
   <!-- 调用播放器实例 -->
-  <ali-player :source="source" ref="player" :play-style="playStyle"
-    :autoplay="islive" :is-live="islive" :use-h5-prism="true"></ali-player>
+  <ali-player ref="player" :play-style="playStyle" v-if="VideoInfo.source !== ''"
+    :source="VideoInfo.source" :autoplay="true" :is-live="VideoInfo.islive" :use-h5-prism="true" :cover="VideoInfo.poster"></ali-player>
 
   <div class="play_optation_row">
     <button class="common_btn" @click="play">播放</button>
@@ -108,7 +106,6 @@ export default class EmployAliPlayer extends Vue {
 .module_employ_ali_player
   margin 0 auto
   width 100%
-  // height 576px
   .play_optation_row
     margin 8px 0
     text-align right

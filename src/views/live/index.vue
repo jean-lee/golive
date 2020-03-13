@@ -10,7 +10,7 @@ import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
 
 import EmployAliPlayer from '@/views/live/_part/employ_ali_player.vue';
 import EmployVideojsPlayer from '@/views/live/_part/employ_videojs_player.vue';
-import CommentDanmu from '@/views/live/barrage/comment_danmu.vue';
+import CommentDanmu from '@/views/barrage/comment_danmu.vue';
 
 @Component({
   name: 'live-index',
@@ -42,8 +42,8 @@ export default class LiveIndex extends Vue {
   ];
 
   private activeVideoIndex: number = 0;
-  private useAliPlayer: boolean = false;
-  private showDanmu: boolean = false;
+  private useAliPlayer: boolean = true;
+  private showDanmu: boolean = true;
   private videoKey: number = 0;
   /* ------------------------ WATCH ------------------------ */
 
@@ -77,8 +77,9 @@ export default class LiveIndex extends Vue {
   <div class="player_wrapp abp">
     <!-- 使用阿里封装的播放器 -->
     <template v-if="useAliPlayer">
-      <employ-ali-player :source="videoAddress[activeVideoIndex].source" :type="videoAddress[activeVideoIndex].type" 
-        :islive="videoAddress[activeVideoIndex].islive" :show-danmu="showDanmu"/>
+      <!-- <employ-ali-player :source="videoAddress[activeVideoIndex].source" :type="videoAddress[activeVideoIndex].type" 
+        :islive="videoAddress[activeVideoIndex].islive" :show-danmu="showDanmu"/> -->
+      <employ-ali-player :key="videoKey" :video-info="videoAddress[activeVideoIndex]" :show-danmu="showDanmu" />
     </template>
     <!-- 使用video.js播放器 -->
     <template v-else>

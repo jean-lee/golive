@@ -19,7 +19,7 @@ import 'videojs-flash';
 })
 export default class VideojsPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
-  @Prop({type: Object, default() { return {}; }}) private VideoInfo!: LIVESPACE.VideoPlayerInfoType;
+  @Prop({type: String, default: ''}) public source!: string;
   @Prop({type: Object, default() { return {}; }}) private options!: object;
 
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
@@ -64,8 +64,8 @@ export default class VideojsPlayer extends Vue {
    * 视频类型相同，切换视频地址时，重新调用src属性
    */
   public refreshPlay() {
-    this.player.src(this.VideoInfo.source);
-    this.player.load(this.VideoInfo.source);
+    this.player.src(this.source);
+    this.player.load(this.source);
     this.player.play();
   }
 }

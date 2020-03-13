@@ -25,79 +25,84 @@ import CommentDanmu from '@/views/live/barrage/comment_danmu.vue';
 export default class AliPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
   // 阿里播放器引用地址
-  @Prop({type: String, default: 'http://g.alicdn.com/de/prismplayer/2.8.7/aliplayer-min.js'}) public aliplayerSdkPath!: string;
+  @Prop({type: String, default: 'http://g.alicdn.com/de/prismplayer/2.8.7/aliplayer-min.js'}) private aliplayerSdkPath!: string;
   // 播放器自定义样式style '100%' | '100px' 宽高比规则：  w:h = 16:9
-  @Prop({type: Object, default() { return {width: '924px', height: '520px'}; }}) public playStyle!: object;
-
-  @Prop({type: Boolean, default: false}) public autoplay!: boolean;
-   // 播放内容是否为直播，直播时会禁止用户拖动进度条
-  @Prop({type: Boolean, default: true}) public isLive!: boolean;
-
+  @Prop({type: Object, default() { return {width: '924px', height: '520px'}; }}) private playStyle!: object;
   // 播放器宽度 | 高度
-  @Prop({type: String, default: '100%'}) public width!: string;
-  @Prop({type: String, default: '100%'}) public height!: string;
+  @Prop({type: String, default: '100%'}) private width!: string;
+  @Prop({type: String, default: '100%'}) private height!: string;
   // controlBarVisibility -> hover | click | always
-  @Prop({type: String, default: 'always'}) public controlBarVisibility!: string;
+  @Prop({type: String, default: 'always'}) private controlBarVisibility!: string;
   // 指定使用H5播放器
-  @Prop({type: Boolean, default: false}) public useH5Prism!: boolean;
+  @Prop({type: Boolean, default: false}) private useH5Prism!: boolean;
   // 指定使用Flash播放器
-  @Prop({type: Boolean, default: false}) public useFlashPrism!: boolean;
+  @Prop({type: Boolean, default: false}) private useFlashPrism!: boolean;
   // H5是否内置播放
-  @Prop({type: Boolean, default: true}) public playsinline!: boolean;
+  @Prop({type: Boolean, default: true}) private playsinline!: boolean;
   // 指定播放地址格式，只有使用vid+plauth播放方式时支持可选值为'mp4'和'm3u8',默认为'mp4'
-  @Prop({type: String, default: 'm3u8'}) public format!: string;
+  @Prop({type: String, default: 'm3u8'}) private format!: string;
   // 显示缓冲进度
-  @Prop({type: Boolean, default: true}) public showBuffer!: boolean;
+  @Prop({type: Boolean, default: true}) private showBuffer!: boolean;
   // 快照
-  @Prop({type: Boolean, default: true}) public snapshot!: boolean;
-  // 媒体转码服务的媒体Id
-  @Prop({type: String, default: ''}) public vid!: string;
-  @Prop({type: String, default: ''}) public playauth!: string;
-  // 视频播放地址url：1、单独url；2、默认状态，表示使用“vi+playauth3、source播放方式优先级最高
-  @Prop({type: String, default: ''}) public source!: string;
+  @Prop({type: Boolean, default: true}) private snapshot!: boolean;
+
+
+  // 自动播放
+  @Prop({type: Boolean, default: false}) private autoplay!: boolean;
+  // 自动加载
+  @Prop({type: Boolean, default: false}) private preload!: boolean;
   // 播放器默认封面图片，请填写正确的图片url地址Flash播放器封面也需要开启允许跨域访问
   // 自动加载与自动播放为false时生效显示
-  @Prop({type: String, default: ''}) public cover!: string;
+  @Prop({type: String, default: ''}) private cover!: string;
+  // 媒体转码服务的媒体Id
+  @Prop({type: String, default: ''}) private vid!: string;
+  @Prop({type: String, default: ''}) private playauth!: string;
+  // 视频播放地址url：1、单独url；2、默认状态，表示使用“vi+playauth3、source播放方式优先级最高
+  @Prop({type: String, default: ''}) private source!: string;
+
+  // 播放内容是否为直播，直播时会禁止用户拖动进度条
+  @Prop({type: Boolean, default: true}) private isLive!: boolean;
+
 
   // 声明启用同层H5播放器，启用时设置的值为'h5'具体参考同层播放 默认'auto'
-  @Prop({type: String, default: 'h5'}) public x5Type!: string;
+  @Prop({type: String, default: 'h5'}) private x5Type!: string;
   // 声明视频播放时是否进入到TBS的全屏模式，默认为false具体参考同层播放
-  @Prop({type: Boolean, default: false}) public x5Fullscreen!: boolean;
+  @Prop({type: Boolean, default: false}) private x5Fullscreen!: boolean;
   // 声明视频播在界面上的位置，默认为"center" 可选值为：'top'，'center' 具体参考同层播放
-  @Prop({type: String, default: 'top'}) public x5VideoPosition!: string;
+  @Prop({type: String, default: 'top'}) private x5VideoPosition!: string;
   // 声明TBS播放器支持的方向，可选值：landscape:横屏） portraint:竖屏 landscape
-  @Prop({type: Number, default: 2}) public x5Orientation!: number;
+  @Prop({type: Number, default: 2}) private x5Orientation!: number;
 
-  // @Prop({type: Number, default: 0}) public autoPlayNumber!: number;
+  // @Prop({type: Number, default: 0}) private autoPlayNumber!: number;
   // 延迟播放时间，单位为秒具体参考延迟播放
-  @Prop({type: Number, default: 0}) public autoPlayDelay!: number;
+  @Prop({type: Number, default: 0}) private autoPlayDelay!: number;
   // 延迟播放提示文本具体参考延迟播放
-  @Prop({type: String, default: 'waiting'}) public autoPlayDelayDisplayText!: string;
+  @Prop({type: String, default: 'waiting'}) private autoPlayDelayDisplayText!: string;
 
 
-  @Emit('ready') public readyEmit() {}
-  @Emit('play') public playEmit() {}
-  @Emit('pause') public pauseEmit() {}
-  @Emit('ended') public endedEmit() {}
-  @Emit('live-streamstop') public liveStreamStopEmit() {}
-  @Emit('m3u8retry') public m3u8RetryEmit() {}
-  @Emit('hidebar') public hideBarEmit() {}
-  @Emit('waiting') public waitingEmit() {}
-  @Emit('snapshoted') public snapshotedEmit() {}
+  @Emit('ready') private readyEmit() {}
+  @Emit('play') private playEmit() {}
+  @Emit('pause') private pauseEmit() {}
+  @Emit('ended') private endedEmit() {}
+  @Emit('live-streamstop') private liveStreamStopEmit() {}
+  @Emit('m3u8retry') private m3u8RetryEmit() {}
+  @Emit('hidebar') private hideBarEmit() {}
+  @Emit('waiting') private waitingEmit() {}
+  @Emit('snapshoted') private snapshotedEmit() {}
 
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
-  // public created() {
+  // private created() {
   //   this.get_window_aliplayer();
   // }
-  public mounted() {
+  private mounted() {
     this.get_window_aliplayer();
   }
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
-  public playerId: string = 'aliplayer_' + Math.random() * 100000000000000000;
-  public scriptTagsStatus: number = 0;
-  public instance: any = null;
+  private playerId: string = 'aliplayer_' + Math.random() * 100000000000000000;
+  private scriptTagsStatus: number = 0;
+  private instance: any = null;
   get whichSkinLayout() {
     // h5
     if (this.isLive) {
@@ -111,7 +116,7 @@ export default class AliPlayer extends Vue {
   /* ------------------------ WATCH ------------------------ */
 
   /* ------------------------ METHODS ------------------------ */
-  public get_window_aliplayer() {
+  private get_window_aliplayer() {
     if ((window as any).Aliplayer !== undefined) {
       // 如果全局对象崔仔，说明编辑器代码已初始化完成，直接加载编辑器
       this.scriptTagsStatus = 2;
@@ -124,7 +129,7 @@ export default class AliPlayer extends Vue {
   /**
    * 插入播放节点
    */
-  public insertScriptTag() {
+  private insertScriptTag() {
     let playerScriptTag: any = document.getElementById('playerScriptTag');
 
     // 如果playerScriptTag不存在，则生成相关代码tag以加载代码
@@ -150,7 +155,7 @@ export default class AliPlayer extends Vue {
   /**
    * 初始化播放器
    */
-  public initAliplayer() {
+  private initAliplayer() {
     // scriptTagsStatus 为 2 的时候，说明两个必须引入的js文件都已经被引入，且加载完成
     if (
         this.scriptTagsStatus === 2 &&

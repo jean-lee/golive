@@ -77,8 +77,8 @@ export default class EmployVideojsPlayer extends Vue {
 <template>
 <div class="module_employ_videojs_player">
   <!-- 调用播放器实例 -->
-  <videojs-player ref="videojs" v-if="videoOptions.sources[0].src !== ''" :options="videoOptions"
-    :video-info="VideoInfo"></videojs-player>
+  <videojs-player ref="videojs" v-if="videoOptions.sources[0].src !== ''"
+    :options="videoOptions" :source="VideoInfo.source"></videojs-player>
 </div>
 </template>
 
