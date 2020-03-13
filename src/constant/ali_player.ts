@@ -103,72 +103,23 @@ export const SKINLAYOUT_FLASH_LIVE = [
 
 // Aliplayer可以通过skinLayout属性去定制三个组件是否显示和位置:
 export const SKINLAYOUT = [
+  {name: 'bigPlayButton', align: 'blabs', x: 30, y: 80},
   {
-    name: 'bigPlayButton',
-    align: 'blabs',
-    x: 30,
-    y: 80,
-  },
-  {
-    name: 'controlBar',
-    align: 'blabs',
-    x: 0,
-    y: 0,
+    name: 'controlBar', align: 'blabs', x: 0, y: 0,
     children: [
-      {
-        name: 'progress',
-        align: 'tlabs',
-        x: 0,
-        y: 0,
-      },
-      {
-        name: 'playButton',
-        align: 'tl',
-        x: 15,
-        y: 26,
-      },
-      {
-        name: 'nextButton',
-        align: 'tl',
-        x: 10,
-        y: 26,
-      },
-      {
-        name: 'streamButton',
-        align: 'tr',
-        x: 10,
-        y: 23,
-      },
+      {name: 'progress', align: 'tlabs', x:  0, y: 0},
+      {name: 'playButton', align: 'tl', x: 15, y: 26},
+      {name: 'nextButton', align: 'tl', x: 10, y: 26},
+      {name: 'streamButton', align: 'tr', x: 10, y: 23},
     ],
   },
   {
-    name: 'fullControlBar',
-    align: 'tlabs',
-    x: 0,
-    y: 0,
+    name: 'fullControlBar', align: 'tlabs', x: 0, y: 0,
     children: [
-      {
-        name: 'fullTitle',
-        align: 'tl',
-        x: 25,
-        y: 6,
-      },
-      {
-        name: 'fullNormalScreenButton',
-        align: 'tr',
-        x: 24,
-        y: 13,
-      },
-      {
-        name: 'fullTimeDisplay',
-        align: 'tr',
-        x: 10,
-        y: 12,
-      },
-      {
-        name: 'fullZoom',
-        align: 'cc',
-      },
+      {name: 'fullTitle', align: 'tl', x: 25, y: 6},
+      {name: 'fullNormalScreenButton', align: 'tr', x: 24, y: 13},
+      {name: 'fullTimeDisplay', align: 'tr', x: 10, y: 12},
+      {name: 'fullZoom', align: 'cc'},
     ],
   },
 ];

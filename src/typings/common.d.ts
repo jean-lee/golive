@@ -20,14 +20,23 @@ declare namespace LIVESPACE {
 /**
  * 视频对象
  */
-interface VIDEOTYPE {
-  type: string; // 视频类型
+interface VideoType {
+  type: string; // 视频类型mp4, m3u8, rtmp, rtmps, rtmpe等等
   id: number;
-  label: string; // 名称
-  value: string; // 地址
+  name: string; // 名称
+  source: string; // 地址
   islive: boolean; // 播放方式
+  poster: string; // 封面
 }
-
+/**
+ * 播放器需要的视频信息
+ */
+interface VideoPlayerInfoType {
+  type: string; // 不同的媒体协议对应不同的数据流类型
+  source: string; // 视频（流）地址
+  islive: boolean;
+  poster: string;
+}
 
 
 /* ============================ CommentCoreLibrary 弹幕 类型 ============================ */
@@ -40,7 +49,7 @@ export interface CmtDanmuType {
   text: string; // 弹幕的文字内容。在创造弹幕对象后，对 text 的更改将无意义。图片弹幕中的 text 字段表示图片的URL。
   size: string; // 文字大小
   // color: number; // 字体颜色, 需为16进制格式: 0xff00ff
-  
+
   // ############### 弹幕附加显示信息 ###############
   color?: string;
   font?: string; // 弹幕字体。默认使用字体

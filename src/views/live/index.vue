@@ -28,21 +28,23 @@ export default class LiveIndex extends Vue {
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
 
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
-  private videoAddress: LIVESPACE.VIDEOTYPE[] = [
-    {type: 'hls', id: 0, label: 'CCTV1', value: 'http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8', islive: true},
-    {type: 'hls', id: 1, label: 'CCTV3', value: 'http://ivi.bupt.edu.cn/hls/cctv3hd.m3u8', islive: false},
-    {type: 'hls', id: 2, label: 'CCTV6', value: 'http://ivi.bupt.edu.cn/hls/cctv6hd.m3u8', islive: true},
-    {type: 'rtmp', id: 3, label: '湖南卫视', value: 'rtmp://58.200.131.2:1935/livetv/hunantv', islive: true},
-    {type: 'rtmp', id: 4, label: '香港卫视', value: 'rtmp://live.hkstv.hk.lxdns.com/live/hks1', islive: false},
-    {type: 'rtmp', id: 5, label: '香港财经', value: 'rtmp://202.69.69.180:443/webcast/bshdlive-pc', islive: true},
-    {type: 'rtmp', id: 6, label: '韩国GoodTV', value: 'rtmp://mobliestream.c3tv.com:554/live/goodtv.sdp', islive: true},
-    {type: 'rtmp', id: 7, label: '美国1', value: 'rtmp://ns8.indexforce.com/home/mystream', islive: true},
-    {type: 'rtmp', id: 8, label: '美国中文电视', value: 'rtmp://media3.sinovision.net:1935/live/livestream', islive: true},
+  private videoAddress: LIVESPACE.VideoType[] = [
+    {type: 'hls', id: 0, name: 'CCTV1', source: 'http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8', islive: true, poster: '/images/see.jpg'},
+    {type: 'rtmp', id: 3, name: '湖南卫视', source: 'rtmp://58.200.131.2:1935/livetv/hunantv', islive: true, poster: '/images/see.jpg'},
+    {type: 'mp4', id: 9, name: '飞屋环游记（节选）', source: '/badhappy.mp4', islive: false, poster: '/images/see_ha.jpg'},
+    {type: 'hls', id: 1, name: 'CCTV3', source: 'http://ivi.bupt.edu.cn/hls/cctv3hd.m3u8', islive: true, poster: '/images/see.jpg'},
+    {type: 'hls', id: 2, name: 'CCTV6', source: 'http://ivi.bupt.edu.cn/hls/cctv6hd.m3u8', islive: true, poster: '/images/see.jpg'},
+    {type: 'rtmp', id: 5, name: '香港财经', source: 'rtmp://202.69.69.180:443/webcast/bshdlive-pc', islive: true, poster: '/images/see_ha.jpg'},
+    {type: 'rtmp', id: 4, name: '香港卫视', source: 'rtmp://live.hkstv.hk.lxdns.com/live/hks1', islive: true, poster: '/images/see.jpg'},
+    {type: 'rtmp', id: 6, name: '韩国GoodTV', source: 'rtmp://mobliestream.c3tv.com:554/live/goodtv.sdp', islive: true, poster: '/images/see.jpg'},
+    {type: 'rtmp', id: 7, name: '美国1', source: 'rtmp://ns8.indexforce.com/home/mystream', islive: true, poster: '/images/see.jpg'},
+    {type: 'rtmp', id: 8, name: '美国中文电视', source: 'rtmp://media3.sinovision.net:1935/live/livestream', islive: true, poster: '/images/see.jpg'},
   ];
 
   private activeVideoIndex: number = 0;
   private useAliPlayer: boolean = false;
   private showDanmu: boolean = false;
+  private videoKey: number = 0;
   /* ------------------------ WATCH ------------------------ */
 
   /* ------------------------ METHODS ------------------------ */
@@ -52,13 +54,8 @@ export default class LiveIndex extends Vue {
    */
   private play(index: number) {
     this.activeVideoIndex = index;
+    this.videoKey++;
   }
-  /**
-   * 更换播放器
-   */
-  // private change_player() {
-  //   this.useAliPlayer = ! this.useAliPlayer;
-  // }
 }
 
 </script>
@@ -66,7 +63,7 @@ export default class LiveIndex extends Vue {
 <template>
 <div class="module_index">
   <div class="head_top">
-    <p class="video_title">{{videoAddress[activeVideoIndex].label}}</p>
+    <!-- <p class="video_title">{{videoAddress[activeVideoIndex].name}}</p> -->
     <button class="common_btn" :class="{active: useAliPlayer}" @click.stop="() => {useAliPlayer=!useAliPlayer}">使用阿里播放器</button>
     <button class="common_btn" :class="{active: !useAliPlayer}" @click.stop="() => {useAliPlayer=!useAliPlayer}">使用videojs播放器</button>
     <button class="common_btn" :class="{active: showDanmu}" @click.stop="() => {showDanmu=!showDanmu}">展示弹幕</button>
@@ -74,20 +71,18 @@ export default class LiveIndex extends Vue {
   <div class="menu">
     <ul class="video_list">
       <li :class="{'active': index === activeVideoIndex}" v-for="(item, index) of videoAddress" :key="index"
-       @click.stop="play(index)">{{item.label}}</li>
+       @click.stop="play(index)">{{item.name}}（{{item.type}}）</li>
     </ul>
   </div>
   <div class="player_wrapp abp">
     <!-- 使用阿里封装的播放器 -->
     <template v-if="useAliPlayer">
-      <employ-ali-player :source="videoAddress[activeVideoIndex].value" :type="videoAddress[activeVideoIndex].type" 
+      <employ-ali-player :source="videoAddress[activeVideoIndex].source" :type="videoAddress[activeVideoIndex].type" 
         :islive="videoAddress[activeVideoIndex].islive" :show-danmu="showDanmu"/>
     </template>
     <!-- 使用video.js播放器 -->
     <template v-else>
-      <employ-videojs-player :source="videoAddress[activeVideoIndex].value" :type="videoAddress[activeVideoIndex].type" 
-        :islive="false" :show-danmu="showDanmu"/>
-        <!-- :islive="videoAddress[activeVideoIndex].islive"/> -->
+      <employ-videojs-player :key="videoKey" :video-info="videoAddress[activeVideoIndex]" :show-danmu="showDanmu"/>
     </template>
 
     <!-- 弹幕 -->
@@ -124,15 +119,19 @@ export default class LiveIndex extends Vue {
       color #2196f3
       border-color #2196f3
   .menu
-    width 100%
-    height 48px
+    // margin-top 10px
     padding 0 60px
+    width 100%
     .video_list
+      margin-top 10px
       padding 14px 0
       li
         display inline-block
+        margin-bottom 10px
         padding 0 8px
         width fit-content
+        height 14px
+        line-height 14px
         border-right 1px solid #666
         color #565656
         text-align center
@@ -142,6 +141,7 @@ export default class LiveIndex extends Vue {
           border-right none
       .active
         color #2196f3
+        font-weight 700
   .player_wrapp
     display inline-block
     // padding 50px 8px 36px

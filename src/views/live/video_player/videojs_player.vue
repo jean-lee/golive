@@ -19,13 +19,24 @@ import 'videojs-flash';
 })
 export default class VideojsPlayer extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
+  @Prop({type: Object, default() { return {}; }}) private VideoInfo!: LIVESPACE.VideoPlayerInfoType;
   @Prop({type: Object, default() { return {}; }}) private options!: object;
 
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
   private mounted() {
-    // element, options, onPlayerReady
+    this.initVideojsPlayer();
+  }
+
+  /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
+  private player: any = null;
+  private loading: boolean = false;
+
+  /* ------------------------ WATCH ------------------------ */
+
+  /* ------------------------ METHODS ------------------------ */
+  private initVideojsPlayer() {
     this.player = videojs(this.$refs.videoPlayer, this.options, () => {
       console.log('onPlayerReady mounted');
 
@@ -35,25 +46,16 @@ export default class VideojsPlayer extends Vue {
       // this.player.on('progress', () => {
       //   console.log('开始播放播放中');
       //   this.loading = false;
-
       // });
       this.player.on('error', () => {
         console.log('异常，无法播放');
       });
     });
 
-    // dynamic 动态绑定className, 更新播放器样式
+    // dynamic动态绑定className, 更新播放器样式
     this.player.addClass('my_videojs_player');
   }
-  /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
-  private player: any = null;
-  private loading: boolean = false;
-
-  /* ------------------------ WATCH ------------------------ */
-
-  /* ------------------------ METHODS ------------------------ */
   private  beforeDestroy() {
-    console.log('dispose beforeDestroy');
     if (this.player) {
       this.player.dispose();
     }
@@ -61,11 +63,11 @@ export default class VideojsPlayer extends Vue {
   /**
    * 视频类型相同，切换视频地址时，重新调用src属性
    */
-  // public refreshPlay() {
-  //    this.player.src(this.source);
-  //    this.player.load(source);
-  //    this.player.play();
-  // }
+  public refreshPlay() {
+    this.player.src(this.VideoInfo.source);
+    this.player.load(this.VideoInfo.source);
+    this.player.play();
+  }
 }
 
 </script>
