@@ -79,6 +79,6 @@ export default class VideojsPlayer extends Vue {
 <style lang="stylus" scoped>
 
 .module_videojs_player
-  width 1024px
+  width 100%
 
 </style>

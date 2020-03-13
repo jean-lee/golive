@@ -34,6 +34,7 @@ export default class EmployAliPlayer extends Vue {
   @Prop({type: String, default: ''}) private source!: string;
   @Prop({type: String, default: 'rtmp'}) private type!: string;
   @Prop({type: Boolean, default: true}) private islive!: boolean;
+
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
@@ -87,6 +88,10 @@ export default class EmployAliPlayer extends Vue {
 
 <template>
 <div class="module_employ_ali_player">
+  <!-- 调用播放器实例 -->
+  <ali-player :source="source" ref="player" :play-style="playStyle"
+    :autoplay="islive" :is-live="islive" :use-h5-prism="true"></ali-player>
+
   <div class="play_optation_row">
     <button class="common_btn" @click="play">播放</button>
     <button class="common_btn" @click="pause">暂停</button>
@@ -95,10 +100,6 @@ export default class EmployAliPlayer extends Vue {
     <!-- <button @click="convert">切换</button> -->
   </div>
 
-  <!-- 调用播放器实例 -->
-  <ali-player :source="source" ref="player" :play-style="playStyle"
-    :autoplay="islive" :is-live="islive" :use-h5-prism="true"></ali-player>
-
 </div>
 </template>
 
@@ -106,8 +107,8 @@ export default class EmployAliPlayer extends Vue {
 
 .module_employ_ali_player
   margin 0 auto
-  width 1024px
-  height 576px
+  width 100%
+  // height 576px
   .play_optation_row
     margin 8px 0
     text-align right

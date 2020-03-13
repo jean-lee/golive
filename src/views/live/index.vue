@@ -10,12 +10,14 @@ import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
 
 import EmployAliPlayer from '@/views/live/_part/employ_ali_player.vue';
 import EmployVideojsPlayer from '@/views/live/_part/employ_videojs_player.vue';
+import CommentDanmu from '@/views/live/barrage/comment_danmu.vue';
 
 @Component({
   name: 'live-index',
   components: {
     EmployAliPlayer,
     EmployVideojsPlayer,
+    CommentDanmu,
   },
 })
 export default class LiveIndex extends Vue {
@@ -40,6 +42,7 @@ export default class LiveIndex extends Vue {
 
   private activeVideoIndex: number = 0;
   private useAliPlayer: boolean = false;
+  private showDanmu: boolean = false;
   /* ------------------------ WATCH ------------------------ */
 
   /* ------------------------ METHODS ------------------------ */
@@ -66,6 +69,7 @@ export default class LiveIndex extends Vue {
     <p class="video_title">{{videoAddress[activeVideoIndex].label}}</p>
     <button class="common_btn" :class="{active: useAliPlayer}" @click.stop="() => {useAliPlayer=!useAliPlayer}">使用阿里播放器</button>
     <button class="common_btn" :class="{active: !useAliPlayer}" @click.stop="() => {useAliPlayer=!useAliPlayer}">使用videojs播放器</button>
+    <button class="common_btn" :class="{active: showDanmu}" @click.stop="() => {showDanmu=!showDanmu}">展示弹幕</button>
   </div>
   <div class="menu">
     <ul class="video_list">
@@ -73,19 +77,21 @@ export default class LiveIndex extends Vue {
        @click.stop="play(index)">{{item.label}}</li>
     </ul>
   </div>
-  <div class="player_wrapp">
+  <div class="player_wrapp abp">
     <!-- 使用阿里封装的播放器 -->
     <template v-if="useAliPlayer">
       <employ-ali-player :source="videoAddress[activeVideoIndex].value" :type="videoAddress[activeVideoIndex].type" 
-        :islive="videoAddress[activeVideoIndex].islive"/>
+        :islive="videoAddress[activeVideoIndex].islive" :show-danmu="showDanmu"/>
     </template>
     <!-- 使用video.js播放器 -->
     <template v-else>
       <employ-videojs-player :source="videoAddress[activeVideoIndex].value" :type="videoAddress[activeVideoIndex].type" 
-        :islive="false"/>
+        :islive="false" :show-danmu="showDanmu"/>
         <!-- :islive="videoAddress[activeVideoIndex].islive"/> -->
     </template>
 
+    <!-- 弹幕 -->
+    <comment-danmu v-if="showDanmu"></comment-danmu>
   </div>
 
 
@@ -138,7 +144,8 @@ export default class LiveIndex extends Vue {
         color #2196f3
   .player_wrapp
     display inline-block
-    width calc(100% - 201px)
-    vertical-align top
+    // padding 50px 8px 36px
+    width 1024px
+    background #000
     
 </style>

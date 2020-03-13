@@ -74,8 +74,6 @@ export default class AliPlayer extends Vue {
   // 延迟播放提示文本具体参考延迟播放
   @Prop({type: String, default: 'waiting'}) public autoPlayDelayDisplayText!: string;
 
-  // 显示弹幕
-  @Prop({type: Boolean, default: false}) public showDanmu!: boolean;
 
   @Emit('ready') public readyEmit() {}
   @Emit('play') public playEmit() {}
@@ -324,8 +322,7 @@ export default class AliPlayer extends Vue {
 </script>
 
 <template>
-  <div class="prism-player abp" :id="playerId" :style="playStyle">
-    <comment-danmu v-if="showDanmu"></comment-danmu>
+  <div class="prism-player" :id="playerId" :style="playStyle">
   </div>
 </template>
 

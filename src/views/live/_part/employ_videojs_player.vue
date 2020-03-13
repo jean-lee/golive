@@ -41,6 +41,7 @@ export default class EmployVideojsPlayer extends Vue {
     // sourceOrder: true,
     liveui: this.islive, // 让进度条失效，仅允许点击暂停
     playsinline: true,
+    // nativeControlsForTouch: false,
     techOrder: ['html5', 'flash'],
     playbackRates: this.islive ? [] : [0.5, 0.75, 1, 1.5, 1.75, 2], // flash不支持倍速
     plugins: { }, // 初始化播放器时使用自定义选项自动初始化插件
@@ -83,7 +84,6 @@ export default class EmployVideojsPlayer extends Vue {
 <div class="module_employ_videojs_player">
   <!-- 调用播放器实例 -->
   <videojs-player v-if="videoOptions.sources[0].src !== ''" :options="videoOptions"></videojs-player>
-
 </div>
 </template>
 
@@ -91,7 +91,8 @@ export default class EmployVideojsPlayer extends Vue {
 
 .module_employ_videojs_player
   margin 0 auto
-  width 1024px
-  height 576px
+  // width 100%
+  height 100%
+  // height 576px
 
 </style>
