@@ -7,8 +7,13 @@
 
 import { Component, Vue, Emit } from 'vue-property-decorator';
 
+import SetGlobalStyle from './set_global_style.vue';
+
 @Component({
   name: 'create-danmu',
+  components: {
+    SetGlobalStyle,
+  },
 })
 export default class CreateDanmuku extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
@@ -29,6 +34,9 @@ export default class CreateDanmuku extends Vue {
   private serviceUrl: string = 'ws://123.207.136.134:9010/ajaxchattest'; // 开源websocket在线测试服务端
   // private serviceUrl: string = 'ws://127.0.0.1:8080/ws';
   private newDanmu: string = '';
+
+  // 弹幕样式设置
+  private set_global_style_show: boolean = false;
   /* ------------------------ WATCH ------------------------ */
 
   /* ------------------------ METHODS ------------------------ */
@@ -105,6 +113,15 @@ export default class CreateDanmuku extends Vue {
       this.ws_onsend();
     }
   }
+  private setting_global_style_open() {
+    this.set_global_style_show = true;
+  }
+  /**
+   * 关闭设置
+   */
+  private set_global_style_close() {
+    this.set_global_style_show = false;
+  }
 }
 
 </script>
@@ -112,14 +129,21 @@ export default class CreateDanmuku extends Vue {
 <template>
   <!-- 弹幕输入、发送、配置区域 -->
   <div class="module_create_danmu">
-    <input type="text" v-model="newDanmu"/>
-    <button class="common_btn" @click="sendDanmu">发送</button>
+    <div>
+      <button class="common_btn" @click="setting_global_style_open">设置</button>
+      <input type="text" v-model="newDanmu"/>
+      <button class="common_btn" @click="sendDanmu">发送</button>
+    </div>
+
+    <set-global-style :show="set_global_style_show" @close="set_global_style_close"></set-global-style>
   </div>
 </template>
 
 <style lang="stylus" scoped>
 
 .module_create_danmu
-  pass
+  padding 7px
+  height 40px
+  text-align right
 
 </style>

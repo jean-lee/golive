@@ -13,6 +13,7 @@
     "axios": "^0.19.2",
     "comment-core-library": "^0.11.1",
     "core-js": "^3.6.4",
+    "element-ui": "^2.13.0",
     "video.js": "^7.6.6",
     "videojs-flash": "^2.2.1",
     "vue": "^2.6.11",

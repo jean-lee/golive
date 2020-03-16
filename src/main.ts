@@ -10,6 +10,13 @@ import '@/assets/styles/_comment_danmu.styl';
 import Vue from 'vue';
 import '@/permission';
 
+import ElementUI from 'element-ui';
+import BaseDialog from '@/components/base-dailog.vue';
+
+
+// ---------------------------------------- 挂载 ----------------------------------------
+Vue.use(ElementUI);
+Vue.component('base-dialog', BaseDialog);
 
 // ---------------------------------------- 组件 ----------------------------------------
 import App from '@/App.vue';
