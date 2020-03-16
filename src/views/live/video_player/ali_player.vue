@@ -14,7 +14,7 @@ import {
   SKINLAYOUT_FLASH_LIVE,
 } from '@/constant/ali_player.ts';
 
-import CommentDanmu from '@/views/live/barrage/comment_danmu.vue';
+import CommentDanmu from '@/views/barrage/comment_danmu.vue';
 
 @Component({
   name: 'ali-player',
@@ -33,14 +33,7 @@ export default class AliPlayer extends Vue {
   @Prop({type: String, default: '100%'}) private height!: string;
   // controlBarVisibility -> hover | click | always
   @Prop({type: String, default: 'always'}) private controlBarVisibility!: string;
-  // 指定使用H5播放器
-  @Prop({type: Boolean, default: false}) private useH5Prism!: boolean;
-  // 指定使用Flash播放器
-  @Prop({type: Boolean, default: false}) private useFlashPrism!: boolean;
-  // H5是否内置播放
-  @Prop({type: Boolean, default: true}) private playsinline!: boolean;
-  // 指定播放地址格式，只有使用vid+plauth播放方式时支持可选值为'mp4'和'm3u8',默认为'mp4'
-  @Prop({type: String, default: 'm3u8'}) private format!: string;
+
   // 显示缓冲进度
   @Prop({type: Boolean, default: true}) private showBuffer!: boolean;
   // 快照
@@ -48,7 +41,7 @@ export default class AliPlayer extends Vue {
 
 
   // 自动播放
-  @Prop({type: Boolean, default: false}) private autoplay!: boolean;
+  @Prop({type: Boolean, default: true}) private autoplay!: boolean;
   // 自动加载
   @Prop({type: Boolean, default: false}) private preload!: boolean;
   // 播放器默认封面图片，请填写正确的图片url地址Flash播放器封面也需要开启允许跨域访问
@@ -59,17 +52,23 @@ export default class AliPlayer extends Vue {
   @Prop({type: String, default: ''}) private playauth!: string;
   // 视频播放地址url：1、单独url；2、默认状态，表示使用“vi+playauth3、source播放方式优先级最高
   @Prop({type: String, default: ''}) private source!: string;
+  // 指定播放地址格式，只有使用vid+plauth播放方式时支持可选值为'mp4'和'm3u8',默认为'mp4'
+  @Prop({type: String, default: 'm3u8'}) private format!: string;
 
   // 播放内容是否为直播，直播时会禁止用户拖动进度条
   @Prop({type: Boolean, default: true}) private isLive!: boolean;
-
-
+  // 指定使用Flash播放器
+  @Prop({type: Boolean, default: false}) private useFlashPrism!: boolean;
+  // H5是否内置播放
+  @Prop({type: Boolean, default: true}) private playsinline!: boolean;
+  // 指定使用H5播放器
+  @Prop({type: Boolean, default: true}) private useH5Prism!: boolean;
   // 声明启用同层H5播放器，启用时设置的值为'h5'具体参考同层播放 默认'auto'
   @Prop({type: String, default: 'h5'}) private x5Type!: string;
-  // 声明视频播放时是否进入到TBS的全屏模式，默认为false具体参考同层播放
-  @Prop({type: Boolean, default: false}) private x5Fullscreen!: boolean;
   // 声明视频播在界面上的位置，默认为"center" 可选值为：'top'，'center' 具体参考同层播放
   @Prop({type: String, default: 'top'}) private x5VideoPosition!: string;
+  // 声明视频播放时是否进入到TBS的全屏模式，默认为false具体参考同层播放
+  @Prop({type: Boolean, default: false}) private x5Fullscreen!: boolean;
   // 声明TBS播放器支持的方向，可选值：landscape:横屏） portraint:竖屏 landscape
   @Prop({type: Number, default: 2}) private x5Orientation!: number;
 

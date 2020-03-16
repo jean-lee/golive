@@ -71,14 +71,14 @@ export const SKINLAYOUT_FLASH_VOD = [
 export const SKINLAYOUT_H5_LIVE = [
   // {name: 'bigPlayButton', align: 'blabs', x: 30, y: 80},
   {name: 'errorDisplay', align: 'tlabs', x: 0, y: 0},
-  {name: 'infoDisplay', align: 'cc'},
+  // {name: 'infoDisplay', align: 'cc'},
   {
     name: 'controlBar', align: 'blabs', x: 0, y: 0,
     children: [
       {name: 'liveDisplay', align: 'tlabs', x:  15, y: 6},
-      {name: 'fullScreenButton', align: 'tr', x: 10, y:  10},
-      {name: 'subtitle', align: 'tr', x: 15, y: 12},
-      {name: 'setting', align: 'tr', x: 15, y: 12},
+      {name: 'fullScreenButton', align: 'tr', x: 10, y: 12},
+      // {name: 'subtitle', align: 'tr', x: 15, y: 12}, // cc
+      // {name: 'setting', align: 'tr', x: 15, y: 12},
       {name: 'volume', align: 'tr', x: 5, y: 10},
     ],
   },
