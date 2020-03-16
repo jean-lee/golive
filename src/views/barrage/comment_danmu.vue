@@ -6,9 +6,7 @@
  * 为直播添加弹幕发送输出功能
  */
 
-import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
-
-// import CommentManager from 'comment-core-library';
+import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
   name: 'comment-danmu',
@@ -19,10 +17,14 @@ export default class CommentDanmu extends Vue {
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
+  private created() {
+
+  }
   private mounted() {
     // my_comment_stage元素挂载后，初始化CM，绑定CommentManager
     this.ccl_init();
   }
+
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   private CM: any;
   private cmtArr: LIVESPACE.CmtDanmuType[] = [
@@ -30,11 +32,9 @@ export default class CommentDanmu extends Vue {
     {mode: 1, text: '2 - hello jean', stime: 1500, size: '16', backgroundColor: '#fff', border: true},
     {mode: 1, text: '3 - who are you', stime: 3000, size: '18', backgroundColor: '#400', border: false},
     {mode: 1, text: '4 - who are you', stime: 3000, size: '25', bgColor: '#424448', border: true},
-    {mode: 1, text: '5 - who are you', stime: 6000, size: '36', bgColor: '#424448', border: false},
-    {mode: 1, text: '6 - who are you', stime: 70000, size: '45', bgColor: '#424448', border: false},
-    {mode: 1, text: '7 - who are you', stime: 70000, size: '64', bgColor: '#fff', border: true},
-    {mode: 1, text: '8 - who are you', stime: 6600, size: '18', bgColor: '#fff', border: false},
+    {mode: 1, text: '5 - who are you', stime: 6600, size: '18', bgColor: '#fff', border: false},
   ];
+
   /* ------------------------ WATCH ------------------------ */
 
   /* ------------------------ METHODS ------------------------ */
@@ -84,14 +84,13 @@ export default class CommentDanmu extends Vue {
   private getCmtDataList() {
     // axios.request 获取
 
-
     // 发送弹幕
     this.sendCmtData(this.cmtArr);
   }
   /**
    * 弹幕发送时长速度计算
    */
-  private sendCmtData(cmtArr: LIVESPACE.CmtDanmuType[]) {
+  public sendCmtData(cmtArr: LIVESPACE.CmtDanmuType[]) {
     for (const item of cmtArr) {
        item.dur = Math.floor(Math.random() * 40000 + 4000);
        item.color = '#fff';
@@ -127,7 +126,9 @@ export default class CommentDanmu extends Vue {
 </script>
 
 <template>
-  <div id="my_comment_stage" class="container module_comment_danmu"></div>
+  <div>
+    <div id="my_comment_stage" class="container module_comment_danmu"></div>
+  </div>
 </template>
 
 <style lang="stylus" scoped>

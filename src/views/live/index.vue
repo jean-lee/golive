@@ -11,6 +11,7 @@ import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
 import EmployAliPlayer from '@/views/live/_part/employ_ali_player.vue';
 import EmployVideojsPlayer from '@/views/live/_part/employ_videojs_player.vue';
 import CommentDanmu from '@/views/barrage/comment_danmu.vue';
+import CreateDanmu from '@/views/barrage/create_danmu.vue';
 
 @Component({
   name: 'live-index',
@@ -18,6 +19,7 @@ import CommentDanmu from '@/views/barrage/comment_danmu.vue';
     EmployAliPlayer,
     EmployVideojsPlayer,
     CommentDanmu,
+    CreateDanmu,
   },
 })
 export default class LiveIndex extends Vue {
@@ -56,6 +58,14 @@ export default class LiveIndex extends Vue {
     this.activeVideoIndex = index;
     this.videoKey++;
   }
+  /**
+   * 发送弹幕
+   */
+  private send_cmt_danmu(val: LIVESPACE.CmtDanmuType[]) {
+    if ((this.$refs.commentDanmuWrap)) {
+      (this.$refs.commentDanmuWrap as CommentDanmu).sendCmtData(val);
+    }
+  }
 }
 
 </script>
@@ -87,7 +97,10 @@ export default class LiveIndex extends Vue {
     </template>
 
     <!-- 弹幕 -->
-    <comment-danmu v-if="showDanmu"></comment-danmu>
+    <comment-danmu v-if="showDanmu" ref="commentDanmuWrap"></comment-danmu>
+
+    <!-- 新增弹幕 -->
+    <create-danmu v-if="showDanmu" @send-danmu="send_cmt_danmu"></create-danmu>
   </div>
 
 
@@ -120,7 +133,6 @@ export default class LiveIndex extends Vue {
       color #2196f3
       border-color #2196f3
   .menu
-    // margin-top 10px
     padding 0 60px
     width 100%
     .video_list
@@ -145,7 +157,6 @@ export default class LiveIndex extends Vue {
         font-weight 700
   .player_wrapp
     display inline-block
-    // padding 50px 8px 36px
     width 1024px
     background #000
     
