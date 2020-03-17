@@ -130,8 +130,8 @@ export default class LiveIndex extends Vue {
       margin-left 10px
       padding 6px
     .active
-      color #2196f3
-      border-color #2196f3
+      color $active_color
+      border-color $active_color
   .menu
     padding 0 60px
     width 100%
@@ -153,7 +153,7 @@ export default class LiveIndex extends Vue {
         &:last-child
           border-right none
       .active
-        color #2196f3
+        color $active_color
         font-weight 700
   .player_wrapp
     display inline-block

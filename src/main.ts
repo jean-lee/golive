@@ -2,6 +2,8 @@
 import '@/assets/styles/reset.styl';
 import '@/assets/styles/utils.styl';
 import '@/assets/styles/_common.styl';
+import 'element-ui/lib/theme-chalk/index.css';
+
 import '@/assets/styles/_videojs.styl';
 import '@/assets/styles/_comment_danmu.styl';
 

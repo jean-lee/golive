@@ -1,14 +1,113 @@
+// --------------------------------------- .module_comment_danmu -----------------------------------------
 .module_comment_danmu
   width 100%
   height calc(100% - 110px)
   .self_customization
-    // font-size: 14px;
-    // color: rgb(0, 255, 221);
-    // left: 1009px;
-    // top: 0px;
-    // width: fit-content;
     background-color rgba(255, 88, 80, .6)
     padding 3px 10px!important
     border-radius 3px
     box-shadow 1px 1px 4px #e06969
     border none!important
+
+// --------------------------------------- .module_create_danmu -----------------------------------------
+.is_showdanmu
+  .el-switch
+    height 22px!important
+    line-height 22px!important
+    width 42px!important
+    .el-switch__core
+      height 22px!important
+      line-height 22px!important
+      width 36px!important
+      border-radius 12px
+      backgroud-color #999
+      &:after
+        content '弹'
+        font-size 12px
+        width 18px
+        line-height 18px
+        height 18px
+        color #666
+  .is-checked
+    .el-switch__core
+      &::after
+        margin-left -19px
+
+// 弹幕样式设置
+.el-tooltip__popper
+  z-index 10001!important 
+.danmu_style_seting_popover
+  background rgba(0, 0, 0, .7)
+  border rgba(0, 0, 0, .7)
+  z-index 10000!important // 滚动弹幕的z-index为9999
+
+  .seting_popover
+    .title
+      color #f8f8f8
+      font-size 14px
+      line-height 32px
+    .set_item
+      height 36px
+      padding-top 10px
+    .shield_by_type
+      ul
+        display flex
+        flex-wrap wrap
+        li
+          flex 0 0 30px
+          margin-right 18px
+          text-align center
+          .el-icon-picture
+            font-size 30px
+            color #eee
+          .desc
+            font-size 12px
+            color #eee
+    .shield_by_comment
+      ul
+        display flex
+        flex-wrap wrap
+        li
+          flex 0 0 120px
+          margin-right 8px
+          color #eee
+          background rgba(120, 120, 120, 1)
+          text-align center
+          line-height 22px
+          border-radius 2px
+          font-size 12px
+    .el-slider
+      display inline-block
+      width calc(100% - 80px)
+      margin-left 10px
+      .el-slider__runway
+        width 100%
+        height 2px
+        margin 3px 0
+        background-color #bbb
+        border-radius 2px
+        .el-slider__bar
+          height 2px
+        .el-slider__button-wrapper
+          height 20px
+          width 20px
+          z-index 1001
+          top -10px
+          .el-slider__button
+            width 8px
+            height 8px
+            border none
+            background-color #409EFF
+        .el-slider__stop
+          top -2px
+        .el-slider__marks
+          .el-slider__marks-text
+            margin-top -22px
+            width fit-content
+            font-size 12px
+    .set_more
+      padding-top 16px
+      .title
+        cursor pointer
+        &:hover
+          color #2196f3
