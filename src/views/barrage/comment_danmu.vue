@@ -26,7 +26,7 @@ export default class CommentDanmu extends Vue {
   }
 
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
-  private CM: any;
+  private CM: any = null;
   private cmtArr: LIVESPACE.CmtDanmuType[] = [
     {mode: 1, text: '1 - hello world', stime: 0,  size: '12', backgroundColor: '#424448', border: false },
     {mode: 1, text: '2 - hello jean', stime: 1500, size: '16', backgroundColor: '#fff', border: true},
@@ -49,34 +49,50 @@ export default class CommentDanmu extends Vue {
     // 固定弹幕（顶部、底部）生存时间为4*a; 滚动弹幕（滚动、底部滚动、顶部滚动）总生存时间是4*a*b
     // 弹幕默认生存时间是4s。加成数值越大，弹幕运行速度越低
     // 相同加成下不同长度的弹幕， 速度是不一样的。 弹幕大了，速度就慢了
-    this.CM.options.global.className = 'cmt self_customization';
+    // this.CM.options.global.className = 'cmt self_customization';
     this.CM.init();
-    // CM.load(this.danmukuList);
+    this.CM.load(this.cmtArr);
 
-     // 弹幕有时间轴位置，那就插入时间轴
+    // 弹幕有时间轴位置，那就插入时间轴
     // 弹幕插入时间轴,插入这个弹幕，因为时间 < CM内现在播放时间，所以一定不会被显示
     // const needInsertDanmu = {
     //   mode: 1,
     //   text: 'hello world',
-    //   stime: video.currentTime * 1000 - 1, // 比现在时间稍微慢一ms,
+    //   stime: 0, // 比现在时间稍微慢一ms,
     //   size: '25',
-    //   color: '#0056dd'，
+    //   color: '#0056dd',
     // };
-    // CM.insert(needInsertDanmu);
-
+    // this.CM.insert(needInsertDanmu);
     // 启动播放弹幕（在未启动状态下弹幕不会移动）
     this.CM.start();
-
-    this.cmtController();
-    // this.danmukuList.map((item: any) => {
-    //   CM.send(item);
-    // });
-
-    // 停止播放（停止弹幕移动）
-    // CM.stop();
     // 强行更新以下 CM 的时间戳。设置了CommentManager的播放时间，单位是毫秒(0.001s)
     // CM.time(500);
     // CM.time(1314);
+  }
+  /**
+   * 播放
+   */
+  public start() {
+    console.log('开播放');
+    this.CM.start();
+    // this.getCmtDataList();
+    // this.sendCmtData([]);
+  }
+  /**
+   * 销毁
+   */
+  public close() {
+    console.log('关');
+    // 停止播放（停止弹幕移动）
+    this.CM.finish();
+  }
+  /**
+   * 弹幕停止移动
+   */
+  public stop() {
+    console.log('stop222');
+    // 弹幕停止移动
+    this.CM.stop();
   }
   /**
    * 获取弹幕数据
@@ -85,7 +101,17 @@ export default class CommentDanmu extends Vue {
     // axios.request 获取
 
     // 发送弹幕
+    console.log('发送弹幕');
     this.sendCmtData(this.cmtArr);
+  }
+  /**
+   * 弹幕发送
+   */
+  private cmtController() {
+    // 定时循环发送
+    setInterval(() => {
+      this.getCmtDataList();
+    }, 3000);
   }
   /**
    * 弹幕发送时长速度计算
@@ -102,15 +128,11 @@ export default class CommentDanmu extends Vue {
     }
   }
   /**
-   * 弹幕发送
+   * 弹幕全局样式设置
    */
-  private cmtController() {
-    // 定时循环发送
-    setInterval(() => {
-      this.getCmtDataList();
-    }, 3000);
-  }
+  public globalCmtStyleSet() {
 
+  }
   // private dynamicDanmu() {
   //   const provider = new CommentProvider();
 

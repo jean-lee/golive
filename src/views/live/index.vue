@@ -66,6 +66,30 @@ export default class LiveIndex extends Vue {
       (this.$refs.commentDanmuWrap as CommentDanmu).sendCmtData(val);
     }
   }
+  /**
+   * 开启弹幕（销毁弹幕播放界面）
+   */
+  private start_cmt() {
+    if ((this.$refs.commentDanmuWrap)) {
+      (this.$refs.commentDanmuWrap as CommentDanmu).start();
+    }
+  }
+  /**
+   * 关闭弹幕（销毁弹幕播放界面）
+   */
+  private close_cmt() {
+    // if ((this.$refs.commentDanmuWrap)) {
+    //   (this.$refs.commentDanmuWrap as CommentDanmu).close();
+    // }
+  }
+  /**
+   * 停止 弹幕 移动
+   */
+  private stop_cmt() {
+    if ((this.$refs.commentDanmuWrap)) {
+      (this.$refs.commentDanmuWrap as CommentDanmu).stop();
+    }
+  }
 }
 
 </script>
@@ -100,7 +124,7 @@ export default class LiveIndex extends Vue {
     <comment-danmu v-if="showDanmu" ref="commentDanmuWrap"></comment-danmu>
 
     <!-- 新增弹幕 -->
-    <create-danmu v-if="showDanmu" @send-danmu="send_cmt_danmu"></create-danmu>
+    <create-danmu v-if="showDanmu" @send-danmu="send_cmt_danmu" @start="start_cmt" @close="close_cmt" @stop="stop_cmt"></create-danmu>
   </div>
 
 

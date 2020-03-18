@@ -5,7 +5,7 @@
  * desc: 创建新弹幕，使用websocket发送
  */
 
-import { Component, Vue, Emit, Prop } from 'vue-property-decorator';
+import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
 
 import SetGlobalStyle from './set_global_style.vue';
 
@@ -17,9 +17,11 @@ import SetGlobalStyle from './set_global_style.vue';
 })
 export default class CreateDanmuku extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
-  // @Prop({ type: Boolean, default: true}) private isShowDanmu!: boolean;
 
-  @Emit('send-danmu') private senddanmu_event(danmu: LIVESPACE.CmtDanmuType[]) { }
+  @Emit('send-danmu') private send_event(danmu: LIVESPACE.CmtDanmuType[]) { }
+  @Emit('start') private start_event() {}
+  @Emit('close') private close_event() {}
+  @Emit('stop') private stop_event() {}
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
@@ -38,10 +40,18 @@ export default class CreateDanmuku extends Vue {
   private newDanmu: string = '';
 
   // 弹幕样式设置
+  private show_danmu: boolean = false;
 
-  private isShowDanmu: boolean = true;
   /* ------------------------ WATCH ------------------------ */
-
+  @Watch('show_danmu') private show_danmu_change(val: boolean) {
+    console.log('val', val);
+    if ( val ) {
+       this.start_event();
+    } else {
+      this.stop_event();
+    }
+    // val ? this.start_event() : this.stop_event();
+  }
   /* ------------------------ METHODS ------------------------ */
   /**
    * 初始化websocket
@@ -85,7 +95,7 @@ export default class CreateDanmuku extends Vue {
    */
   private ws_onsend() {
     const str: LIVESPACE.CmtDanmuType = {mode: 1, text: this.newDanmu, stime: 0, size: '22', backgroundColor: '#f24448', border: false };
-
+    this.newDanmu = '';
     console.log('发送弹幕');
     this.myWs.send(JSON.stringify(str));
   }
@@ -106,15 +116,33 @@ export default class CreateDanmuku extends Vue {
     }
 
     const sv: LIVESPACE.CmtDanmuType[] = [JSON.parse(sstr)];
-    this.senddanmu_event(sv); // 传递至（.module_comment_danmu）区域展示
+    this.send_event(sv); // 传递至（.module_comment_danmu）区域展示
   }
   /**
    * 调用websocket向服务端 发送 最新输入弹幕
    */
-  private sendDanmu() {
+  private send() {
     if (this.myWs.readyState === 1) {
       this.ws_onsend();
     }
+  }
+  /**
+   * 关闭弹幕
+   */
+  private start() {
+    this.start_event();
+  }
+  /**
+   * 关闭弹幕
+   */
+  private close() {
+
+  }
+  /**
+   * 停止弹幕
+   */
+  private stopMove() {
+
   }
 }
 
@@ -127,13 +155,13 @@ export default class CreateDanmuku extends Vue {
       <el-col :span="6"></el-col>
       <el-col :span="3"><button class="common_btn" @click="setting_global_style_open"><i class="el-icon-setting"></i>设置</button></el-col>
       <el-col :span="10"><el-input placeholder="发个友善弹幕记录见证当下" prefix-icon="el-icon-edit" v-model="newDanmu"></el-input></el-col>
-      <el-col :span="3"><button class="common_btn" @click="sendDanmu">发送</button></el-col>
+      <el-col :span="3"><button class="common_btn" @click="send">发送</button></el-col>
     </el-row> -->
     <div class="opration">
       <div class="opration_item occupied"></div>
       <div class="opration_item is_showdanmu">
-        <el-tooltip :content="'Switch value: ' + isShowDanmu" placement="top">
-          <el-switch v-model="isShowDanmu" active-color="#2196f3" inactive-color="#ccc" active-value="true" inactive-value="false" />
+        <el-tooltip :content="'Switch value: ' + show_danmu" placement="top">
+          <el-switch v-model="show_danmu" active-color="#2196f3" inactive-color="#ccc" />
         </el-tooltip>
       </div>
       <div class="opration_item item_set">
@@ -142,7 +170,7 @@ export default class CreateDanmuku extends Vue {
       </div>
       <div class="opration_item item_input">
         <input placeholder="发个友善弹幕见证当下" prefix-icon="el-icon-edit" v-model="newDanmu" />
-        <button class="common_btn" @click="sendDanmu">发送</button>
+        <button class="common_btn" @click="send">发送</button>
       </div>
       
     </div>
