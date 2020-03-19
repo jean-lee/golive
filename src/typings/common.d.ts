@@ -88,4 +88,16 @@ export interface CmtDanmuType {
   // toString
 }
 
+/**
+ * 全局弹幕 设置
+ */
+export interface CmtGlobalStylsSetType {
+  shieldtype: string; // 按弹幕类型屏蔽（滚动、底部、彩色等）
+  opacity: number; // 透明度
+  shieldcomment: number; // 关键词屏蔽
+  area: number; // 弹幕显示区域
+  speed: number; // 弹幕速度
+  fontsize: number; // 弹幕字号
+  limit: number; // 最大显示数量（0或以下表示不限制同屏弹幕数量）
+}
 }

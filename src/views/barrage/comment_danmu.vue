@@ -29,10 +29,10 @@ export default class CommentDanmu extends Vue {
   private CM: any = null;
   private cmtArr: LIVESPACE.CmtDanmuType[] = [
     {mode: 1, text: '1 - hello world', stime: 0,  size: '12', backgroundColor: '#424448', border: false },
-    // {mode: 1, text: '2 - hello jean', stime: 1500, size: '16', backgroundColor: '#fff', border: true},
-    // {mode: 1, text: '3 - who are you', stime: 3000, size: '18', backgroundColor: '#400', border: false},
-    // {mode: 1, text: '4 - who are you', stime: 3000, size: '25', bgColor: '#424448', border: true},
-    // {mode: 1, text: '5 - who are you', stime: 6600, size: '18', bgColor: '#fff', border: false},
+    {mode: 1, text: '2 - hello jean', stime: 1500, size: '16', backgroundColor: '#fff', border: true},
+    {mode: 1, text: '3 - who are you', stime: 3000, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '4 - who are you', stime: 6000, size: '25', bgColor: '#424448', border: true},
+    {mode: 1, text: '5 - who are you', stime: 12000, size: '18', bgColor: '#fff', border: false},
   ];
 
   /* ------------------------ WATCH ------------------------ */
@@ -55,18 +55,18 @@ export default class CommentDanmu extends Vue {
   /**
    * 插入 弹幕
    */
-  private insert() {
-    // 弹幕有时间轴位置，那就插入时间轴
-    // 弹幕插入时间轴,插入这个弹幕，因为时间 < CM内现在播放时间，所以一定不会被显示
-    const needInsertDanmu = {
-      mode: 1,
-      text: 'hello world',
-      stime: 0, // 比现在时间稍微慢一ms,
-      size: '25',
-      color: '#0056dd',
-    };
-    this.CM.insert(needInsertDanmu);
-  }
+  // private insert() {
+  //   // 弹幕有时间轴位置，那就插入时间轴
+  //   // 弹幕插入时间轴,插入这个弹幕，因为时间 < CM内现在播放时间，所以一定不会被显示
+  //   const needInsertDanmu = {
+  //     mode: 1,
+  //     text: 'hello world',
+  //     stime: 0, // 比现在时间稍微慢一ms,
+  //     size: '25',
+  //     color: '#0056dd',
+  //   };
+  //   this.CM.insert(needInsertDanmu);
+  // }
   /**
    * 销毁
    */
@@ -82,10 +82,9 @@ export default class CommentDanmu extends Vue {
    */
   public start() {
     console.log('开启 弹幕');
-    // this.CM.clear();
     this.CM.start();
-    this.sendCmtData();
-    // this.getCmtDataList();
+    // this.sendCmtData();
+    // this.cmtController();
   }
   /**
    * 弹幕 暂停移动
@@ -117,7 +116,7 @@ export default class CommentDanmu extends Vue {
   private cmtController() {
     // 定时循环发送
     setInterval(() => {
-      this.getCmtDataList();
+      this.sendCmtData();
     }, 3000);
   }
   /**
@@ -140,13 +139,23 @@ export default class CommentDanmu extends Vue {
   /**
    * 弹幕全局样式设置
    */
-  public globalCmtStyleSet() {
+  public globalCmtStyleSet(val: LIVESPACE.CmtGlobalStylsSetType) {
     // a: this.CM.options.gloabal.scale // 单个弹幕对象全局生存时间加成
     // b: this.CM.options.scroll.scale // 单个弹幕对象滚动弹幕生存时间加成
     // 固定弹幕（顶部、底部）生存时间为4*a; 滚动弹幕（滚动、底部滚动、顶部滚动）总生存时间是4*a*b
     // 弹幕默认生存时间是4s。加成数值越大，弹幕运行速度越低
     // 相同加成下不同长度的弹幕， 速度是不一样的。 弹幕大了，速度就慢了
+
     this.CM.options.global.className = 'cmt self_customization';
+    // // this.CM.options.global.shieldtype = val.shieldtype;
+    this.CM.options.global.opacity = val.opacity / 100;
+
+
+
+
+    // this.CM.options.global.shieldcomment = val.shieldcomment;
+    // this.CM.options.global.area = val.area;
+    // this.CM.options.global.fontsize = val.fontsize;
   }
   // private dynamicDanmu() {
   //   const provider = new CommentProvider();

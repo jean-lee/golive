@@ -12,20 +12,33 @@ import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
 })
 export default class SetGlobalStyle extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
+  @Prop({ type: Object, default() { return {
+    shieldtype: '1',
+    opacity: 50,
+    shieldcomment: 1,
+    area: 1,
+    speed: 40,
+    fontsize: 40,
+    limit: 0,
+  }; } }) private value!: LIVESPACE.CmtGlobalStylsSetType;
 
+
+  @Emit('global-set-change') private global_set_change(val: LIVESPACE.CmtGlobalStylsSetType) {}
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
 
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
-  private checkedVal = {
-    shieldtype: '1',
-    opcity: 50,
-    shieldcomment: 1,
-    area: 1,
-    speed: 40,
-    fontsize: 40,
-  };
+  private global_set_value: LIVESPACE.CmtGlobalStylsSetType = this.value;
+  // private global_set_value: LIVESPACE.CmtGlobalStylsSetType = {
+  //   shieldtype: '1',
+  //   opacity: 50,
+  //   shieldcomment: 1,
+  //   area: 1,
+  //   speed: 40,
+  //   fontsize: 40,
+  //   limit: 0,
+  // };
   private set_global_style_show: boolean = false;
   private shield_type_opstions = [
     { mode: '1,2', name: '滚动', icon: 'el-icon-picture' },
@@ -57,11 +70,8 @@ export default class SetGlobalStyle extends Vue {
    * 按滚动类型屏蔽
    */
   private type_select(val: string) {
-    this.checkedVal.shieldtype = val;
+    this.global_set_value.shieldtype = val;
   }
-  // private comment_select() {
-
-  // }
   /**
    * 关闭设置
    */
@@ -71,15 +81,17 @@ export default class SetGlobalStyle extends Vue {
   /**
    * 格式化 透明度
    */
-  private format_opcity(val: number) {
+  private format_opacity(val: number) {
     return val + '%';
   }
+
 }
 
 </script>
 
 <template>
- <el-popover popper-class="danmu_style_seting_popover" :tabindex="-1" placement="top" width="300" trigger="manual" v-model="set_global_style_show">
+ <el-popover popper-class="danmu_style_seting_popover" :tabindex="-1" placement="top" width="300" trigger="hover" v-model="set_global_style_show">
+   <!-- trigger="manual" -->
     <div class="seting_popover">
       <div class="shield_by_type">
         <p class="title">按类型屏蔽</p>
@@ -92,25 +104,25 @@ export default class SetGlobalStyle extends Vue {
       <div class="shield_by_comment">
         <p class="title">防挡字幕</p>
         <ul>
-          <li @click.stop="() => { checkedVal.shieldcomment = 1}">添加屏蔽词</li>
-          <li @click.stop="() => { checkedVal.shieldcomment = 2}">同步屏蔽列表</li>
+          <li @click.stop="() => { global_set_value.shieldcomment = 1}">添加屏蔽词</li>
+          <li @click.stop="() => { global_set_value.shieldcomment = 2}">同步屏蔽列表</li>
         </ul>
       </div>
-      <div class="set_item set_opcity">
+      <div class="set_item set_opacity">
         <span class="title">不透明度</span>
-        <el-slider v-model="checkedVal.opcity" :format-tooltip="format_opcity"></el-slider>
+        <el-slider v-model="global_set_value.opacity" :format-tooltip="format_opacity"></el-slider>
       </div>
       <div class="set_item set_display_wrap">
         <span class="title">显示区域</span>
-        <el-slider v-model="checkedVal.area" :marks="display_wrap_marks" show-stops :step="25" :show-tooltip="false"></el-slider>
+        <el-slider v-model="global_set_value.area" :marks="display_wrap_marks" show-stops :step="25" :show-tooltip="false"></el-slider>
       </div>
       <div class="set_item set_danmu_speed">
         <span class="title">弹幕速度</span>
-        <el-slider v-model="checkedVal.speed" :marks="speed_val_marks" :min="40" :max="160" :format-tooltip="format_opcity"></el-slider>
+        <el-slider v-model="global_set_value.speed" :marks="speed_val_marks" :min="40" :max="160" :format-tooltip="format_opacity"></el-slider>
       </div>
       <div class="set_item set_font_size">
         <span class="title">字体大小</span>
-        <el-slider v-model="checkedVal.fontsize" :marks="font_size_marks" :min="40" :max="160" :format-tooltip="format_opcity"></el-slider>
+        <el-slider v-model="global_set_value.fontsize" :marks="font_size_marks" :min="40" :max="160" :format-tooltip="format_opacity"></el-slider>
       </div>
       <div class="set_item set_more">
         <span class="title">更多弹幕设置</span>

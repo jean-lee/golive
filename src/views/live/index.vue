@@ -47,6 +47,8 @@ export default class LiveIndex extends Vue {
   private useAliPlayer: boolean = false;
   private showDanmu: boolean = true;
   private videoKey: number = 0;
+
+
   /* ------------------------ WATCH ------------------------ */
 
   /* ------------------------ METHODS ------------------------ */
@@ -62,7 +64,7 @@ export default class LiveIndex extends Vue {
    * 发送弹幕
    */
   private send_cmt_danmu(val: LIVESPACE.CmtDanmuType[]) {
-    if ((this.$refs.commentDanmuWrap)) {
+    if (this.$refs.commentDanmuWrap) {
       (this.$refs.commentDanmuWrap as CommentDanmu).sendCmtData(val);
     }
   }
@@ -70,7 +72,7 @@ export default class LiveIndex extends Vue {
    * 开启弹幕（销毁弹幕播放界面）
    */
   private start_cmt() {
-    if ((this.$refs.commentDanmuWrap)) {
+    if (this.$refs.commentDanmuWrap) {
       (this.$refs.commentDanmuWrap as CommentDanmu).start();
     }
   }
@@ -78,7 +80,7 @@ export default class LiveIndex extends Vue {
    * 关闭弹幕（销毁弹幕播放界面）
    */
   private close_cmt() {
-    if ((this.$refs.commentDanmuWrap)) {
+    if (this.$refs.commentDanmuWrap) {
       (this.$refs.commentDanmuWrap as CommentDanmu).close();
     }
   }
@@ -86,7 +88,7 @@ export default class LiveIndex extends Vue {
    * 停止 弹幕 移动
    */
   private stop_cmt() {
-    if ((this.$refs.commentDanmuWrap)) {
+    if (this.$refs.commentDanmuWrap) {
       (this.$refs.commentDanmuWrap as CommentDanmu).stop();
     }
   }
@@ -94,8 +96,16 @@ export default class LiveIndex extends Vue {
    * 清空 弹幕
    */
   private clear_cmt() {
-    if ((this.$refs.commentDanmuWrap)) {
+    if (this.$refs.commentDanmuWrap) {
       (this.$refs.commentDanmuWrap as CommentDanmu).clear();
+    }
+  }
+  /**
+   * 弹幕 输出 全局更改
+   */
+  private cmt_global_set_change(val: LIVESPACE.CmtGlobalStylsSetType) {
+    if (this.$refs.commentDanmuWrap) {
+      (this.$refs.commentDanmuWrap as CommentDanmu).globalCmtStyleSet(val);
     }
   }
 }
@@ -131,7 +141,11 @@ export default class LiveIndex extends Vue {
     <comment-danmu v-if="showDanmu" ref="commentDanmuWrap"></comment-danmu>
 
     <!-- 新增弹幕 -->
-    <create-danmu v-if="showDanmu" @send-danmu="send_cmt_danmu" @start="start_cmt" @close="close_cmt" @stop="stop_cmt" @clear="clear_cmt"></create-danmu>
+    <create-danmu v-show="showDanmu" 
+      @send-danmu="send_cmt_danmu" @start="start_cmt"
+      @close="close_cmt" @stop="stop_cmt" @clear="clear_cmt"
+      @global-set-change="cmt_global_set_change"
+      ></create-danmu>
   </div>
 
 

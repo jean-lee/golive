@@ -19,10 +19,12 @@ export default class CreateDanmuku extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
 
   @Emit('send-danmu') private send_event(danmu: LIVESPACE.CmtDanmuType[]) { }
-  @Emit('start') private start_event() {}
+  @Emit('start') private start_event() { this.show_danmu = true; }
   @Emit('close') private close_event() {}
-  @Emit('stop') private stop_event() {}
+  @Emit('stop') private stop_event() {  this.show_danmu = false; }
   @Emit('clear') private clear_event() {}
+
+  @Emit('global-set-change') private global_set_change(val: LIVESPACE.CmtGlobalStylsSetType) {}
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
@@ -43,9 +45,22 @@ export default class CreateDanmuku extends Vue {
   // 弹幕样式设置
   private show_danmu: boolean = false;
 
+  // 弹幕展示 全局设置
+  private global_set_value: LIVESPACE.CmtGlobalStylsSetType = {
+    shieldtype: '1',
+    opacity: 50,
+    shieldcomment: 1,
+    area: 1,
+    speed: 40,
+    fontsize: 40,
+    limit: 0,
+  };
   /* ------------------------ WATCH ------------------------ */
   @Watch('show_danmu') private show_danmu_change(val: boolean) {
     val ? this.start_event() : this.stop_event();
+  }
+  @Watch('global_set_value', {deep: true}) private cmt_global_set_change(val: LIVESPACE.CmtGlobalStylsSetType) {
+    this.global_set_change(val);
   }
   /* ------------------------ METHODS ------------------------ */
   /**
@@ -149,7 +164,7 @@ export default class CreateDanmuku extends Vue {
       </div> -->
       <div class="opration_item item_set">
         <!--  title="全局弹幕展示设置" @click="setting_global_style_open" :show="set_global_style_show" -->
-        <set-global-style></set-global-style>
+        <set-global-style v-model="global_set_value" @global-set-change="cmt_global_set_change"></set-global-style>
       </div>
       <div class="opration_item item_input" :class="{disabled: !show_danmu}">
         <input placeholder="发个友善弹幕见证当下" prefix-icon="el-icon-edit" v-model="newDanmu" />
