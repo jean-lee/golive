@@ -22,6 +22,7 @@ export default class CreateDanmuku extends Vue {
   @Emit('start') private start_event() {}
   @Emit('close') private close_event() {}
   @Emit('stop') private stop_event() {}
+  @Emit('clear') private clear_event() {}
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
@@ -44,13 +45,7 @@ export default class CreateDanmuku extends Vue {
 
   /* ------------------------ WATCH ------------------------ */
   @Watch('show_danmu') private show_danmu_change(val: boolean) {
-    console.log('val', val);
-    if ( val ) {
-       this.start_event();
-    } else {
-      this.stop_event();
-    }
-    // val ? this.start_event() : this.stop_event();
+    val ? this.start_event() : this.stop_event();
   }
   /* ------------------------ METHODS ------------------------ */
   /**
@@ -126,24 +121,6 @@ export default class CreateDanmuku extends Vue {
       this.ws_onsend();
     }
   }
-  /**
-   * 关闭弹幕
-   */
-  private start() {
-    this.start_event();
-  }
-  /**
-   * 关闭弹幕
-   */
-  private close() {
-
-  }
-  /**
-   * 停止弹幕
-   */
-  private stopMove() {
-
-  }
 }
 
 </script>
@@ -159,23 +136,28 @@ export default class CreateDanmuku extends Vue {
     </el-row> -->
     <div class="opration">
       <div class="opration_item occupied"></div>
-      <div class="opration_item is_showdanmu">
+      <div class="opration_item danmu_act">
+        <button class="common_btn" @click="close_event">关闭</button>
+        <button class="common_btn" @click="start_event">启动</button>
+        <button class="common_btn" @click="stop_event">暂停</button>
+        <button class="common_btn" @click="clear_event">清空</button>
+      </div>
+      <!-- <div class="opration_item is_showdanmu">
         <el-tooltip :content="'Switch value: ' + show_danmu" placement="top">
           <el-switch v-model="show_danmu" active-color="#2196f3" inactive-color="#ccc" />
         </el-tooltip>
-      </div>
+      </div> -->
       <div class="opration_item item_set">
         <!--  title="全局弹幕展示设置" @click="setting_global_style_open" :show="set_global_style_show" -->
         <set-global-style></set-global-style>
       </div>
-      <div class="opration_item item_input">
+      <div class="opration_item item_input" :class="{disabled: !show_danmu}">
         <input placeholder="发个友善弹幕见证当下" prefix-icon="el-icon-edit" v-model="newDanmu" />
         <button class="common_btn" @click="send">发送</button>
       </div>
       
     </div>
 
-    <!--  -->
   </div>
 </template>
 
@@ -197,6 +179,8 @@ export default class CreateDanmuku extends Vue {
       text-align center
     .occupied
       flex -1
+    .danmu_act
+      flex 0 0 218px
     .is_showdanmu
       flex 0 0 44px
     .item_set
@@ -223,6 +207,19 @@ export default class CreateDanmuku extends Vue {
         border none
         border-top-left-radius 0
         border-bottom-left-radius 0
+    .disabled
+      position relative
+      &:after
+        position absolute
+        display inline-block
+        top 0
+        left 0
+        content ''
+        width 100%
+        min-width 230px
+        height 24px
+        z-index 9
+        background rgba(0, 0, 0, 0.2)
 
 
 </style>

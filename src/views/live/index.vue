@@ -78,9 +78,9 @@ export default class LiveIndex extends Vue {
    * 关闭弹幕（销毁弹幕播放界面）
    */
   private close_cmt() {
-    // if ((this.$refs.commentDanmuWrap)) {
-    //   (this.$refs.commentDanmuWrap as CommentDanmu).close();
-    // }
+    if ((this.$refs.commentDanmuWrap)) {
+      (this.$refs.commentDanmuWrap as CommentDanmu).close();
+    }
   }
   /**
    * 停止 弹幕 移动
@@ -90,6 +90,14 @@ export default class LiveIndex extends Vue {
       (this.$refs.commentDanmuWrap as CommentDanmu).stop();
     }
   }
+  /**
+   * 清空 弹幕
+   */
+  private clear_cmt() {
+    if ((this.$refs.commentDanmuWrap)) {
+      (this.$refs.commentDanmuWrap as CommentDanmu).clear();
+    }
+  }
 }
 
 </script>
@@ -97,7 +105,7 @@ export default class LiveIndex extends Vue {
 <template>
 <div class="module_index">
   <div class="head_top">
-    <!-- <p class="video_title">{{videoAddress[activeVideoIndex].name}}</p> -->
+    <p class="video_title">{{videoAddress[activeVideoIndex].name}}</p>
     <button class="common_btn" :class="{active: useAliPlayer}" @click.stop="() => {useAliPlayer=!useAliPlayer}">使用阿里播放器</button>
     <button class="common_btn" :class="{active: !useAliPlayer}" @click.stop="() => {useAliPlayer=!useAliPlayer}">使用videojs播放器</button>
     <button class="common_btn" :class="{active: showDanmu}" @click.stop="() => {showDanmu=!showDanmu}">展示弹幕</button>
@@ -111,10 +119,9 @@ export default class LiveIndex extends Vue {
   <div class="player_wrapp abp">
     <!-- 使用阿里封装的播放器 -->
     <template v-if="useAliPlayer">
-      <!-- <employ-ali-player :source="videoAddress[activeVideoIndex].source" :type="videoAddress[activeVideoIndex].type" 
-        :islive="videoAddress[activeVideoIndex].islive" :show-danmu="showDanmu"/> -->
       <employ-ali-player :key="videoKey" :video-info="videoAddress[activeVideoIndex]" :show-danmu="showDanmu" />
     </template>
+
     <!-- 使用video.js播放器 -->
     <template v-else>
       <employ-videojs-player :key="videoKey" :video-info="videoAddress[activeVideoIndex]" :show-danmu="showDanmu"/>
@@ -124,7 +131,7 @@ export default class LiveIndex extends Vue {
     <comment-danmu v-if="showDanmu" ref="commentDanmuWrap"></comment-danmu>
 
     <!-- 新增弹幕 -->
-    <create-danmu v-if="showDanmu" @send-danmu="send_cmt_danmu" @start="start_cmt" @close="close_cmt" @stop="stop_cmt"></create-danmu>
+    <create-danmu v-if="showDanmu" @send-danmu="send_cmt_danmu" @start="start_cmt" @close="close_cmt" @stop="stop_cmt" @clear="clear_cmt"></create-danmu>
   </div>
 
 

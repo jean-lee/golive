@@ -2,7 +2,7 @@
 /* COMPONENT DOCUMENT
  * author: ljx
  * date: 2020/03/16
- * desc: 
+ * desc: 弹幕样式 全局设置
  */
 
 import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
@@ -35,18 +35,18 @@ export default class SetGlobalStyle extends Vue {
     { mode: '8', name: '高级', icon: 'el-icon-picture' },
   ];
   private display_wrap_marks = {
-          0: '1/4屏',
-          25: '半屏',
-          50: '3/4屏',
-          75: '不重叠',
-          100: '不限',
-          // 50: {
-          //   style: {
-          //     color: '#1989FA'
-          //   },
-          //   label: this.$createElement('strong', '50%')
-          // }
-        };
+    0: '1/4屏',
+    25: '半屏',
+    50: '3/4屏',
+    75: '不重叠',
+    100: '不限',
+    // 50: {
+    //   style: {
+    //     color: '#1989FA'
+    //   },
+    //   label: this.$createElement('strong', '50%')
+    // }
+  };
   private speed_val_marks = { 40: '慢', 160: '快' };
   private font_size_marks = { 40: '小', 160: '大' };
 

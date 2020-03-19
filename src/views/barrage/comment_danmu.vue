@@ -29,10 +29,10 @@ export default class CommentDanmu extends Vue {
   private CM: any = null;
   private cmtArr: LIVESPACE.CmtDanmuType[] = [
     {mode: 1, text: '1 - hello world', stime: 0,  size: '12', backgroundColor: '#424448', border: false },
-    {mode: 1, text: '2 - hello jean', stime: 1500, size: '16', backgroundColor: '#fff', border: true},
-    {mode: 1, text: '3 - who are you', stime: 3000, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '4 - who are you', stime: 3000, size: '25', bgColor: '#424448', border: true},
-    {mode: 1, text: '5 - who are you', stime: 6600, size: '18', bgColor: '#fff', border: false},
+    // {mode: 1, text: '2 - hello jean', stime: 1500, size: '16', backgroundColor: '#fff', border: true},
+    // {mode: 1, text: '3 - who are you', stime: 3000, size: '18', backgroundColor: '#400', border: false},
+    // {mode: 1, text: '4 - who are you', stime: 3000, size: '25', bgColor: '#424448', border: true},
+    // {mode: 1, text: '5 - who are you', stime: 6600, size: '18', bgColor: '#fff', border: false},
   ];
 
   /* ------------------------ WATCH ------------------------ */
@@ -44,55 +44,63 @@ export default class CommentDanmu extends Vue {
     }
 
     this.CM = new (window as any).CommentManager(document.getElementById('my_comment_stage'));
-    // a: this.CM.options.gloabal.scale // 单个弹幕对象全局生存时间加成
-    // b: this.CM.options.scroll.scale // 单个弹幕对象滚动弹幕生存时间加成
-    // 固定弹幕（顶部、底部）生存时间为4*a; 滚动弹幕（滚动、底部滚动、顶部滚动）总生存时间是4*a*b
-    // 弹幕默认生存时间是4s。加成数值越大，弹幕运行速度越低
-    // 相同加成下不同长度的弹幕， 速度是不一样的。 弹幕大了，速度就慢了
-    // this.CM.options.global.className = 'cmt self_customization';
-    this.CM.init();
-    this.CM.load(this.cmtArr);
 
-    // 弹幕有时间轴位置，那就插入时间轴
-    // 弹幕插入时间轴,插入这个弹幕，因为时间 < CM内现在播放时间，所以一定不会被显示
-    // const needInsertDanmu = {
-    //   mode: 1,
-    //   text: 'hello world',
-    //   stime: 0, // 比现在时间稍微慢一ms,
-    //   size: '25',
-    //   color: '#0056dd',
-    // };
-    // this.CM.insert(needInsertDanmu);
-    // 启动播放弹幕（在未启动状态下弹幕不会移动）
-    this.CM.start();
+    this.CM.init();
+    // this.CM.load(this.cmtArr);
+
     // 强行更新以下 CM 的时间戳。设置了CommentManager的播放时间，单位是毫秒(0.001s)
     // CM.time(500);
     // CM.time(1314);
   }
   /**
-   * 播放
+   * 插入 弹幕
    */
-  public start() {
-    console.log('开播放');
-    this.CM.start();
-    // this.getCmtDataList();
-    // this.sendCmtData([]);
+  private insert() {
+    // 弹幕有时间轴位置，那就插入时间轴
+    // 弹幕插入时间轴,插入这个弹幕，因为时间 < CM内现在播放时间，所以一定不会被显示
+    const needInsertDanmu = {
+      mode: 1,
+      text: 'hello world',
+      stime: 0, // 比现在时间稍微慢一ms,
+      size: '25',
+      color: '#0056dd',
+    };
+    this.CM.insert(needInsertDanmu);
   }
   /**
    * 销毁
    */
   public close() {
-    console.log('关');
+    console.log('停止弹幕展示，并清空');
     // 停止播放（停止弹幕移动）
-    this.CM.finish();
+    // this.CM.finish();
+    this.stop();
+    this.clear();
   }
   /**
-   * 弹幕停止移动
+   * 播放
+   */
+  public start() {
+    console.log('开启 弹幕');
+    // this.CM.clear();
+    this.CM.start();
+    this.sendCmtData();
+    // this.getCmtDataList();
+  }
+  /**
+   * 弹幕 暂停移动
    */
   public stop() {
-    console.log('stop222');
+    console.log('暂停 弹幕');
     // 弹幕停止移动
     this.CM.stop();
+  }
+  /**
+   * 清空 舞台
+   */
+  public clear() {
+    console.log('清空 弹幕');
+    this.CM.clear();
   }
   /**
    * 获取弹幕数据
@@ -101,8 +109,7 @@ export default class CommentDanmu extends Vue {
     // axios.request 获取
 
     // 发送弹幕
-    console.log('发送弹幕');
-    this.sendCmtData(this.cmtArr);
+    this.sendCmtData();
   }
   /**
    * 弹幕发送
@@ -116,22 +123,30 @@ export default class CommentDanmu extends Vue {
   /**
    * 弹幕发送时长速度计算
    */
-  public sendCmtData(cmtArr: LIVESPACE.CmtDanmuType[]) {
-    for (const item of cmtArr) {
-       item.dur = Math.floor(Math.random() * 40000 + 4000);
-       item.color = '#fff';
-      //  item.backgroundColor = 'rgba(ff, 00, dd, .5)';
-       item.backgroundColor = '#fee';
-      // 把一条 弹幕显示到屏幕上, 它不会把弹幕发送到服务器，也不会把弹幕插入时间轴
-       this.CM.send(item);
-      //  this.CM.stop();
-    }
+  public sendCmtData(cmtArr?: LIVESPACE.CmtDanmuType[]) {
+    const showCmt = cmtArr || this.cmtArr;
+    console.log('发送弹幕');
+    this.CM.send(showCmt);
+    // for (const item of showCmt) {
+    //   //  item.dur = Math.floor(Math.random() * 40000 + 4000);
+    //   //  item.color = '#fff';
+    //   //  item.backgroundColor = 'rgba(ff, 00, dd, .5)';
+    //   //  item.backgroundColor = '#fee';
+    //   // 把一条 弹幕显示到屏幕上, 它不会把弹幕发送到服务器，也不会把弹幕插入时间轴
+    //    this.CM.send(item);
+    //   //  this.CM.stop();
+    // }
   }
   /**
    * 弹幕全局样式设置
    */
   public globalCmtStyleSet() {
-
+    // a: this.CM.options.gloabal.scale // 单个弹幕对象全局生存时间加成
+    // b: this.CM.options.scroll.scale // 单个弹幕对象滚动弹幕生存时间加成
+    // 固定弹幕（顶部、底部）生存时间为4*a; 滚动弹幕（滚动、底部滚动、顶部滚动）总生存时间是4*a*b
+    // 弹幕默认生存时间是4s。加成数值越大，弹幕运行速度越低
+    // 相同加成下不同长度的弹幕， 速度是不一样的。 弹幕大了，速度就慢了
+    this.CM.options.global.className = 'cmt self_customization';
   }
   // private dynamicDanmu() {
   //   const provider = new CommentProvider();
