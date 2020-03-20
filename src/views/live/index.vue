@@ -12,6 +12,7 @@ import EmployAliPlayer from '@/views/live/_part/employ_ali_player.vue';
 import EmployVideojsPlayer from '@/views/live/_part/employ_videojs_player.vue';
 import CommentDanmu from '@/views/barrage/comment_danmu.vue';
 import CreateDanmu from '@/views/barrage/create_danmu.vue';
+import VideojsPlayer from './video_player/videojs_player.vue';
 
 @Component({
   name: 'live-index',
@@ -47,7 +48,7 @@ export default class LiveIndex extends Vue {
   private useAliPlayer: boolean = false;
   private showDanmu: boolean = true;
   private videoKey: number = 0;
-
+  private playerCurrentTime: any = 0;
 
   /* ------------------------ WATCH ------------------------ */
 
@@ -108,6 +109,14 @@ export default class LiveIndex extends Vue {
       (this.$refs.commentDanmuWrap as CommentDanmu).globalCmtStyleSet(val);
     }
   }
+  private get_player_current_time() {
+    if (this.useAliPlayer) {
+
+    } else {
+      this.playerCurrentTime = (this.$refs.videojsplayer as EmployVideojsPlayer).get_player_state();
+    }
+
+  }
 }
 
 </script>
@@ -129,16 +138,16 @@ export default class LiveIndex extends Vue {
   <div class="player_wrapp abp">
     <!-- 使用阿里封装的播放器 -->
     <template v-if="useAliPlayer">
-      <employ-ali-player :key="videoKey" :video-info="videoAddress[activeVideoIndex]" :show-danmu="showDanmu" />
+      <employ-ali-player ref="aliplayer" :key="videoKey" :video-info="videoAddress[activeVideoIndex]" :show-danmu="showDanmu" />
     </template>
 
     <!-- 使用video.js播放器 -->
     <template v-else>
-      <employ-videojs-player :key="videoKey" :video-info="videoAddress[activeVideoIndex]" :show-danmu="showDanmu"/>
+      <employ-videojs-player ref="videojsplayer" :key="videoKey" :video-info="videoAddress[activeVideoIndex]" :show-danmu="showDanmu"/>
     </template>
 
     <!-- 弹幕 -->
-    <comment-danmu v-if="showDanmu" ref="commentDanmuWrap"></comment-danmu>
+    <comment-danmu v-if="showDanmu" ref="commentDanmuWrap" :player-current-time="playerCurrentTime"></comment-danmu>
 
     <!-- 新增弹幕 -->
     <create-danmu v-show="showDanmu" 

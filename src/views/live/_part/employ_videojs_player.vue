@@ -21,13 +21,22 @@ export default class EmployVideojsPlayer extends Vue {
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
-
+  private mounted() {
+    this.get_player_state();
+  }
+  private destroyed() {
+    this._clearInterVal();
+  }
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
+  private makeInterVal: any = null;
   private videoKey: number = 0;
   private videoOptions = {
     autoplay: true,
     controls: true,
     controlBar: {
+      // currentTimeDisplay: true,
+      // timeDivider: !this.VideoInfo.islive, // 时间分割线
+      // durationDisplay: !this.VideoInfo.islive, // 总时间
       progressControl: !this.VideoInfo.islive, // 直播时，不显示进度条
       volumePanel: {inline: false}, // 音量纵向调整
       playToggle: {replay: false}, // 隐藏重播图标
@@ -69,7 +78,17 @@ export default class EmployVideojsPlayer extends Vue {
     this.videoKey++;
   }
   /* ------------------------ METHODS ------------------------ */
+  private _clearInterVal() {
+    clearInterval(this.makeInterVal);
+  }
+  public get_player_state() {
+    this.makeInterVal = setInterval(() => {
+      const player = (this.$refs.videojs as VideojsPlayer).player;
+      console.log(player.cache_.currentTime);
+      console.log(player.cache_.duration);
 
+    }, 1000);
+  }
 }
 
 </script>

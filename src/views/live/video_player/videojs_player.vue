@@ -28,11 +28,17 @@ export default class VideojsPlayer extends Vue {
   private mounted() {
     this.initVideojsPlayer();
   }
-
+  // public playerCurrentTime: any = 0;
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
-  private player: any = null;
+  public player: any = null;
   private loading: boolean = false;
 
+  public get playerCurrentTime() {
+    return this.player.cache_.currentTime;
+  }
+  public get playerDuration() {
+    return this.player.cache_.duration;
+  }
   /* ------------------------ WATCH ------------------------ */
 
   /* ------------------------ METHODS ------------------------ */
@@ -44,7 +50,7 @@ export default class VideojsPlayer extends Vue {
         console.log('播放结束了');
       });
       // this.player.on('progress', () => {
-      //   console.log('开始播放播放中');
+      //   console.log('开始播放--- ' + this.player.duration);
       //   this.loading = false;
       // });
       this.player.on('error', () => {
