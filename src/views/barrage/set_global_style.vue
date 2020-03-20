@@ -40,6 +40,7 @@ export default class SetGlobalStyle extends Vue {
   //   limit: 0,
   // };
   private set_global_style_show: boolean = false;
+  // 当 `mode >= 7`时，弹幕为高级弹幕，text部分为JSON对象。根对象是一个数组，属性按照出没顺序
   private shield_type_opstions = [
     { mode: '1,2', name: '滚动', icon: 'el-icon-picture' },
     { mode: '5', name: '顶部', icon: 'el-icon-picture' },
@@ -61,6 +62,8 @@ export default class SetGlobalStyle extends Vue {
     // }
   };
   private speed_val_marks = { 40: '慢', 160: '快' };
+  // 依据B站40%对应字号10px, 上限160%对应40px
+  // 此处展示的字号 = 25*X% ： 25 * (X% / 100)
   private font_size_marks = { 40: '小', 160: '大' };
 
   /* ------------------------ WATCH ------------------------ */
@@ -81,7 +84,7 @@ export default class SetGlobalStyle extends Vue {
   /**
    * 格式化 透明度
    */
-  private format_opacity(val: number) {
+  private format_number(val: number) {
     return val + '%';
   }
 
@@ -110,7 +113,7 @@ export default class SetGlobalStyle extends Vue {
       </div>
       <div class="set_item set_opacity">
         <span class="title">不透明度</span>
-        <el-slider v-model="global_set_value.opacity" :format-tooltip="format_opacity"></el-slider>
+        <el-slider v-model="global_set_value.opacity" :format-tooltip="format_number"></el-slider>
       </div>
       <div class="set_item set_display_wrap">
         <span class="title">显示区域</span>
@@ -118,11 +121,11 @@ export default class SetGlobalStyle extends Vue {
       </div>
       <div class="set_item set_danmu_speed">
         <span class="title">弹幕速度</span>
-        <el-slider v-model="global_set_value.speed" :marks="speed_val_marks" :min="40" :max="160" :format-tooltip="format_opacity"></el-slider>
+        <el-slider v-model="global_set_value.speed" :marks="speed_val_marks" :min="40" :max="160" :format-tooltip="format_number"></el-slider>
       </div>
       <div class="set_item set_font_size">
         <span class="title">字体大小</span>
-        <el-slider v-model="global_set_value.fontsize" :marks="font_size_marks" :min="40" :max="160" :format-tooltip="format_opacity"></el-slider>
+        <el-slider v-model="global_set_value.fontsize" :marks="font_size_marks" :min="40" :max="160" :format-tooltip="format_number"></el-slider>
       </div>
       <div class="set_item set_more">
         <span class="title">更多弹幕设置</span>

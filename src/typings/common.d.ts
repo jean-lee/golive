@@ -44,10 +44,10 @@ interface VideoPlayerInfoType {
  *  CommentCoreLibrary CommentManager CommentObject单条弹幕类型 | 弹幕抽象对象ICommentData
  */
 export interface CmtDanmuType {
-  mode: number; // 类型
   stime: number; // 弹幕相对于视频位置的开始时间（ms）弹幕根据stime排序输出
+  mode: number; // 弹幕类型 (`< 7` 时为普通弹幕)
+  size: string; // 字号
   text: string; // 弹幕的文字内容。在创造弹幕对象后，对 text 的更改将无意义。图片弹幕中的 text 字段表示图片的URL。
-  size: string; // 文字大小
   // color: number; // 字体颜色, 需为16进制格式: 0xff00ff
 
   // ############### 弹幕附加显示信息 ###############
@@ -58,17 +58,22 @@ export interface CmtDanmuType {
   border?: boolean; // 弹幕边框
   shadow?: number; //是否显示弹幕描边/阴影
 
+
+
   ttl?: number; // Time To Live: ttl 表示弹幕剩余的生存时间（ms）（注意：在css模式下该子段可能不准确）
   dur?: number; // 弹幕的总生存时间（ms）。默认情况下，对于滚动弹幕这个数字是 4000
   motion?: string[]; // 控制一般弹幕（CoreComment）的运动轨迹，别的类型的弹幕可能忽略此属性（如 滚动弹幕）
   movable?: boolean; // 弹幕是否可移动
   width?: number; // 弹幕的宽高
   height?: number;
-  cindex?: number; // 弹幕在弹幕池里的ID，用于删除弹幕时寻找
-  date?: string; // 排序时，两个相同stime的弹幕，Date更新的排序在后面（渲染更靠上层）
-
+  
+  
   // ############### 暂未使用的配置 ###############
-  // dbid: any; // 记录弹幕的数据库ID，同一时间靠前的弹幕会先显示，靠后的后显示，来实现遮罩
+  author?: number; // 发送者ID
+  date?: string; // 发送时间戳。排序时，两个相同stime的弹幕，Date更新的排序在后面（渲染更靠上层）
+  cindex?: number; // 弹幕在弹幕池里的ID，用于删除弹幕时寻找
+  pool?: number; // 
+  dbid?: any; // 记录弹幕的数据库ID，同一时间靠前的弹幕会先显示，靠后的后显示，来实现遮罩
 
 
   // axis: number; // 坐标轴增长方向

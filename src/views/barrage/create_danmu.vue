@@ -57,7 +57,7 @@ export default class CreateDanmuku extends Vue {
   };
   /* ------------------------ WATCH ------------------------ */
   @Watch('show_danmu') private show_danmu_change(val: boolean) {
-    val ? this.start_event() : this.stop_event();
+    val ? this.start_event() : this.close_event();
   }
   @Watch('global_set_value', {deep: true}) private cmt_global_set_change(val: LIVESPACE.CmtGlobalStylsSetType) {
     this.global_set_change(val);
@@ -85,13 +85,15 @@ export default class CreateDanmuku extends Vue {
    * websocket 连接 OK
    */
   private ws_onopen() {
+    this.show_danmu = true;
     console.log('连接已通');
   }
   /**
    * 结束websocket
    */
   private ws_onclose(e: any) {
-    console.log('连接断开', e);
+    this.show_danmu = false;
+    this.$message({ type: 'error', message: 'WebSocket连接异常'});
   }
   /**
    * websocket 连接 异常， 再次重连
@@ -151,17 +153,17 @@ export default class CreateDanmuku extends Vue {
     </el-row> -->
     <div class="opration">
       <div class="opration_item occupied"></div>
-      <div class="opration_item danmu_act">
+      <!-- <div class="opration_item danmu_act">
         <button class="common_btn" @click="close_event">关闭</button>
         <button class="common_btn" @click="start_event">启动</button>
         <button class="common_btn" @click="stop_event">暂停</button>
         <button class="common_btn" @click="clear_event">清空</button>
-      </div>
-      <!-- <div class="opration_item is_showdanmu">
+      </div> -->
+      <div class="opration_item is_showdanmu">
         <el-tooltip :content="'Switch value: ' + show_danmu" placement="top">
           <el-switch v-model="show_danmu" active-color="#2196f3" inactive-color="#ccc" />
         </el-tooltip>
-      </div> -->
+      </div>
       <div class="opration_item item_set">
         <!--  title="全局弹幕展示设置" @click="setting_global_style_open" :show="set_global_style_show" -->
         <set-global-style v-model="global_set_value" @global-set-change="cmt_global_set_change"></set-global-style>
