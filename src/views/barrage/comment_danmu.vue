@@ -13,7 +13,7 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 })
 export default class CommentDanmu extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
-  @Prop({ type: Float32Array, default: 0}) private playerCurrentTime!: Float32Array;
+  @Prop({ type: Number, default: 0}) private playerCurrentTime!: number;
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
@@ -28,26 +28,30 @@ export default class CommentDanmu extends Vue {
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   private CM: any = null;
   private cmtArr: LIVESPACE.CmtDanmuType[] = [
-    {mode: 1, text: '4 - who are you', stime: 6000, size: '25', bgColor: '#424448', border: true},
-    {mode: 1, text: '1 - hello world', stime: 0,  size: '12', backgroundColor: '#424448', border: false },
-    {mode: 1, text: '2 - hello jean', stime: 1500, size: '16', backgroundColor: '#fff', border: true},
-    {mode: 1, text: '5 - who are you', stime: 12000, size: '18', bgColor: '#fff', border: false},
-    {mode: 1, text: '31000 - who are you', stime: 31000, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '4 - who are you', stime: 4, size: '25', bgColor: '#424448', border: true},
+    {mode: 1, text: '1 111111- hello world', stime: 0,  size: '12', backgroundColor: '#424448', border: false },
+    {mode: 1, text: '15 - hello jean', stime: 15, size: '16', backgroundColor: '#fff', border: true},
+    {mode: 1, text: '5 - who are you', stime: 8, size: '18', bgColor: '#fff', border: false},
+    {mode: 1, text: '23 - who are you', stime: 23, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '5 - who are you', stime: 5, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '6 - who are you', stime: 6, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '13 - who are you', stime: 13, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '17 - who are you', stime: 17, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '9 - who are you', stime: 9, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '23 - who are you', stime: 23, size: '18', backgroundColor: '#400', border: false},
     {mode: 1, text: '3 - who are you', stime: 3000, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '3 - who are you', stime: 3000, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '13000 - who are you', stime: 13000, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '3 - who are you', stime: 3000, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '3 - who are you', stime: 9000, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '23000 2 - who are you', stime: 23000, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '3 - who are you', stime: 3000, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '19000 - who are you', stime: 19000, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '13000 - who are you', stime: 13000, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '20000 - who are you', stime: 20000, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '23000 - who are you', stime: 23000, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '19 - who are you', stime: 19, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '13 - who are you', stime: 13, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '20 - who are you', stime: 20, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '23 - who are you', stime: 23, size: '18', backgroundColor: '#400', border: false},
   ];
 
   /* ------------------------ WATCH ------------------------ */
-
+  @Watch('playerCurrentTime') private playerCurrentTimeChange(val: number, oldVal: number) {
+    if (val !== oldVal) {
+      this.CM.time(val);
+    }
+  }
   /* ------------------------ METHODS ------------------------ */
   private ccl_init() {
     if ( ! (window as any) || ! (window as any).CommentManager || ! document.getElementById('my_comment_stage') ) {
@@ -62,7 +66,7 @@ export default class CommentDanmu extends Vue {
     // 将清空之前的时间轴，载入cmtArr抽象弹幕对象作为时间轴timeline, 并根据stime从小到大的顺序排序
     this.CM.load(this.cmtArr);
     // this.CM.insert();
-    this.CM.time(1000);
+    this.CM.time(0);
 
     // 通报目前的时间轴时间。管理器会自动处理时间前进和后退的情况，包括在需要时清除屏幕上正再运行的弹幕。
     // 这里的`currentTime`是绝对时间，对应弹幕的 `stime`。时间单位是毫秒（ms）。`time`只会把相关的

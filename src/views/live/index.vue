@@ -29,7 +29,14 @@ export default class LiveIndex extends Vue {
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
-
+  private mounted() {
+    this.makeInterVal = setInterval(() => {
+      this.get_player_current_time();
+    }, 1000);
+  }
+  private destroyed() {
+    this._clearInterVal();
+  }
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   private videoAddress: LIVESPACE.VideoType[] = [
     {type: 'mp4', id: 9, name: '飞屋环游记（节选）', source: '/badhappy.mp4', islive: false, poster: '/images/see_ha.jpg'},
@@ -48,7 +55,11 @@ export default class LiveIndex extends Vue {
   private useAliPlayer: boolean = false;
   private showDanmu: boolean = true;
   private videoKey: number = 0;
-  private playerCurrentTime: any = 0;
+
+  // 
+  private makeInterVal: any = null;
+  private playerCurrentTime: number = 0;
+  private playerDUration: number = 0;
 
   /* ------------------------ WATCH ------------------------ */
 
@@ -109,11 +120,19 @@ export default class LiveIndex extends Vue {
       (this.$refs.commentDanmuWrap as CommentDanmu).globalCmtStyleSet(val);
     }
   }
+  /**
+   * 
+   */
+  private _clearInterVal() {
+    clearInterval(this.makeInterVal);
+  }
   private get_player_current_time() {
     if (this.useAliPlayer) {
 
     } else {
-      this.playerCurrentTime = (this.$refs.videojsplayer as EmployVideojsPlayer).get_player_state();
+      const {currentTime, duration} = (this.$refs.videojsplayer as EmployVideojsPlayer).get_player_state();
+      this.playerCurrentTime = currentTime;
+      this.playerDUration = duration;
     }
 
   }

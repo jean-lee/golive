@@ -33,11 +33,15 @@ export default class VideojsPlayer extends Vue {
   public player: any = null;
   private loading: boolean = false;
 
-  public get playerCurrentTime() {
-    return this.player.cache_.currentTime;
-  }
-  public get playerDuration() {
-    return this.player.cache_.duration;
+  // public get playerCurrentTime() {
+  //   return this.player.cache_.currentTime;
+  // }
+  // public get playerDuration() {
+  //   return this.player.cache_.duration;
+  // }
+  // : Promise<Object>
+  public getVideojsTimeState() {
+    return {currentTime: this.player.cache_.currentTime, duration: this.player.cache_.duration}
   }
   /* ------------------------ WATCH ------------------------ */
 

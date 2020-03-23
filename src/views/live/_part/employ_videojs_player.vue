@@ -24,11 +24,8 @@ export default class EmployVideojsPlayer extends Vue {
   private mounted() {
     this.get_player_state();
   }
-  private destroyed() {
-    this._clearInterVal();
-  }
+
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
-  private makeInterVal: any = null;
   private videoKey: number = 0;
   private videoOptions = {
     autoplay: true,
@@ -44,7 +41,8 @@ export default class EmployVideojsPlayer extends Vue {
     width: 1024, // 单独设置宽或高时，另外一项会按比例自动适配，保证画面在宽或高中占满父级
     // height: '576px',
 
-    loop: !this.VideoInfo.islive,
+    // loop: !this.VideoInfo.islive,
+    loop: false,
     muted: true, // 静音
     fluid: false,
     poster: this.VideoInfo.poster, // 封面
@@ -78,16 +76,12 @@ export default class EmployVideojsPlayer extends Vue {
     this.videoKey++;
   }
   /* ------------------------ METHODS ------------------------ */
-  private _clearInterVal() {
-    clearInterval(this.makeInterVal);
-  }
+  
   public get_player_state() {
-    this.makeInterVal = setInterval(() => {
-      const player = (this.$refs.videojs as VideojsPlayer).player;
-      console.log(player.cache_.currentTime);
-      console.log(player.cache_.duration);
-
-    }, 1000);
+    const {currentTime, duration} = (this.$refs.videojs as VideojsPlayer).getVideojsTimeState();
+    // console.log(currentTime);s
+    // console.log(duration);
+    return {currentTime, duration}
   }
 }
 
