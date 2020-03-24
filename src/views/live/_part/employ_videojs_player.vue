@@ -113,13 +113,12 @@ export default class EmployVideojsPlayer extends Vue {
   @Watch('VideoInfo') private videoinfo_change(val: LIVESPACE.VideoPlayerInfoType) {
     this.videoKey++;
   }
-  /* ------------------------ METHODS ------------------------ */
-  
+  /* ------------------------ METHODS ------------------------ */ 
   public get_player_state() {
     const {currentTime, duration} = (this.$refs.videojs as VideojsPlayer).getVideojsTimeState();
     // console.log(currentTime);s
     // console.log(duration);
-    return {currentTime, duration}
+    return {currentTime, duration};
   }
 }
 

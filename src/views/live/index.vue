@@ -56,7 +56,7 @@ export default class LiveIndex extends Vue {
   private showDanmu: boolean = true;
   private videoKey: number = 0;
 
-  // 
+  // 播放器 实例
   private makeInterVal: any = null;
   private playerCurrentTime: number = 0;
   private playerDUration: number = 0;
@@ -121,11 +121,14 @@ export default class LiveIndex extends Vue {
     }
   }
   /**
-   * 
+   * 清空 定时器
    */
   private _clearInterVal() {
     clearInterval(this.makeInterVal);
   }
+  /**
+   * 获取 当前已播放 时长
+   */
   private get_player_current_time() {
     if (this.useAliPlayer) {
 
