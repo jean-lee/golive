@@ -23,6 +23,7 @@ export default class EmployVideojsPlayer extends Vue {
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
   private mounted() {
     this.get_player_state();
+
   }
 
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
@@ -31,19 +32,36 @@ export default class EmployVideojsPlayer extends Vue {
     autoplay: true,
     controls: true,
     controlBar: {
-      // currentTimeDisplay: true,
-      // timeDivider: !this.VideoInfo.islive, // 时间分割线
-      // durationDisplay: !this.VideoInfo.islive, // 总时间
+      // 方法一（样式 currentTime / duration  进度条）：
+      currentTimeDisplay: true,
+      timeDivider: !this.VideoInfo.islive, // 时间分割线
+      durationDisplay: !this.VideoInfo.islive, // 总时间
       progressControl: !this.VideoInfo.islive, // 直播时，不显示进度条
       volumePanel: {inline: false}, // 音量纵向调整
       playToggle: {replay: false}, // 隐藏重播图标
+      // 方法二 （样式 currentTime 进度条 duration）：
+      // children: [
+      //   {name: 'playToggle'}, // 播放按钮
+      //   {name: 'currentTimeDisplay'}, // 当前已播放时间
+      //   {name: 'progressControl'}, // 播放进度条
+      //   {name: 'durationDisplay'}, // 总时间
+      //   { // 倍数播放
+      //     name: 'playbackRateMenuButton',
+      //     'playbackRates': [0.5, 1, 1.5, 2, 2.5]
+      //   },
+      //   {
+      //     name: 'volumePanel', // 音量控制
+      //     inline: false, // 不使用水平方式
+      //   },
+      //   {name: 'FullscreenToggle'} // 全屏
+      // ],
     },
     width: 1024, // 单独设置宽或高时，另外一项会按比例自动适配，保证画面在宽或高中占满父级
     // height: '576px',
 
     // loop: !this.VideoInfo.islive,
     loop: false,
-    muted: true, // 静音
+    muted: false, // 静音
     fluid: false,
     poster: this.VideoInfo.poster, // 封面
     preload: 'metadata', // 预加载如视频长度、尺寸的信息
@@ -68,8 +86,28 @@ export default class EmployVideojsPlayer extends Vue {
         type: this.VideoInfo.type === 'mp4' ? 'video/mp4' : (this.VideoInfo.type === 'hls' ? 'application/x-mpegURL' : 'rtmp/flv'),
         src: this.VideoInfo.source,
       },
+      // { type: 'video/webm', src: '*/*.webm' },
+      // { type: 'video/ogg', src: '*/*.ogv' },
     ],
-
+    userActions: {
+      hotKeys: (e: any) => {
+          // if (e.which === 88){
+          //   (this.$refs.videojs as VideojsPlayer).play();
+          //   console.log('play--- ' + e);
+          // }
+          // if (e.which === 89){
+          //    (this.$refs.videojs as VideojsPlayer).pause();
+          //   console.log('pause--- ' + e);
+          // }
+        // playPauseKey: (e: any) => {
+          // (this.$refs.videojs as VideojsPlayer).play();
+          // console.log('play--- ' + e);
+        // },
+        // mutekey: (e: any) => {
+        //   console.log('开始播放66666--- ' + e);
+        // },
+      }
+    }
   };
   /* ------------------------ WATCH ------------------------ */
   @Watch('VideoInfo') private videoinfo_change(val: LIVESPACE.VideoPlayerInfoType) {

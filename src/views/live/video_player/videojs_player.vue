@@ -31,15 +31,9 @@ export default class VideojsPlayer extends Vue {
   // public playerCurrentTime: any = 0;
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   public player: any = null;
+  public isPlay: boolean = false;
   private loading: boolean = false;
 
-  // public get playerCurrentTime() {
-  //   return this.player.cache_.currentTime;
-  // }
-  // public get playerDuration() {
-  //   return this.player.cache_.duration;
-  // }
-  // : Promise<Object>
   public getVideojsTimeState() {
     return {currentTime: this.player.cache_.currentTime, duration: this.player.cache_.duration}
   }
@@ -48,20 +42,57 @@ export default class VideojsPlayer extends Vue {
   /* ------------------------ METHODS ------------------------ */
   private initVideojsPlayer() {
     this.player = videojs(this.$refs.videoPlayer, this.options, () => {
-      console.log('onPlayerReady mounted');
+      this.player.volume(0.2);
 
       this.player.on('ended', () => {
+        this.isPlay = false;
         console.log('播放结束了');
       });
-      // this.player.on('progress', () => {
-      //   console.log('开始播放--- ' + this.player.duration);
-      //   this.loading = false;
-      // });
       this.player.on('error', () => {
         console.log('异常，无法播放');
       });
-    });
+      // this.isPlay = false;
+      // this.player.on('progress', () => {
+        // this.isPlay = true;
+        // this.player.play();
+        // setTimeout(() => {
+        //   console.log('开始播放---pasued ');
+        //   this.player.pause()
+        // }, 5000);
+      // });
+      // this.player.on('userActions', (e: any) => {
+      //   console.log('userActions', e)
+      //   if (e.which === 88){
+      //     this.isPlay = false;
+      //     this.player.pause();
+      //   }
+      //   if (e.which === 89){
+      //     this.isPlay = true;
+      //     this.player.play();
+      //   }
+      // });
 
+      // this.player.on('timeupdate', () => { // 播放中，currenttime会增加
+      //   console.log('timeupdate')
+      // });
+        // this.isPlay = true;
+        // 　　if (this.player.cache_.currentTime != '0:00' && this.isPlay) { //判断视频真正开始播放 和 重新播放
+        // 　　　this.isPlay = false;
+        // 　　}
+      // this.player.on('click', (e: any) => {
+      //   console.log('click8', e.which)
+      // })
+
+      this.player.on('play', () => {
+        console.log('playing');
+        this.isPlay = true;
+      });
+      this.player.on('pause', () => {
+        console.log('paused ');
+        this.isPlay = false;
+      });
+
+    });
     // dynamic动态绑定className, 更新播放器样式
     this.player.addClass('my_videojs_player');
   }
@@ -69,6 +100,14 @@ export default class VideojsPlayer extends Vue {
     if (this.player) {
       this.player.dispose();
     }
+  }
+  public play() {
+    this.isPlay = true;
+    this.player.play();
+  }
+  public pause() {
+    this.isPlay = false;
+    this.player.pause();
   }
   /**
    * 视频类型相同，切换视频地址时，重新调用src属性

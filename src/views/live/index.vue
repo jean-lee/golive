@@ -39,7 +39,7 @@ export default class LiveIndex extends Vue {
   }
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   private videoAddress: LIVESPACE.VideoType[] = [
-    {type: 'mp4', id: 9, name: '飞屋环游记（节选）', source: '/badhappy.mp4', islive: false, poster: '/images/see_ha.jpg'},
+    {type: 'mp4', id: 9, name: '飞屋环游记（节选）', source: '/badhappy.mp4', islive: false, poster: '/images/see.jpg'},
     {type: 'hls', id: 0, name: 'CCTV1', source: 'http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8', islive: true, poster: '/images/see.jpg'},
     {type: 'rtmp', id: 3, name: '湖南卫视', source: 'rtmp://58.200.131.2:1935/livetv/hunantv', islive: true, poster: '/images/see.jpg'},
     {type: 'hls', id: 1, name: 'CCTV3', source: 'http://ivi.bupt.edu.cn/hls/cctv3hd.m3u8', islive: true, poster: '/images/see.jpg'},
