@@ -115,10 +115,12 @@ export default class EmployVideojsPlayer extends Vue {
   }
   /* ------------------------ METHODS ------------------------ */
   public get_player_state() {
-    const {currentTime, duration} = (this.$refs.videojs as VideojsPlayer).getVideojsTimeState();
+    // const {currentTime, duration} = (this.$refs.videojs as VideojsPlayer).getVideojsTimeState();
     // console.log(currentTime);s
     // console.log(duration);
-    return {currentTime, duration};
+    const currentTime = (this.$refs.videojs as VideojsPlayer).playerCurrentTime;
+    const isplaying = false;
+    return {isplaying, currentTime};
   }
 }
 

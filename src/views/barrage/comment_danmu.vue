@@ -92,7 +92,6 @@ export default class CommentDanmu extends Vue {
       border: false,
     };
 
-
     this.CM.insert(needInsertDanmu);
     console.log('插入弹幕');
   }

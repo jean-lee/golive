@@ -59,7 +59,7 @@ export default class LiveIndex extends Vue {
   // 播放器 实例
   private makeInterVal: any = null;
   private playerCurrentTime: number = 0;
-  private playerDUration: number = 0;
+  private isPlaying: boolean = false;
 
   /* ------------------------ WATCH ------------------------ */
 
@@ -133,9 +133,9 @@ export default class LiveIndex extends Vue {
     if (this.useAliPlayer) {
 
     } else {
-      const {currentTime, duration} = (this.$refs.videojsplayer as EmployVideojsPlayer).get_player_state();
+      const {isplaying, currentTime} = (this.$refs.videojsplayer as EmployVideojsPlayer).get_player_state();
+      this.isPlaying = isplaying;
       this.playerCurrentTime = currentTime;
-      this.playerDUration = duration;
     }
 
   }

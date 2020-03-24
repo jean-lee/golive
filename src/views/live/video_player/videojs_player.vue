@@ -28,21 +28,20 @@ export default class VideojsPlayer extends Vue {
   private mounted() {
     this.initVideojsPlayer();
   }
-  // public playerCurrentTime: any = 0;
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   public player: any = null;
   public isPlay: boolean = false;
-  private loading: boolean = false;
 
-  public getVideojsTimeState() {
-    return {currentTime: this.player.cache_.currentTime, duration: this.player.cache_.duration};
+  get playerCurrentTime() {
+    return this.player.currentTime();
   }
   /* ------------------------ WATCH ------------------------ */
 
   /* ------------------------ METHODS ------------------------ */
   private initVideojsPlayer() {
     this.player = videojs(this.$refs.videoPlayer, this.options, () => {
-      this.player.volume(0.2);
+      this.player.volume(0.1);
+      // this.player.currentTime(8); // 设置播放进度
 
       this.player.on('ended', () => {
         this.isPlay = false;
@@ -51,8 +50,15 @@ export default class VideojsPlayer extends Vue {
       this.player.on('error', () => {
         console.log('异常，无法播放');
       });
-      // this.isPlay = false;
-      // this.player.on('progress', () => {
+      this.player.on('play', () => {
+        console.log('playing');
+        this.isPlay = true;
+      });
+      this.player.on('pause', () => {
+        console.log('paused');
+        this.isPlay = false;
+      });
+      // this.player.on('progress', () => { // 进度变化
         // this.isPlay = true;
         // this.player.play();
         // setTimeout(() => {
@@ -72,26 +78,13 @@ export default class VideojsPlayer extends Vue {
       //   }
       // });
 
-      // this.player.on('timeupdate', () => { // 播放中，currenttime会增加
-      //   console.log('timeupdate')
-      // });
-        // this.isPlay = true;
-        // 　　if (this.player.cache_.currentTime != '0:00' && this.isPlay) { //判断视频真正开始播放 和 重新播放
-        // 　　　this.isPlay = false;
-        // 　　}
+      this.player.on('timeupdate', () => { // 判断视频真正播放，currentTime会变化
+        console.log('timeupdate')
+        this.isPlay = true;
+      });
       // this.player.on('click', (e: any) => {
       //   console.log('click8', e.which)
       // })
-
-      this.player.on('play', () => {
-        console.log('playing');
-        this.isPlay = true;
-      });
-      this.player.on('pause', () => {
-        console.log('paused ');
-        this.isPlay = false;
-      });
-
     });
     // dynamic动态绑定className, 更新播放器样式
     this.player.addClass('my_videojs_player');
