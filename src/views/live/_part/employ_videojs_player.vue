@@ -106,14 +106,14 @@ export default class EmployVideojsPlayer extends Vue {
         // mutekey: (e: any) => {
         //   console.log('开始播放66666--- ' + e);
         // },
-      }
-    }
+      },
+    },
   };
   /* ------------------------ WATCH ------------------------ */
   @Watch('VideoInfo') private videoinfo_change(val: LIVESPACE.VideoPlayerInfoType) {
     this.videoKey++;
   }
-  /* ------------------------ METHODS ------------------------ */ 
+  /* ------------------------ METHODS ------------------------ */
   public get_player_state() {
     const {currentTime, duration} = (this.$refs.videojs as VideojsPlayer).getVideojsTimeState();
     // console.log(currentTime);s
