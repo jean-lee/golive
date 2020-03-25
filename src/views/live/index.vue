@@ -133,8 +133,8 @@ export default class LiveIndex extends Vue {
     if (this.useAliPlayer) {
 
     } else {
-      const {isplaying, currentTime} = (this.$refs.videojsplayer as EmployVideojsPlayer).get_player_state();
-      this.isPlaying = isplaying;
+      const {isplay, currentTime} = (this.$refs.videojsplayer as EmployVideojsPlayer).get_player_state();
+      this.isPlaying = isplay;
       this.playerCurrentTime = currentTime;
     }
 

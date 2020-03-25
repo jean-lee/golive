@@ -31,14 +31,15 @@ export default class VideojsPlayer extends Vue {
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   public player: any = null;
   public isPlay: boolean = false;
+  public playerCurrentTime: number = 0;
 
-  get playerCurrentTime() {
-    return this.player.currentTime();
-  }
+
   /* ------------------------ WATCH ------------------------ */
 
   /* ------------------------ METHODS ------------------------ */
   private initVideojsPlayer() {
+    // const _me = this;
+    // debugger
     this.player = videojs(this.$refs.videoPlayer, this.options, () => {
       this.player.volume(0.1);
       // this.player.currentTime(8); // 设置播放进度
@@ -48,40 +49,24 @@ export default class VideojsPlayer extends Vue {
         console.log('播放结束了');
       });
       this.player.on('error', () => {
-        console.log('异常，无法播放');
+        this.isPlay = false;
+        console.error('异常，无法播放');
       });
       this.player.on('play', () => {
-        console.log('playing');
         this.isPlay = true;
+        // console.log('playing-----' + this.isPlay);
       });
       this.player.on('pause', () => {
-        console.log('paused');
         this.isPlay = false;
+        // console.log('paused--' + this.isPlay);
       });
       // this.player.on('progress', () => { // 进度变化
-        // this.isPlay = true;
-        // this.player.play();
-        // setTimeout(() => {
-        //   console.log('开始播放---pasued ');
-        //   this.player.pause()
-        // }, 5000);
-      // });
-      // this.player.on('userActions', (e: any) => {
-      //   console.log('userActions', e)
-      //   if (e.which === 88){
-      //     this.isPlay = false;
-      //     this.player.pause();
-      //   }
-      //   if (e.which === 89){
-      //     this.isPlay = true;
-      //     this.player.play();
-      //   }
       // });
 
-      this.player.on('timeupdate', () => { // 判断视频真正播放，currentTime会变化
-        console.log('timeupdate')
-        this.isPlay = true;
-      });
+
+      // this.player.on('timeupdate', () => { // 判断视频真正播放，currentTime会变化
+      //   console.log('timeupdate');
+      // });
       // this.player.on('click', (e: any) => {
       //   console.log('click8', e.which)
       // })
@@ -109,6 +94,13 @@ export default class VideojsPlayer extends Vue {
     this.player.src(this.source);
     this.player.load(this.source);
     this.player.play();
+  }
+  /**
+   * 获取当前视频播放点，已播放时长
+   */
+  public getPlayerCurrentTime(): number {
+    this.playerCurrentTime = this.player ? this.player.currentTime() : 0;
+    return this.playerCurrentTime;
   }
 }
 
