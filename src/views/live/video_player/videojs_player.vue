@@ -31,8 +31,27 @@ export default class VideojsPlayer extends Vue {
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   public player: any = null;
   public isPlay: boolean = false;
-  public playerCurrentTime: number = 0;
+  public playerCurrentTime: any = 0;
 
+  private optionsMade = {
+    ...this.options,
+    userActions: {
+      hotkeys: (event: any) => {
+        // `this` is the player in this context
+
+        // `x` key = pause
+        if (event.which === 88) {
+          this.pause();
+          console.info('event', event);
+        }
+        // `y` key = play
+        if (event.which === 89) {
+          this.play();
+          console.info('tag', '8888');
+        }
+      },
+    },
+  };
 
   /* ------------------------ WATCH ------------------------ */
 
@@ -40,7 +59,7 @@ export default class VideojsPlayer extends Vue {
   private initVideojsPlayer() {
     // const _me = this;
     // debugger
-    this.player = videojs(this.$refs.videoPlayer, this.options, () => {
+    this.player = videojs(this.$refs.videoPlayer, this.optionsMade, () => {
       this.player.volume(0.1);
       // this.player.currentTime(8); // 设置播放进度
 
@@ -68,8 +87,11 @@ export default class VideojsPlayer extends Vue {
       //   console.log('timeupdate');
       // });
       // this.player.on('click', (e: any) => {
-      //   console.log('click8', e.which)
-      // })
+      //   console.log('click8', e.which);
+      // });
+      this.player.on('hotkeys', () => {
+        console.log('hotkey click');
+      });
     });
     // dynamic动态绑定className, 更新播放器样式
     this.player.addClass('my_videojs_player');
@@ -98,7 +120,7 @@ export default class VideojsPlayer extends Vue {
   /**
    * 获取当前视频播放点，已播放时长
    */
-  public getPlayerCurrentTime(): number {
+  public getPlayerCurrentTime() {
     this.playerCurrentTime = this.player ? this.player.currentTime() : 0;
     return this.playerCurrentTime;
   }

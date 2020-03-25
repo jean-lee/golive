@@ -89,25 +89,36 @@ export default class EmployVideojsPlayer extends Vue {
       // { type: 'video/webm', src: '*/*.webm' },
       // { type: 'video/ogg', src: '*/*.ogv' },
     ],
-    userActions: {
-      hotKeys: (e: any) => {
-          // if (e.which === 88){
-          //   (this.$refs.videojs as VideojsPlayer).play();
-          //   console.log('play--- ' + e);
-          // }
-          // if (e.which === 89){
-          //    (this.$refs.videojs as VideojsPlayer).pause();
-          //   console.log('pause--- ' + e);
-          // }
-        // playPauseKey: (e: any) => {
-          // (this.$refs.videojs as VideojsPlayer).play();
-          // console.log('play--- ' + e);
-        // },
-        // mutekey: (e: any) => {
-        //   console.log('开始播放66666--- ' + e);
-        // },
-      },
-    },
+    // userActions: {
+      // hotKeys: function(event: any) {
+      //   // `x` key = pause
+      //     if (event.which === 88) {
+      //       // this.pause();
+      //       console.info('tag', '8888');
+      //     }
+      //     // `y` key = play
+      //     if (event.which === 89) {
+      //       // this.play();
+      //     }
+      // }
+      // hotKeys: (event: any) => {
+      //     // if (e.which === 88){
+      //     //   (this.$refs.videojs as VideojsPlayer).play();
+      //     //   console.log('play--- ' + e);
+      //     // }
+      //     // if (e.which === 89){
+      //     //    (this.$refs.videojs as VideojsPlayer).pause();
+      //     //   console.log('pause--- ' + e);
+      //     // }
+      //   // playPauseKey: (e: any) => {
+      //     // (this.$refs.videojs as VideojsPlayer).play();
+      //     // console.log('play--- ' + e);
+      //   // },
+      //   // mutekey: (e: any) => {
+      //   //   console.log('开始播放66666--- ' + e);
+      //   // },
+      // },
+    // },
   };
   /* ------------------------ WATCH ------------------------ */
   @Watch('VideoInfo') private videoinfo_change(val: LIVESPACE.VideoPlayerInfoType) {

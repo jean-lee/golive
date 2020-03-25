@@ -102,6 +102,9 @@ export default class AliPlayer extends Vue {
   private playerId: string = 'aliplayer_' + Math.random() * 100000000000000000;
   private scriptTagsStatus: number = 0;
   private instance: any = null;
+
+  public isPlay: boolean = false;
+
   get whichSkinLayout() {
     // h5
     if (this.isLive) {
@@ -204,9 +207,11 @@ export default class AliPlayer extends Vue {
           this.readyEmit();
         });
         this.instance.on('play', () => {
+          // this.isPlay = true;
           this.playEmit();
         });
         this.instance.on('pause', () => {
+          // this.isPlay = false;
           this.pauseEmit();
         });
         this.instance.on('waiting', () => {

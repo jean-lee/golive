@@ -52,17 +52,23 @@ export default class LiveIndex extends Vue {
   ];
 
   private activeVideoIndex: number = 0;
-  private useAliPlayer: boolean = false;
+  private useAliPlayer: boolean = true;
   private showDanmu: boolean = true;
   private videoKey: number = 0;
 
   // 播放器 实例
   private makeInterVal: any = null;
-  private playerCurrentTime: number = 0;
+  private playerCurrentTime: any = 0;
   private isPlaying: boolean = false;
 
   /* ------------------------ WATCH ------------------------ */
-
+  @Watch('isPlaying') private isPlayingChange(val: boolean) {
+    if (val) {
+      this.start_cmt();
+    } else {
+      this.stop_cmt();
+    }
+  }
   /* ------------------------ METHODS ------------------------ */
   /**
    * 播放
@@ -131,7 +137,9 @@ export default class LiveIndex extends Vue {
    */
   private get_player_current_time() {
     if (this.useAliPlayer) {
-
+      const {isplay, currentTime}  =  (this.$refs.aliplayer as EmployAliPlayer).get_player_state();
+      this.isPlaying = isplay;
+      this.playerCurrentTime = currentTime;
     } else {
       const {isplay, currentTime} = (this.$refs.videojsplayer as EmployVideojsPlayer).get_player_state();
       this.isPlaying = isplay;
