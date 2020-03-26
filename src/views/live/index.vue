@@ -10,17 +10,15 @@ import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
 
 import EmployAliPlayer from '@/views/live/_part/employ_ali_player.vue';
 import EmployVideojsPlayer from '@/views/live/_part/employ_videojs_player.vue';
-import CommentDanmu from '@/views/barrage/comment_danmu.vue';
-import CreateDanmu from '@/views/barrage/create_danmu.vue';
-import VideojsPlayer from './video_player/videojs_player.vue';
+import Barrage from '@/views/barrage/index.vue';
+
 
 @Component({
   name: 'live-index',
   components: {
     EmployAliPlayer,
     EmployVideojsPlayer,
-    CommentDanmu,
-    CreateDanmu,
+    Barrage,
   },
 })
 export default class LiveIndex extends Vue {
@@ -59,15 +57,8 @@ export default class LiveIndex extends Vue {
   private playerCurrentTime: number = 0;
   private isPlaying: boolean = true;
 
+
   /* ------------------------ WATCH ------------------------ */
-  @Watch('isPlaying', {immediate: true}) private isPlayingChange(val: boolean) {
-    // 仅当展示弹幕时， 针对视频的播放暂停，弹幕联动
-    if (this.showDanmu && val) {
-      this.start_cmt();
-    } else {
-      this.stop_cmt();
-    }
-  }
   @Watch('showDanmu') private showDanmuChange(val: boolean) {
     if (val && !this.curTimeInterval) {
       this.intervalGetCurrentTime();
@@ -75,6 +66,7 @@ export default class LiveIndex extends Vue {
       this.clearMyInterval();
     }
   }
+
   /* ------------------------ METHODS ------------------------ */
   /**
    * 设置定时器，获取视频当前播放时间及是否正在播放
@@ -100,54 +92,6 @@ export default class LiveIndex extends Vue {
   private play(index: number) {
     this.activeVideoIndex = index;
     this.videoKey++;
-  }
-  /**
-   * 发送弹幕
-   */
-  private send_cmt_danmu(val: LIVESPACE.CmtDanmuType[]) {
-    if (this.$refs.commentDanmuWrap) {
-      (this.$refs.commentDanmuWrap as CommentDanmu).sendCmtData(val);
-    }
-  }
-  /**
-   * 开启弹幕（销毁弹幕播放界面）
-   */
-  private start_cmt() {
-    if (this.$refs.commentDanmuWrap) {
-      (this.$refs.commentDanmuWrap as CommentDanmu).start();
-    }
-  }
-  /**
-   * 关闭弹幕（销毁弹幕播放界面）
-   */
-  private close_cmt() {
-    if (this.$refs.commentDanmuWrap) {
-      (this.$refs.commentDanmuWrap as CommentDanmu).close();
-    }
-  }
-  /**
-   * 停止 弹幕 移动
-   */
-  private stop_cmt() {
-    if (this.$refs.commentDanmuWrap) {
-      (this.$refs.commentDanmuWrap as CommentDanmu).stop();
-    }
-  }
-  /**
-   * 清空 弹幕
-   */
-  private clear_cmt() {
-    if (this.$refs.commentDanmuWrap) {
-      (this.$refs.commentDanmuWrap as CommentDanmu).clear();
-    }
-  }
-  /**
-   * 弹幕 输出 全局更改
-   */
-  private cmt_global_set_change(val: LIVESPACE.CmtGlobalStylsSetType) {
-    if (this.$refs.commentDanmuWrap) {
-      (this.$refs.commentDanmuWrap as CommentDanmu).globalCmtStyleSet(val);
-    }
   }
   /**
    * 获取 当前已播放 时长
@@ -182,6 +126,7 @@ export default class LiveIndex extends Vue {
        @click.stop="play(index)">{{item.name}}（{{item.type}}）</li>
     </ul>
   </div>
+
   <div class="player_wrapp abp">
     <!-- 使用阿里封装的播放器 -->
     <template v-if="useAliPlayer">
@@ -194,26 +139,18 @@ export default class LiveIndex extends Vue {
     </template>
 
     <!-- 弹幕 -->
-    <comment-danmu v-if="showDanmu" ref="commentDanmuWrap" :player-current-time="playerCurrentTime"></comment-danmu>
-
-    <!-- 新增弹幕 -->
-    <create-danmu v-show="showDanmu" 
-      @send-danmu="send_cmt_danmu"
-      @start="start_cmt" @close="close_cmt"
-      @global-set-change="cmt_global_set_change"
-      ></create-danmu>
+    <barrage v-if="showDanmu" ref="barrage" :player-current-time="playerCurrentTime" :isplay="isPlaying" :show-anmu="showDanmu"></barrage>
+  </div>
   </div>
 
 
-  
-</div>
 </template>
+
 
 <style lang="stylus" scoped>
 @import '~@/assets/styles/var.styl';
 
 .module_index
-  // margin-top 60px
   .head_top
     padding 0 60px
     background #191717
@@ -260,5 +197,5 @@ export default class LiveIndex extends Vue {
     display inline-block
     width 1024px
     background #000
-    
+
 </style>

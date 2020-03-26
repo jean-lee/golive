@@ -24,11 +24,12 @@ export default class CreateDanmuku extends Vue {
   @Emit('stop') private stop_event() {}
   @Emit('clear') private clear_event() {}
 
-  @Emit('global-set-change') private global_set_change(val: LIVESPACE.CmtGlobalStylsSetType) {}
+  // @Emit('global-set-change') private global_set_change(val: LIVESPACE.CmtGlobalStylsSetType) {}
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
   private mounted() {
+    console.log('send_event mmmmm')
     // 初始化websocket连接
     this.initWebsocket();
   }
@@ -42,26 +43,14 @@ export default class CreateDanmuku extends Vue {
   // private serviceUrl: string = 'ws://127.0.0.1:8080/ws';
   private newDanmu: string = '';
 
-  // 弹幕样式设置
+  // switch 是否展示弹幕，并且可新建弹幕
   private show_danmu: boolean = true;
 
-  // 弹幕展示 全局设置
-  private global_set_value: LIVESPACE.CmtGlobalStylsSetType = {
-    shieldtype: '1',
-    opacity: 50,
-    shieldcomment: 1,
-    area: 1,
-    speed: 40,
-    fontsize: 40,
-    limit: 0,
-  };
   /* ------------------------ WATCH ------------------------ */
   @Watch('show_danmu') private show_danmu_change(val: boolean) {
     val ? this.start_event() : this.close_event();
   }
-  @Watch('global_set_value', {deep: true}) private cmt_global_set_change(val: LIVESPACE.CmtGlobalStylsSetType) {
-    this.global_set_change(val);
-  }
+
   /* ------------------------ METHODS ------------------------ */
   /**
    * 初始化websocket
@@ -128,7 +117,7 @@ export default class CreateDanmuku extends Vue {
     }
 
     const sv: LIVESPACE.CmtDanmuType[] = [JSON.parse(sstr)];
-    this.send_event(sv); // 传递至（.module_comment_danmu）区域展示
+    this.send_event(sv); // 传递至（.module_danmu_stage）区域展示
   }
   /**
    * 调用websocket向服务端 发送 最新输入弹幕
@@ -144,9 +133,9 @@ export default class CreateDanmuku extends Vue {
 
 <template>
   <!-- 弹幕输入、发送、配置区域 -->
-  <div class="module_create_danmu">
+  <div class="module_danmu_create">
     <div class="opration">
-      <div class="opration_item occupied"></div>
+      <!-- <div class="opration_item occupied"></div> -->
       <!-- <div class="opration_item danmu_act">
         <button class="common_btn" @click="close_event">关闭</button>
         <button class="common_btn" @click="start_event">启动</button>
@@ -157,10 +146,6 @@ export default class CreateDanmuku extends Vue {
         <el-tooltip :content="'Switch value: ' + show_danmu" placement="top">
           <el-switch v-model="show_danmu" active-color="#2196f3" inactive-color="#ccc" />
         </el-tooltip>
-      </div>
-      <div class="opration_item item_set">
-        <!--  title="全局弹幕展示设置" @click="setting_global_style_open" :show="set_global_style_show" -->
-        <set-global-style v-model="global_set_value" @global-set-change="cmt_global_set_change"></set-global-style>
       </div>
       <div class="opration_item item_input" :class="{disabled: !show_danmu}">
         <input placeholder="发个友善弹幕见证当下" prefix-icon="el-icon-edit" v-model="newDanmu" />
@@ -175,31 +160,21 @@ export default class CreateDanmuku extends Vue {
 <style lang="stylus" scoped>
 @import '~@/assets/styles/var.styl';
 
-.module_create_danmu
-  padding 10px
-  // height 40px
-  text-align right
+.module_danmu_create
   .opration
-    display flex
-    flex-wrap wrap
-    align-content space-between
+    width auto
     .opration_item
-      flex 1
+      display inline-block
       height 24px
       line-height 24px
       text-align center
-    .occupied
-      flex -1
     .danmu_act
-      flex 0 0 218px
+      width 218px
     .is_showdanmu
-      flex 0 0 44px
-    .item_set
-      flex 0 0 38px
-      padding-left 5px
-      text-align left
+      width 44px
     .item_input
-      flex 0 0 45%
+      min-width 245px
+      max-width 400px
       input
         font-size 12px
         width calc(100% - 50px)

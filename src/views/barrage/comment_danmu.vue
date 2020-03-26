@@ -14,11 +14,12 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 export default class CommentDanmu extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
   @Prop({ type: Number, default: 0}) private playerCurrentTime!: number;
+
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
   private mounted() {
-    // my_comment_stage元素挂载后，初始化CM，绑定CommentManager
+    // my_danmu_stage元素挂载后，初始化CM，绑定CommentManager
     this.ccl_init();
   }
 
@@ -51,11 +52,11 @@ export default class CommentDanmu extends Vue {
   }
   /* ------------------------ METHODS ------------------------ */
   private ccl_init() {
-    if ( ! (window as any) || ! (window as any).CommentManager || ! document.getElementById('my_comment_stage') ) {
+    if ( ! (window as any) || ! (window as any).CommentManager || ! document.getElementById('my_danmu_stage') ) {
       return false;
     }
 
-    this.CM = new (window as any).CommentManager(document.getElementById('my_comment_stage'));
+    this.CM = new (window as any).CommentManager(document.getElementById('my_danmu_stage'));
     (window as any).CM = this.CM;
     this.CM.init();
     this.CM.start();
@@ -203,11 +204,5 @@ export default class CommentDanmu extends Vue {
 </script>
 
 <template>
-  <div>
-    <div id="my_comment_stage" class="container module_comment_danmu"></div>
-  </div>
+  <div id="my_danmu_stage" class="container module_danmu_stage"></div>
 </template>
-
-<style lang="stylus" scoped>
-
-</style>
