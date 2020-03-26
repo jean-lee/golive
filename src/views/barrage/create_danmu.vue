@@ -19,9 +19,9 @@ export default class CreateDanmuku extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
 
   @Emit('send-danmu') private send_event(danmu: LIVESPACE.CmtDanmuType[]) { }
-  @Emit('start') private start_event() { this.show_danmu = true; }
+  @Emit('start') private start_event() {}
   @Emit('close') private close_event() {}
-  @Emit('stop') private stop_event() {  this.show_danmu = false; }
+  @Emit('stop') private stop_event() {}
   @Emit('clear') private clear_event() {}
 
   @Emit('global-set-change') private global_set_change(val: LIVESPACE.CmtGlobalStylsSetType) {}
@@ -43,7 +43,7 @@ export default class CreateDanmuku extends Vue {
   private newDanmu: string = '';
 
   // 弹幕样式设置
-  private show_danmu: boolean = false;
+  private show_danmu: boolean = true;
 
   // 弹幕展示 全局设置
   private global_set_value: LIVESPACE.CmtGlobalStylsSetType = {
@@ -86,7 +86,7 @@ export default class CreateDanmuku extends Vue {
    */
   private ws_onopen() {
     this.show_danmu = true;
-    console.log('连接已通');
+    console.log('WebSocket连接已通');
   }
   /**
    * 结束websocket
@@ -145,12 +145,6 @@ export default class CreateDanmuku extends Vue {
 <template>
   <!-- 弹幕输入、发送、配置区域 -->
   <div class="module_create_danmu">
-    <!-- <el-row>
-      <el-col :span="6"></el-col>
-      <el-col :span="3"><button class="common_btn" @click="setting_global_style_open"><i class="el-icon-setting"></i>设置</button></el-col>
-      <el-col :span="10"><el-input placeholder="发个友善弹幕记录见证当下" prefix-icon="el-icon-edit" v-model="newDanmu"></el-input></el-col>
-      <el-col :span="3"><button class="common_btn" @click="send">发送</button></el-col>
-    </el-row> -->
     <div class="opration">
       <div class="opration_item occupied"></div>
       <!-- <div class="opration_item danmu_act">

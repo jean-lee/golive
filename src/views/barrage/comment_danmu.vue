@@ -17,9 +17,6 @@ export default class CommentDanmu extends Vue {
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
-  private created() {
-
-  }
   private mounted() {
     // my_comment_stage元素挂载后，初始化CM，绑定CommentManager
     this.ccl_init();

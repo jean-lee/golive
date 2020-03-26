@@ -30,12 +30,10 @@ export default class LiveIndex extends Vue {
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
   private mounted() {
-    this.makeInterVal = setInterval(() => {
-      this.get_player_current_time();
-    }, 1000);
+    this.intervalGetCurrentTime();
   }
   private destroyed() {
-    this._clearInterVal();
+    this.clearMyInterval();
   }
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   private videoAddress: LIVESPACE.VideoType[] = [
@@ -52,24 +50,49 @@ export default class LiveIndex extends Vue {
   ];
 
   private activeVideoIndex: number = 0;
-  private useAliPlayer: boolean = true;
+  private useAliPlayer: boolean = false;
   private showDanmu: boolean = true;
   private videoKey: number = 0;
 
   // 播放器 实例
-  private makeInterVal: any = null;
-  private playerCurrentTime: any = 0;
-  private isPlaying: boolean = false;
+  private curTimeInterval: number = 0;
+  private playerCurrentTime: number = 0;
+  private isPlaying: boolean = true;
 
   /* ------------------------ WATCH ------------------------ */
-  @Watch('isPlaying') private isPlayingChange(val: boolean) {
-    if (val) {
+  @Watch('isPlaying', {immediate: true}) private isPlayingChange(val: boolean) {
+    // 仅当展示弹幕时， 针对视频的播放暂停，弹幕联动
+    if (this.showDanmu && val) {
       this.start_cmt();
     } else {
       this.stop_cmt();
     }
   }
+  @Watch('showDanmu') private showDanmuChange(val: boolean) {
+    if (val && !this.curTimeInterval) {
+      this.intervalGetCurrentTime();
+    } else {
+      this.clearMyInterval();
+    }
+  }
   /* ------------------------ METHODS ------------------------ */
+  /**
+   * 设置定时器，获取视频当前播放时间及是否正在播放
+   */
+  private intervalGetCurrentTime() {
+    if (this.showDanmu) {
+      this.curTimeInterval = setInterval(() => {
+        this.get_player_current_time();
+      }, 100);
+    }
+  }
+  /**
+   * 清空定时器
+   */
+  private clearMyInterval() {
+    clearInterval(this.curTimeInterval);
+    this.curTimeInterval = 0;
+  }
   /**
    * 播放
    * @ source: 所选视频地址
@@ -127,19 +150,13 @@ export default class LiveIndex extends Vue {
     }
   }
   /**
-   * 清空 定时器
-   */
-  private _clearInterVal() {
-    clearInterval(this.makeInterVal);
-  }
-  /**
    * 获取 当前已播放 时长
    */
   private get_player_current_time() {
     if (this.useAliPlayer) {
       const {isplay, currentTime}  =  (this.$refs.aliplayer as EmployAliPlayer).get_player_state();
       this.isPlaying = isplay;
-      this.playerCurrentTime = currentTime;
+      this.playerCurrentTime = Number(currentTime);
     } else {
       const {isplay, currentTime} = (this.$refs.videojsplayer as EmployVideojsPlayer).get_player_state();
       this.isPlaying = isplay;
@@ -181,8 +198,8 @@ export default class LiveIndex extends Vue {
 
     <!-- 新增弹幕 -->
     <create-danmu v-show="showDanmu" 
-      @send-danmu="send_cmt_danmu" @start="start_cmt"
-      @close="close_cmt" @stop="stop_cmt" @clear="clear_cmt"
+      @send-danmu="send_cmt_danmu"
+      @start="start_cmt" @close="close_cmt"
       @global-set-change="cmt_global_set_change"
       ></create-danmu>
   </div>
