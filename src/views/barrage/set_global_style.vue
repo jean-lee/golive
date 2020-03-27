@@ -30,22 +30,14 @@ export default class SetGlobalStyle extends Vue {
 
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   private global_set_value: LIVESPACE.CmtGlobalStylsSetType = this.value;
-  // private global_set_value: LIVESPACE.CmtGlobalStylsSetType = {
-  //   shieldtype: '1',
-  //   opacity: 50,
-  //   shieldcomment: 1,
-  //   area: 1,
-  //   speed: 40,
-  //   fontsize: 40,
-  //   limit: 0,
-  // };
+
   private set_global_style_show: boolean = false;
   // 当 `mode >= 7`时，弹幕为高级弹幕，text部分为JSON对象。根对象是一个数组，属性按照出没顺序
   private shield_type_opstions = [
     { mode: '1,2', name: '滚动', icon: 'el-icon-picture' },
     { mode: '5', name: '顶部', icon: 'el-icon-picture' },
     { mode: '4', name: '底部', icon: 'el-icon-picture' },
-    { mode: '4', name: '彩色', icon: 'el-icon-picture' },
+    // { mode: '4', name: '彩色', icon: 'el-icon-picture' },
     { mode: '8', name: '高级', icon: 'el-icon-picture' },
   ];
   private display_wrap_marks = {
@@ -94,13 +86,13 @@ export default class SetGlobalStyle extends Vue {
 
 <template>
 <div class="setting_style">
-  <el-popover popper-class="danmu_style_seting_popover" :tabindex="-1" placement="top" width="300" trigger="hover" v-model="set_global_style_show">
+  <el-popover popper-class="danmu_style_seting_popover" :tabindex="-1" placement="top" width="300" trigger="manual" v-model="set_global_style_show">
    <!-- trigger="manual" -->
     <div class="seting_popover">
       <div class="shield_by_type">
         <p class="title">按类型屏蔽</p>
         <ul>
-          <li v-for="(item, index) in shield_type_opstions" :key="index"
+          <li :class="{'active': global_set_value.shieldtype === item.mode}" v-for="(item, index) in shield_type_opstions" :key="index"
             @click.stop="type_select(item.mode)">
             <p><i :class="item.icon"></i></p><p class="desc">{{item.name}}</p></li>
         </ul>

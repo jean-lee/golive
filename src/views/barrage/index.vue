@@ -93,11 +93,11 @@ export default class Barrage extends Vue {
   /**
    * 弹幕 输出 全局更改
    */
-  private cmt_global_set_change(val: LIVESPACE.CmtGlobalStylsSetType) {
-    if (this.$refs.commentDanmuWrap) {
-      (this.$refs.commentDanmuWrap as CommentDanmu).globalCmtStyleSet(val);
-    }
-  }
+  // private cmt_global_set_change(val: LIVESPACE.CmtGlobalStylsSetType) {
+  //   if (this.$refs.commentDanmuWrap) {
+  //     (this.$refs.commentDanmuWrap as CommentDanmu).globalCmtStyleSet(val);
+  //   }
+  // }
 }
 
 </script>

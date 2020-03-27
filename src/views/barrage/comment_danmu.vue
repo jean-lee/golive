@@ -14,7 +14,15 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 export default class CommentDanmu extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
   @Prop({ type: Number, default: 0}) private playerCurrentTime!: number;
-
+  @Prop({ type: Object, default() { return {
+    shieldtype: '1',
+    opacity: 50,
+    shieldcomment: 1,
+    area: 1,
+    speed: 40,
+    fontsize: 40,
+    limit: 0,
+  }; } }) private GlobalSetVal!: LIVESPACE.CmtGlobalStylsSetType;
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
@@ -50,6 +58,9 @@ export default class CommentDanmu extends Vue {
       this.CM.time(val);
     }
   }
+  @Watch('GlobalSetVal', {deep: true}) private GlobalSetValChange(val: LIVESPACE.CmtGlobalStylsSetType) {
+    this.set_global_style(val);
+  }
   /* ------------------------ METHODS ------------------------ */
   private ccl_init() {
     if ( ! (window as any) || ! (window as any).CommentManager || ! document.getElementById('my_danmu_stage') ) {
@@ -59,39 +70,27 @@ export default class CommentDanmu extends Vue {
     this.CM = new (window as any).CommentManager(document.getElementById('my_danmu_stage'));
     (window as any).CM = this.CM;
     this.CM.init();
-    this.CM.start();
 
     // 将清空之前的时间轴，载入cmtArr抽象弹幕对象作为时间轴timeline, 并根据stime从小到大的顺序排序
     this.CM.load(this.cmtArr);
-    // this.CM.insert();
-    this.CM.time(0);
 
+    // this.CM.time(0);
     // 通报目前的时间轴时间。管理器会自动处理时间前进和后退的情况，包括在需要时清除屏幕上正再运行的弹幕。
     // 这里的`currentTime`是绝对时间，对应弹幕的 `stime`。时间单位是毫秒（ms）。`time`只会把相关的
     // 弹幕放到runline（运行列表）里。至于这些弹幕是否在移动，则要根据目前管理器的 `isRunning` 状态。
     // 强行更新以下 CM 的时间戳。设置了CommentManager的播放时间，单位是毫秒(0.001s)
-    // CM.time(500);
-    // CM.time(1314);
+    // CM.time(520);
   }
   /**
    * 插入 弹幕
    */
-  private insert() {
+  public insert(comment: LIVESPACE.CmtDanmuType) {
+    this.CM.time(this.playerCurrentTime * 1000); // 强行更新 CM时间戳
+    comment.stime = this.playerCurrentTime * 1000 - 1; // 插入这个弹幕，因为时间 < CM内现在播放时间，所以一定不会被显示
+    this.CM.insert(comment); // 插入弹幕
+    // sendCommentToServer(comment); // 把弹幕发到服务器上，注意服务器要无视 border=true 的
 
-    // 弹幕有时间轴位置，那就插入时间轴
-    // 弹幕插入时间轴,插入这个弹幕，因为时间 < CM内现在播放时间，所以一定不会被显示
-    const needInsertDanmu: LIVESPACE.CmtDanmuType = {
-      mode: 1,
-      text: 'hello world',
-      stime: 10000, // 比现在时间稍微慢一ms,
-      size: '25',
-      color: '#0056dd',
-      backgroundColor: '#400',
-      border: false,
-    };
-
-    this.CM.insert(needInsertDanmu);
-    console.log('插入弹幕');
+    this.CM.send(comment); // 立刻显示一次自己这条弹幕，保证用户肯定会看到
   }
   /**
    * 销毁
@@ -109,8 +108,7 @@ export default class CommentDanmu extends Vue {
   public start() {
     console.log('开启 弹幕');
     this.CM.start();
-    // this.sendCmtData();
-    // this.cmtController();
+
   }
   /**
    * 弹幕 暂停移动
@@ -140,19 +138,10 @@ export default class CommentDanmu extends Vue {
   /**
    * 弹幕发送
    */
-  private cmtController() {
-    // 定时循环发送
-    setInterval(() => {
-      this.sendCmtData();
-    }, 3000);
-  }
-  /**
-   * 弹幕发送时长速度计算
-   */
   public sendCmtData(cmtArr?: LIVESPACE.CmtDanmuType[]) {
     const showCmt = cmtArr || this.cmtArr;
     console.log('发送弹幕');
-    this.CM.send(showCmt);
+    // this.CM.send(showCmt);
     // for (const item of showCmt) {
     //   //  item.dur = Math.floor(Math.random() * 40000 + 4000);
     //   //  item.color = '#fff';
@@ -166,25 +155,28 @@ export default class CommentDanmu extends Vue {
   /**
    * 弹幕全局样式设置
    */
-  public globalCmtStyleSet(val: LIVESPACE.CmtGlobalStylsSetType) {
+  public set_global_style(val: LIVESPACE.CmtGlobalStylsSetType) {
     // -------------------- 透明度 --------------------
     this.CM.options.global.className = 'cmt self_customization';
     // // this.CM.options.global.shieldtype = val.shieldtype;
-    this.CM.options.global.opacity = val.opacity / 100; // 全局透明度上限
-    this.CM.options.scroll = val.opacity / 100; // 滚动弹幕透明度上限
+    const _opacity = Number((1 - val.opacity / 100).toFixed(2));
+    this.CM.options.global.opacity = _opacity; // 全局透明度上限
+    this.CM.options.scroll.opacity = _opacity; // 滚动弹幕透明度上限
 
-    // -------------------- 速度 --------------------
-    // a: this.CM.options.gloabal.scale // 单个弹幕对象全局生存时间加成
-    // b: this.CM.options.scroll.scale // 单个弹幕对象滚动弹幕生存时间加成
-    // 固定弹幕（顶部、底部）生存时间为4*a; 滚动弹幕（滚动、底部滚动、顶部滚动）总生存时间是4*a*b
-    // 弹幕默认生存时间是4s。加成数值越大，弹幕运行速度越低
+    // -------------------- 显示区域 --------------------
+
+    // -------------------- 速度 ------------------------
+    // a: this.CM.options.gloabal.scale // 单个弹幕对象 全局生存时间加成
+    // b: this.CM.options.scroll.scale // 单个弹幕对象 滚动弹幕生存时间加成
+    // 固定弹幕（顶部、底部）生存时间为4*a秒; 滚动弹幕（滚动、底部滚动、顶部滚动）总生存时间是4*a*b秒
+    // 弹幕默认生存时间是4秒。       加成数值越大，弹幕运行速度越低
+    // 注意：改变全局加成会改变包括高级弹幕在内的所有弹幕的生存时间。***不要***更改弹幕速度的加成数值
     // 相同加成下不同长度的弹幕， 速度是不一样的。 弹幕大了，速度就慢了
     // 4000 * (val.speed * 0.01);
-    // switch(val.mode)
-    this.CM.options.gloabal.scale = 40 * val.speed;
-    this.CM.options.scroll.scale = 40 * val.speed;
+    // this.CM.options.global.scale = 40 * val.speed;
+    // this.CM.options.scroll.scale = 40 * val.speed;
 
-
+    // -------------------- 字体大小 ---------------------
     // this.CM.options.global.shieldcomment = val.shieldcomment;
     // this.CM.options.global.area = val.area;
     // this.CM.options.global.fontsize = val.fontsize;

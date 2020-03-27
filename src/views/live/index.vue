@@ -63,10 +63,10 @@ export default class LiveIndex extends Vue {
 
   // 弹幕展示 全局设置
   private global_set_value: LIVESPACE.CmtGlobalStylsSetType = {
-    shieldtype: '1',
+    shieldtype: '1,2',
     opacity: 50,
     shieldcomment: 1,
-    area: 1,
+    area: 0,
     speed: 40,
     fontsize: 40,
     limit: 0,
@@ -147,11 +147,11 @@ export default class LiveIndex extends Vue {
     }
   }
   /**
-   * 发送弹幕
+   * 插入弹幕
    */
-  private send_cmt_danmu(val: LIVESPACE.CmtDanmuType[]) {
+  private insert_cmt_danmu(val: LIVESPACE.CmtDanmuType) {
     if (this.$refs.commentDanmuWrap) {
-      (this.$refs.commentDanmuWrap as CommentDanmu).sendCmtData(val);
+      (this.$refs.commentDanmuWrap as CommentDanmu).insert(val);
     }
   }
   /**
@@ -173,11 +173,11 @@ export default class LiveIndex extends Vue {
   /**
    * 弹幕 输出 全局更改
    */
-  private cmt_global_set_change(val: LIVESPACE.CmtGlobalStylsSetType) {
-    if (this.$refs.commentDanmuWrap) {
-      (this.$refs.commentDanmuWrap as CommentDanmu).globalCmtStyleSet(val);
-    }
-  }
+  // private cmt_global_set_change(val: LIVESPACE.CmtGlobalStylsSetType) {
+  //   if (this.$refs.commentDanmuWrap) {
+  //     (this.$refs.commentDanmuWrap as CommentDanmu).globalCmtStyleSet(val);
+  //   }
+  // }
 }
 
 </script>
@@ -215,9 +215,9 @@ export default class LiveIndex extends Vue {
         :global-set-val="global_set_value"/>
       <div class="row_op">
         <!-- 新增 弹幕 -->
-        <create-danmu class="row_op_item" @send-danmu="send_cmt_danmu" @start="start_cmt" @close="close_cmt" />
+        <create-danmu class="row_op_item" @send-danmu="insert_cmt_danmu" @start="start_cmt" @close="close_cmt" />
         <!-- 全局样式设置 弹幕 -->
-        <set-global-style class="row_op_item item_set" v-model="global_set_value" @global-set-change="cmt_global_set_change" />
+        <set-global-style class="row_op_item item_set" v-model="global_set_value" />
       </div>
     </template>
   </div>
