@@ -93,7 +93,8 @@ export default class SetGlobalStyle extends Vue {
 </script>
 
 <template>
- <el-popover popper-class="danmu_style_seting_popover" :tabindex="-1" placement="top" width="300" trigger="hover" v-model="set_global_style_show">
+<div class="setting_style">
+  <el-popover popper-class="danmu_style_seting_popover" :tabindex="-1" placement="top" width="300" trigger="hover" v-model="set_global_style_show">
    <!-- trigger="manual" -->
     <div class="seting_popover">
       <div class="shield_by_type">
@@ -133,12 +134,13 @@ export default class SetGlobalStyle extends Vue {
     </div>
     <div slot="reference" @click="set_global_style_show = !set_global_style_show"><i class="el-icon-setting"></i></div>
   </el-popover>
+</div>
 </template>
 
 <style lang="stylus" scoped>
 
 .el-icon-setting
-  line-height 24px
+  margin-top 13px
   font-size 18px
   color #ffffff
   cursor pointer

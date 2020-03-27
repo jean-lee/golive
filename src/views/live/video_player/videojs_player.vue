@@ -30,7 +30,7 @@ export default class VideojsPlayer extends Vue {
   }
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   public player: any = null;
-  public isPlay: boolean = false;
+  public isplay: boolean = false;
   public playerCurrentTime: any = 0;
 
   private optionsMade = {
@@ -64,20 +64,20 @@ export default class VideojsPlayer extends Vue {
       // this.player.currentTime(8); // 设置播放进度
 
       this.player.on('ended', () => {
-        this.isPlay = false;
+        this.isplay = false;
         console.log('播放结束了');
       });
       this.player.on('error', () => {
-        this.isPlay = false;
+        this.isplay = false;
         console.error('异常，无法播放');
       });
       this.player.on('play', () => {
-        this.isPlay = true;
-        // console.log('playing-----' + this.isPlay);
+        this.isplay = true;
+        // console.log('playing-----' + this.isplay);
       });
       this.player.on('pause', () => {
-        this.isPlay = false;
-        // console.log('paused--' + this.isPlay);
+        this.isplay = false;
+        // console.log('paused--' + this.isplay);
       });
       // this.player.on('progress', () => { // 进度变化
       // });
@@ -102,11 +102,11 @@ export default class VideojsPlayer extends Vue {
     }
   }
   public play() {
-    this.isPlay = true;
+    this.isplay = true;
     this.player.play();
   }
   public pause() {
-    this.isPlay = false;
+    this.isplay = false;
     this.player.pause();
   }
   /**

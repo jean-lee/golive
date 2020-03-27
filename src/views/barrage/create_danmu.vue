@@ -7,34 +7,28 @@
 
 import { Component, Vue, Emit, Prop, Watch } from 'vue-property-decorator';
 
-import SetGlobalStyle from './set_global_style.vue';
-
 @Component({
   name: 'create-danmu',
-  components: {
-    SetGlobalStyle,
-  },
 })
 export default class CreateDanmuku extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
-
   @Emit('send-danmu') private send_event(danmu: LIVESPACE.CmtDanmuType[]) { }
   @Emit('start') private start_event() {}
   @Emit('close') private close_event() {}
   @Emit('stop') private stop_event() {}
   @Emit('clear') private clear_event() {}
 
-  // @Emit('global-set-change') private global_set_change(val: LIVESPACE.CmtGlobalStylsSetType) {}
   /* ------------------------ VUEX (vuex getter & vuex action) ------------------------ */
 
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
   private mounted() {
-    console.log('send_event mmmmm')
     // 初始化websocket连接
     this.initWebsocket();
   }
   private beforeDestroy() {
-    this.myWs.close();
+    if (this.myWs) {
+      this.myWs.close();
+    }
   }
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
 
@@ -56,7 +50,7 @@ export default class CreateDanmuku extends Vue {
    * 初始化websocket
    */
   private initWebsocket() {
-    if ( ! (window as any) || ! (window as any).CommentManager || ! document.getElementById('my_comment_stage') ) {
+    if ( ! (window as any) || ! (window as any).CommentManager || ! document.getElementById('my_danmu_stage') ) {
       return false;
     }
     // params1: 需要连接的地址
@@ -162,7 +156,7 @@ export default class CreateDanmuku extends Vue {
 
 .module_danmu_create
   .opration
-    width auto
+    width fit-content
     .opration_item
       display inline-block
       height 24px
