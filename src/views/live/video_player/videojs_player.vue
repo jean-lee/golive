@@ -38,7 +38,6 @@ export default class VideojsPlayer extends Vue {
     userActions: {
       hotkeys: (event: any) => {
         // `this` is the player in this context
-
         // `x` key = pause
         if (event.which === 88) {
           this.pause();
@@ -81,7 +80,6 @@ export default class VideojsPlayer extends Vue {
       });
       // this.player.on('progress', () => { // 进度变化
       // });
-
 
       // this.player.on('timeupdate', () => { // 判断视频真正播放，currentTime会变化
       //   console.log('timeupdate');
