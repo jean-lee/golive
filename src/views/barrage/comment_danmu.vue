@@ -14,6 +14,7 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 export default class CommentDanmu extends Vue {
   /* ------------------------ INPUT & OUTPUT ------------------------ */
   @Prop({ type: Number, default: 0}) private playerCurrentTime!: number;
+  @Prop({ type: String, default: 'danmu_interaction' }) private dynamicClass!: string; // 弹幕舞台类名
   @Prop({ type: Object, default() { return {
     shieldtype: '1',
     opacity: 50,
@@ -34,26 +35,28 @@ export default class CommentDanmu extends Vue {
   /* ------------------------ COMPONENT STATE (data & computed & model) ------------------------ */
   private CM: any = null;
   private cmtArr: LIVESPACE.CmtDanmuType[] = [
-    {mode: 1, text: '4 - who are you', stime: 4, size: '25', bgColor: '#424448', border: true},
-    {mode: 1, text: '1 111111- hello world', stime: 0,  size: '12', backgroundColor: '#424448', border: false },
-    {mode: 1, text: '15 - hello jean', stime: 15, size: '16', backgroundColor: '#fff', border: true},
-    {mode: 1, text: '5 - who are you', stime: 8, size: '18', bgColor: '#fff', border: false},
+    {mode: 1, text: '1上上上上上端 - who are you', stime: 0.001, size: '25', bgColor: '#424448', border: true},
+    {mode: 2, text: '2下下下下下端 111111- hello world', stime: 1,  size: '12', backgroundColor: '#424448', border: false },
+    {mode: 4, text: '4底底底底底部 - hello jean', stime: 15, size: '16', backgroundColor: '#fff', border: true},
+    {mode: 5, text: '5顶顶顶顶顶部 - who are you', stime: 8, size: '18', bgColor: '#fff', border: false},
+    {mode: 6, text: '6逆逆逆逆逆逆向 - who are you', stime: 5, size: '18', backgroundColor: '#400', border: false},
+    {mode: 6, text: '6逆逆逆逆逆逆向 - who are you', stime: 17, size: '18', backgroundColor: '#400', border: false},
+    {mode: 7, text: '7定定定定位 - who are you', stime: 17, size: '18', backgroundColor: '#400', border: false},
+    {mode: 17, text: '17图图图图图片弹幕 - who are you', stime: 9, size: '18', backgroundColor: '#400', border: false},
     {mode: 1, text: '23 - who are you', stime: 23, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '5 - who are you', stime: 5, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '6 - who are you', stime: 6, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '13 - who are you', stime: 13, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '17 - who are you', stime: 17, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '9 - who are you', stime: 9, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '23 - who are you', stime: 23, size: '18', backgroundColor: '#400', border: false},
-    {mode: 1, text: '3 - who are you', stime: 3000, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '3 - who are you', stime: 16.66, size: '18', backgroundColor: '#400', border: false},
     {mode: 1, text: '19 - who are you', stime: 19, size: '18', backgroundColor: '#400', border: false},
     {mode: 1, text: '13 - who are you', stime: 13, size: '18', backgroundColor: '#400', border: false},
     {mode: 1, text: '20 - who are you', stime: 20, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '23 - who are you', stime: 23, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '6 - who are you', stime: 6, size: '18', backgroundColor: '#400', border: false},
+    {mode: 1, text: '13 - who are you', stime: 13, size: '18', backgroundColor: '#400', border: false},
     {mode: 1, text: '23 - who are you', stime: 23, size: '18', backgroundColor: '#400', border: false},
   ];
 
   /* ------------------------ WATCH ------------------------ */
   @Watch('playerCurrentTime') private playerCurrentTimeChange(val: number, oldVal: number) {
+    // console.log('val---' + val + '---oldVal--' + oldVal + '---run--' + this.CM.isRunning);
     if (val !== oldVal) {
       this.CM.time(val);
     }
@@ -61,6 +64,14 @@ export default class CommentDanmu extends Vue {
   @Watch('GlobalSetVal', {deep: true}) private GlobalSetValChange(val: LIVESPACE.CmtGlobalStylsSetType) {
     this.set_global_style(val);
   }
+  // @Watch('CM') private CMChange(val: any) {
+  //   if (val === null) { return false; }
+
+  //   console.log(this.CM);
+  //   console.log(this.CM.runline);
+  //   console.log(this.CM.timeline);
+  //   console.log(this.CM.filter);
+  // }
   /* ------------------------ METHODS ------------------------ */
   private ccl_init() {
     if ( ! (window as any) || ! (window as any).CommentManager || ! document.getElementById('my_danmu_stage') ) {
@@ -73,13 +84,6 @@ export default class CommentDanmu extends Vue {
 
     // 将清空之前的时间轴，载入cmtArr抽象弹幕对象作为时间轴timeline, 并根据stime从小到大的顺序排序
     this.CM.load(this.cmtArr);
-
-    // this.CM.time(0);
-    // 通报目前的时间轴时间。管理器会自动处理时间前进和后退的情况，包括在需要时清除屏幕上正再运行的弹幕。
-    // 这里的`currentTime`是绝对时间，对应弹幕的 `stime`。时间单位是毫秒（ms）。`time`只会把相关的
-    // 弹幕放到runline（运行列表）里。至于这些弹幕是否在移动，则要根据目前管理器的 `isRunning` 状态。
-    // 强行更新以下 CM 的时间戳。设置了CommentManager的播放时间，单位是毫秒(0.001s)
-    // CM.time(520);
   }
   /**
    * 插入 弹幕
@@ -92,6 +96,7 @@ export default class CommentDanmu extends Vue {
 
     this.CM.send(comment); // 立刻显示一次自己这条弹幕，保证用户肯定会看到
   }
+
   /**
    * 销毁
    */
@@ -196,5 +201,5 @@ export default class CommentDanmu extends Vue {
 </script>
 
 <template>
-  <div id="my_danmu_stage" class="container module_danmu_stage"></div>
+  <div id="my_danmu_stage" ref="myDanmuStage" :class="['container module_danmu_stage', dynamicClass]"></div>
 </template>

@@ -43,7 +43,7 @@ export default class AliPlayer extends Vue {
   // 自动播放
   @Prop({type: Boolean, default: true}) private autoplay!: boolean;
   // 自动加载
-  @Prop({type: Boolean, default: false}) private preload!: boolean;
+  @Prop({type: Boolean, default: true}) private preload!: boolean;
   // 播放器默认封面图片，请填写正确的图片url地址Flash播放器封面也需要开启允许跨域访问
   // 自动加载与自动播放为false时生效显示
   @Prop({type: String, default: ''}) private cover!: string;
@@ -82,6 +82,7 @@ export default class AliPlayer extends Vue {
   @Emit('ready') private readyEmit() {}
   @Emit('play') private playEmit() {}
   @Emit('pause') private pauseEmit() {}
+  @Emit('replay') private replayEmit() {}
   @Emit('ended') private endedEmit() {}
   @Emit('live-streamstop') private liveStreamStopEmit() {}
   @Emit('m3u8retry') private m3u8RetryEmit() {}
@@ -102,7 +103,7 @@ export default class AliPlayer extends Vue {
   private playerId: string = 'aliplayer_' + Math.random() * 100000000000000000;
   private scriptTagsStatus: number = 0;
   private instance: any = null;
-
+  private ct: any = null;
   public isPlay: boolean = false;
 
   get whichSkinLayout() {
@@ -120,7 +121,7 @@ export default class AliPlayer extends Vue {
   /* ------------------------ METHODS ------------------------ */
   private get_window_aliplayer() {
     if ((window as any).Aliplayer !== undefined) {
-      // 如果全局对象崔仔，说明编辑器代码已初始化完成，直接加载编辑器
+      // 如果全局对象存在，说明编辑器代码已初始化完成，直接加载编辑器
       this.scriptTagsStatus = 2;
       this.initAliplayer();
     } else {
@@ -183,7 +184,7 @@ export default class AliPlayer extends Vue {
           vid: this.vid,
           playauth: this.playauth,
           source: this.source,
-          cover: this.cover,
+          cover:  !this.autoplay && !this.preload ? this.cover : '', // preload和autoplay为false时， 才生效
           format: this.format,
 
           useH5Prism: this.useH5Prism,
@@ -207,12 +208,13 @@ export default class AliPlayer extends Vue {
           this.readyEmit();
         });
         this.instance.on('play', () => {
-          // this.isPlay = true;
           this.playEmit();
         });
         this.instance.on('pause', () => {
-          // this.isPlay = false;
           this.pauseEmit();
+        });
+        this.instance.on('replay', () => {
+          this.replayEmit();
         });
         this.instance.on('waiting', () => {
           this.waitingEmit();
@@ -229,10 +231,11 @@ export default class AliPlayer extends Vue {
         this.instance.on('hideBar', () => {
           this.hideBarEmit();
         });
-
         this.instance.on('snapshoted', () => {
           this.snapshotedEmit();
         });
+
+        this.setVolume(0.1);
       });
     }
   }
@@ -240,49 +243,52 @@ export default class AliPlayer extends Vue {
    * 播放 视频
    */
   public play() {
+    this.isPlay = true;
     this.instance.play();
   }
   /**
    * 暂停 视频
    */
   public pause() {
+    this.isPlay = false;
     this.instance.pause();
   }
   /**
    * 重播 视频
    */
   public replay() {
+    this.isPlay = true;
     this.instance.replay();
   }
   /**
-   * 获取当前的播放时刻，返回的单位为秒
+   * 跳转到某个时刻进行播放
    */
   public seek(time: number) {
     this.instance.seek(time);
   }
   /**
-   * 获取视频总时长，返回的单位为秒
+   * 获取当前时间 单位秒
    */
   public getCurrentTime() {
-    this.instance.getCurrentTime();
+   return this.instance.getCurrentTime();
   }
   /**
    * 获取视频总时长，返回的单位为秒
    */
   public getDuration() {
-    this.instance.getDuration();
+   return this.instance.getDuration();
   }
   /**
    * 获取当前的音量，返回值为0-1的实数ios和部分android会失效
    */
   public getVolume() {
-    this.instance.getVolume();
+    return this.instance.getVolume();
   }
   /**
    * 设置音量，vol为0-1的实数，ios和部分android会失效
    */
-  public setVolume() {
-    this.instance.setVolume();
+  public setVolume(val: number) {
+    this.instance.setVolume(val);
   }
   /**
    * 直接播放视频url，time为可选值（单位秒）目前只支持同种格式（mp4/flv/m3u8）之间切换，暂不支持直播rtmp流切换

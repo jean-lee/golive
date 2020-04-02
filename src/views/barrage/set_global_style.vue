@@ -56,6 +56,7 @@ export default class SetGlobalStyle extends Vue {
   private speed_val_marks = { 40: '慢', 160: '快' };
   // 依据B站40%对应字号10px, 上限160%对应40px
   // 此处展示的字号 = 25*X% ： 25 * (X% / 100)
+  // 12非常小,16特小,18小,25中,36大,45很大,64特别大
   private font_size_marks = { 40: '小', 160: '大' };
 
   /* ------------------------ WATCH ------------------------ */
@@ -86,7 +87,7 @@ export default class SetGlobalStyle extends Vue {
 
 <template>
 <div class="setting_style">
-  <el-popover popper-class="danmu_style_seting_popover" :tabindex="-1" placement="top" width="300" trigger="manual" v-model="set_global_style_show">
+  <el-popover popper-class="danmu_style_seting_popover" :tabindex="-1" placement="top" width="300" trigger="hover" v-model="set_global_style_show">
    <!-- trigger="manual" -->
     <div class="seting_popover">
       <div class="shield_by_type">
@@ -124,20 +125,20 @@ export default class SetGlobalStyle extends Vue {
         <span class="title">更多弹幕设置</span>
       </div>
     </div>
-    <div slot="reference" @click="set_global_style_show = !set_global_style_show"><i class="el-icon-setting"></i></div>
+    <div class="seticon" slot="reference" @click="set_global_style_show = !set_global_style_show"><i class="el-icon-set-up"></i></div>
   </el-popover>
 </div>
 </template>
 
 <style lang="stylus" scoped>
 
-.el-icon-setting
-  margin-top 13px
-  font-size 18px
-  color #ffffff
-  cursor pointer
-  text-align center
-  &:hover
-    color $active_color
+.setting_style
+  .seticon
+    font-size 18px
+    color #ffffff
+    cursor pointer
+    text-align center
+    &:hover
+      color $active_color
 
 </style>

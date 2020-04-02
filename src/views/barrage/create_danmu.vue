@@ -121,6 +121,12 @@ export default class CreateDanmuku extends Vue {
       this.ws_onsend();
     }
   }
+  /**
+   * 新增弹幕 设置
+   */
+  private new_set() {
+    alert('字号颜色等配置..');
+  }
 }
 
 </script>
@@ -137,17 +143,15 @@ export default class CreateDanmuku extends Vue {
         <button class="common_btn" @click="clear_event">清空</button>
       </div> -->
       <div class="opration_item is_showdanmu">
-        <el-tooltip :content="'Switch value: ' + show_danmu" placement="top">
-          <el-switch v-model="show_danmu" active-color="#2196f3" inactive-color="#ccc" />
-        </el-tooltip>
+        <el-switch v-model="show_danmu" active-color="#2196f3" inactive-color="#ccc" />
       </div>
       <div class="opration_item item_input" :class="{disabled: !show_danmu}">
-        <input placeholder="发个友善弹幕见证当下" prefix-icon="el-icon-edit" v-model="newDanmu" />
-        <button class="common_btn" @click="send">发送</button>
+        <el-input class="my_input_32" placeholder="发个友善弹幕见证当下" prefix-icon="" v-model="newDanmu" @keyup.enter.native="send">
+          <i slot="prefix" class="el-icon-setting" @click.stop="new_set"></i>
+          <el-button slot="append">发送</el-button>
+        </el-input>
       </div>
-      
     </div>
-
   </div>
 </template>
 
@@ -169,24 +173,6 @@ export default class CreateDanmuku extends Vue {
     .item_input
       min-width 245px
       max-width 400px
-      input
-        font-size 12px
-        width calc(100% - 50px)
-        min-width 180px
-        height inherit
-        text-indent 4px
-        border none
-        border-top-left-radius 4px
-        border-bottom-left-radius 4px
-      .common_btn
-        margin-left 0
-        height inherit
-        padding 0 12px
-        font-size 12px
-        background $active_color
-        border none
-        border-top-left-radius 0
-        border-bottom-left-radius 0
     .disabled
       position relative
       &:after

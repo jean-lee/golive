@@ -33,6 +33,7 @@ export default class LiveIndex extends Vue {
   /* ------------------------ LIFECYCLE HOOKS (created & mounted & ...) ------------------------ */
   private mounted() {
     this.intervalGetCurrentTime();
+    // this.start_cmt();
   }
   private destroyed() {
     this.clearMyInterval();
@@ -95,10 +96,10 @@ export default class LiveIndex extends Vue {
    * 设置定时器，获取视频当前播放时间及是否正在播放
    */
   private intervalGetCurrentTime() {
-    if (this.showDanmu) {
+    if (this.showDanmu && this.isplay) {
       this.curTimeInterval = setInterval(() => {
         this.get_player_current_time();
-      }, 100);
+      }, 50);
     }
   }
   /**
@@ -209,7 +210,7 @@ export default class LiveIndex extends Vue {
     </template>
 
     <!-- 弹幕 -->
-    <template v-show="showDanmu">
+    <template v-if="showDanmu">
       <!-- 输出 弹幕 -->
       <comment-danmu ref="commentDanmuWrap" :player-current-time="playerCurrentTime" 
         :global-set-val="global_set_value"/>
