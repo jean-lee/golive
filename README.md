@@ -1,40 +1,13 @@
 # golive
 
-## Project setup
+### Project setup
 ```
 yarn install
+yarn serve
+yarn build
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
-
-### Compiles and minifies for production
-```
-yarn run build
-```
-
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Run your unit tests
-```
-yarn run test:unit
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-<br/><br/><br/>
-
+<br/><br/>
 # **Already have**
 ## videojs
 1. 直播、点播播放， 不同协议流媒体、视频切换播放
@@ -49,9 +22,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 4. 单个弹幕样式独立设置
 
 
-<br/><br/><br/>
-
-
+<br/><br/>
 # **Need**
 ## videojs
 1. 视频播放键盘空格键控制，userAction-> hotKeys应用
@@ -77,6 +48,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 9. CommentManager随视频界面大小而更改
 
 
-
-### **预览**
+<br/><br/>
+## **预览**
 ![avatar](./golive.png)
