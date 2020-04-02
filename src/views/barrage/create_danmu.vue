@@ -76,7 +76,7 @@ export default class CreateDanmuku extends Vue {
    */
   private ws_onclose(e: any) {
     this.show_danmu = false;
-    this.$message({ type: 'error', message: 'WebSocket连接异常'});
+    console.error('WebSocket连接异常');
   }
   /**
    * websocket 连接 异常， 再次重连
@@ -125,7 +125,7 @@ export default class CreateDanmuku extends Vue {
    * 新增弹幕 设置
    */
   private new_set() {
-    alert('字号颜色等配置..');
+    this.$message({ type: 'warning', message: '字号颜色等配置'});
   }
 }
 
@@ -169,10 +169,14 @@ export default class CreateDanmuku extends Vue {
     .danmu_act
       width 218px
     .is_showdanmu
-      width 44px
+      width 50px
+      .el-switch
+        margin-right 18px
     .item_input
       min-width 245px
       max-width 400px
+      .el-icon-setting
+        cursor pointer
     .disabled
       position relative
       &:after

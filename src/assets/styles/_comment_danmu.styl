@@ -1,14 +1,3 @@
-// --------------------------------------- .module_danmu_stage -----------------------------------------
-.module_danmu_stage
-  width 100%
-  height calc(100% - 110px)
-  .self_customization
-    background-color rgba(255, 88, 80, .6)
-    padding 3px 10px!important
-    border-radius 3px
-    box-shadow 1px 1px 4px #e06969
-    border none!important
-
 // --------------------------------------- .module_danmu_create -----------------------------------------
 .is_showdanmu
   .el-switch
@@ -119,3 +108,31 @@
       cursor pointer
       &:hover
         color #2196f3
+
+/* ################################################# 可交互的弹幕 ##########################################################*/
+// --------------------------------------- .module_danmu_stage -----------------------------------------
+.module_danmu_stage
+  width 100%
+  height calc(100% - 110px)
+  pointer-events none // 允许穿透绝对定位元素去触发下面元素的某些行为
+  .cmt
+    font-size 14px
+    padding 4px 8px!important
+    border-radius 6px
+
+
+// 番茄背景弹幕
+.self_customization 
+  background-color rgba(255, 88, 80, .6)
+  border-radius 3px
+  box-shadow 1px 1px 4px #e06969
+  border none!important
+
+// 单个弹幕对象添加样式-鼠标移入悬浮弹幕
+.danmu_interaction
+  .cmt
+    pointer-events auto
+    &:hover
+      background rgba(0,0,0,0.6)
+      font-size 16px
+      cursor pointer
